@@ -1,3 +1,10 @@
+---
+tags: [Notebooks/blog]
+title: migrating a database always hurts
+created: '2014-08-01T17:24:54+02:00'
+modified: '2014-08-01T17:24:54+02:00'
+---
+
 迁移数据库这种事情，似乎无论是做了多少充分的准备都会冒出这样那样的问题。比如这些：
 
 * 目标系统改变。改改版本还是小事，但如果是在Linux-MacOS-Windows之间变呢？光是把PostgreSQL架好就够折腾一阵子的

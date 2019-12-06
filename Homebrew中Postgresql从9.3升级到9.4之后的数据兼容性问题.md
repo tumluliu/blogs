@@ -1,3 +1,10 @@
+---
+tags: [Notebooks/blog]
+title: Homebrew中Postgresql从9.3升级到9.4之后的数据兼容性问题
+created: '2015-01-21T13:44:30+01:00'
+modified: '2015-01-21T13:44:30+01:00'
+---
+
 Homebrew中Postgresql从9.3升级到9.4之后的数据兼容性问题
 
 今天早上看到Hao Zhang发来的微信说帮忙写个SQL语句。倒啊，我的SQL渣成啥样啊，而且我无比厌恶SQL他居然不知道。没办法，准备打开Pgadmin让它帮忙生成个建表语句然后发给他，结果突然发现我本地的postgresql又起不来了。google出了用brew安装的postgresql的服务启动方法（不好意思，总是记不住这个launchctl命令。。）：

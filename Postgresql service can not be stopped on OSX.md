@@ -5,9 +5,9 @@ created: '2016-12-29T12:03:00+01:00'
 modified: '2016-12-29T12:03:00+01:00'
 ---
 
-As I experieced many times before, migrating/upgrating a database always hurts. That's the reason I won't upgrade my Postgresql to the latest version until I have to. And the day finally comes. 
+As I experieced many times before, migrating/upgrating a database always hurts. That's the reason I won't upgrade my Postgresql to the latest version until I have to. And the day finally comes.
 
-I have to upgrade my Postgresql server from `9.4.9` to `9.6.1` with `pg_upgrade`. Otherwise, I can not properly install `postgis`, which is another long story. I am surely not the first one who is doing this upgrading. [Olivier Lacan](https://gist.github.com/olivierlacan) has [a great post about Postgresql database migrating](https://gist.github.com/olivierlacan/e1bf5c34bc9f82e06bc0). But the thing is, I still can not run the `pg_upgrade` command properly after unloading the `homebrew.mxcl.postgresql.plist`. And the most weird thing is I can not even kill the postgres process even with `kill -9`. After each time I enter the kill command, the postgres services appear again with a new PID just like a ghost virus program. And the `pg_ctl stop` command, of course, doesn't work with whatever `mode` option. Finally, I figure out that there is another `pList` - `homebrew.mxcl.postgresql.plist.bak` still active in the `~/Library/LaunchAgents/` directory. And it IS the control script that starting the current Postgresql service. So I immediatly `launchctl unload` it, then all the postgres services are gone. 
+I have to upgrade my Postgresql server from `9.4.9` to `9.6.1` with `pg_upgrade`. Otherwise, I can not properly install `postgis`, which is another long story. I am surely not the first one who is doing this upgrading. [Olivier Lacan](https://gist.github.com/olivierlacan) has [a great post about Postgresql database migrating](https://gist.github.com/olivierlacan/e1bf5c34bc9f82e06bc0). But the thing is, I still can not run the `pg_upgrade` command properly after unloading the `homebrew.mxcl.postgresql.plist`. And the most weird thing is I can not even kill the postgres process even with `kill -9`. After each time I enter the kill command, the postgres services appear again with a new PID just like a ghost virus program. And the `pg_ctl stop` command, of course, doesn't work with whatever `mode` option. Finally, I figure out that there is another `pList` - `homebrew.mxcl.postgresql.plist.bak` still active in the `~/Library/LaunchAgents/` directory. And it IS the control script that starting the current Postgresql service. So I immediatly `launchctl unload` it, then all the postgres services are gone.
 
 All done? Don't be naive. After running the command
 
@@ -34,4 +34,4 @@ So it's postgis's show time. `could not access file "$libdir/postgis-2.1": No su
 6. Stop new postgresql service
 7. Upgrade postgresql server (with `pg_upgrade`)
 
-I don't think there are many choices for me. So I decide using [Postgres.app](https://postgresapp.com/) instead, and just give up all the postgresql stuff from Homebrew. I hope that will bring less pain in the future. How about the data? Don't worry, I still have a running database on AWS. 
+I don't think there are many choices for me. So I decide using [Postgres.app](https://postgresapp.com/) instead, and just give up all the postgresql stuff from Homebrew. I hope that will bring less pain in the future. How about the data? Don't worry, I still have a running database on AWS.

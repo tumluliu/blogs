@@ -1,3 +1,10 @@
+---
+tags: [Notebooks/blog]
+title: Multimodal route planner (mmrp) API service v1 is released
+created: '2015-06-14T18:01:46+02:00'
+modified: '2015-06-14T18:01:46+02:00'
+---
+
 After large amount of data cleaning, preprocessing and integrating work on the datasets from OpenStreetMap, UnitedMaps and the Munich underground station platform data collected by myself, a multimodal graph dataset for Munich area is finally ready to use. The data processing scripts are in the mmgraphdb-builder project on github. 
 
 With the testbed prepared, I improved the pymmrouting (python wrapper of multimodal shortest path algorithms library) with a lot of refactoring and rewriting, did some slight improvement w.r.t the stablity and error handling on the C library mmspa (multimodal shortest path algorithms) I implemented in TUM, and then implemented an JSON RPC style API service for multimodal path finding. The API service is hosted just here on my website, the URL is:

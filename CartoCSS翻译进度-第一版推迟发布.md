@@ -1,3 +1,10 @@
+---
+tags: [Notebooks/blog]
+title: CartoCSS翻译进度-第一版推迟发布
+created: '2015-04-03T15:33:35+02:00'
+modified: '2015-04-03T15:33:35+02:00'
+---
+
 目前，《CartoCSS指南》编译的进度仍然落后于原计划，但是在进行中的。目前书中各章节的具体进度如下：
 
 1. **概述**：本部分内容需要完全原创，而且对全书将起到重要的引领作用，因此需要投入较多精力考虑如何撰写。正在和Anran Yang[讨论](https://github.com/tumluliu/carto_zh-cn/issues/3)其中的内容。

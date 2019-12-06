@@ -1,3 +1,10 @@
+---
+tags: [Notebooks/blog]
+title: mmrp数据准备
+created: '2015-05-31T03:23:52+02:00'
+modified: '2015-05-31T03:23:52+02:00'
+---
+
 # 数据准备
 
 ```bash

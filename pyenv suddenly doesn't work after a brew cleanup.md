@@ -1,3 +1,10 @@
+---
+tags: [Notebooks/blog]
+title: pyenv suddenly doesn't work after a brew cleanup
+created: '2016-06-17T18:03:50+02:00'
+modified: '2016-06-17T18:03:50+02:00'
+---
+
 I have just run a `brew cleanup` command to release some of my hard drive space. But after that, I suddenly found my python doesn't work:
 
 ```bash

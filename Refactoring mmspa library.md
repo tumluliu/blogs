@@ -1,3 +1,10 @@
+---
+tags: [Notebooks/blog]
+title: Refactoring mmspa library
+created: '2015-12-23T10:38:01+01:00'
+modified: '2015-12-23T10:38:01+01:00'
+---
+
 其实重构[mmspa](https://github.com/tumluliu/mmspa)的想法早已有之，因为那是我2009年4月份开始写的库，后面在2010年集中开发Multimodal Route Planning System for Munich的时候基本就不再动它了，主要是有一种怕一碰就不能用了的心理在作怪。直到去年把上层的wrapper重新用Python写成[pymmrouting](https://github.com/tumluliu/pymmrouting)的时候都没敢大动mmspa的代码，只是稍微添加了几个函数。但实际上，它的代码已经too(不) ugly(忍) to(直) read(视)了，而且现在又有了个改进效率的想法作为契机，那就做个大扫除吧。
 
 之前的代码问题很多，要列清单可以列很长，这里就不详述了，当自己重构的动作提起速度来的时候也是脑子中几条线同时前进，有的问题随着发现就随着解决了，可能都没来得及反映到commit comments中。这里只提纲挈领的记几个要点：
