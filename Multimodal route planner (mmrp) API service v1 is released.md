@@ -1,11 +1,11 @@
 ---
 tags: [Notebooks/blog]
 title: Multimodal route planner (mmrp) API service v1 is released
-created: '2015-06-14T18:01:46+02:00'
-modified: '2015-06-14T18:01:46+02:00'
+date: '2015-06-14T18:01:46+02:00'
+updated: '2015-06-14T18:01:46+02:00'
 ---
 
-After large amount of data cleaning, preprocessing and integrating work on the datasets from OpenStreetMap, UnitedMaps and the Munich underground station platform data collected by myself, a multimodal graph dataset for Munich area is finally ready to use. The data processing scripts are in the mmgraphdb-builder project on github. 
+After large amount of data cleaning, preprocessing and integrating work on the datasets from OpenStreetMap, UnitedMaps and the Munich underground station platform data collected by myself, a multimodal graph dataset for Munich area is finally ready to use. The data processing scripts are in the mmgraphdb-builder project on github.
 
 With the testbed prepared, I improved the pymmrouting (python wrapper of multimodal shortest path algorithms library) with a lot of refactoring and rewriting, did some slight improvement w.r.t the stablity and error handling on the C library mmspa (multimodal shortest path algorithms) I implemented in TUM, and then implemented an JSON RPC style API service for multimodal path finding. The API service is hosted just here on my website, the URL is:
 
@@ -16,13 +16,13 @@ The related open source projects are:
 - [mmspa](https://github.com/tumluliu/mmspa)
 - [pymmrouting](https://github.com/tumluliu/pymmrouting)
 - [mmgraphdb-builder](https://github.com/tumluliu/mmgraphdb-builder)
-- [mmrp-jsonrpc](https://github.com/tumluliu/mmrp-jsonrpc) 
+- [mmrp-jsonrpc](https://github.com/tumluliu/mmrp-jsonrpc)
 
 The usage of the API can be found in the README of mmrp-jsonrpc. Here I paste the usage section:
 
 ## Sample usage
 
-The API service provides two methods accepting POST requests: 
+The API service provides two methods accepting POST requests:
 
 - `mmrp.index`: return a welcome message
 - `mmrp.findMultimodalPaths`: do the multimodal route planning with given routing options
@@ -45,8 +45,8 @@ Content-Type: application/json
 Content-Length: 111
 
 {
-  "id": "1", 
-  "jsonrpc": "2.0", 
+  "id": "1",
+  "jsonrpc": "2.0",
   "result": "Welcome using Multimodal Route Planner (mmrp) JSON-RPC API"
 }
 ```
@@ -67,13 +67,13 @@ Both the request and response are too long to write here. The request can be fou
 The limitation list is, well, not short. Why do I develop and release it? The only reason is there is NO practical multimodal routing engine can be found across the whole Internet that can provide such routing results:
 
 - Drive to a parking lot with available positions, park the car there and walk to the destination
-- Drive a car which can only run 10 km due to gas limit to a park and ride lot, park there and take public transit to go to the destination, but keep in mind that there should be enough gas left for you to drive the car back at least to a nearby gas station 
+- Drive a car which can only run 10 km due to gas limit to a park and ride lot, park there and take public transit to go to the destination, but keep in mind that there should be enough gas left for you to drive the car back at least to a nearby gas station
 - I am a passenger this time, my wife drives. She takes me to a kiss and ride lot, I get off the car and take the underground line (I like underground more than other sort of public transits) to go to my destination, while she drives away back home or for work
 
-At present, I am doing some multimodal path analysis work, and need a practical system/library/service being able to give routing results like above. But unfortunately I cannot find one. So I have to reorganize my phd work and use my own library although it is a little bit slow. 
+At present, I am doing some multimodal path analysis work, and need a practical system/library/service being able to give routing results like above. But unfortunately I cannot find one. So I have to reorganize my phd work and use my own library although it is a little bit slow.
 
-In next steps, I may do some improvement work aiming at the above limitation list. But there is no scheduled plan yet. Now I am implementing a simple web demo - mmrp-web. It will be online within one month hopefully. 
+In next steps, I may do some improvement work aiming at the above limitation list. But there is no scheduled plan yet. Now I am implementing a simple web demo - mmrp-web. It will be online within one month hopefully.
 
-There is already a Chinese version of this post. 
+There is already a Chinese version of this post.
 
-这篇帖子我已经写了中文版，需要的话请移步[这里](http://luliu.me?p=91)。 
+这篇帖子我已经写了中文版，需要的话请移步[这里](http://luliu.me?p=91)。

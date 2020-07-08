@@ -1,8 +1,8 @@
 ---
 tags: [Notebooks/blog]
 title: 多模式路径规划服务API上线
-created: '2015-06-14T05:21:27+02:00'
-modified: '2015-06-14T05:21:27+02:00'
+date: '2015-06-14T05:21:27+02:00'
+updated: '2015-06-14T05:21:27+02:00'
 ---
 
 在对OpenStreetMap数据、UnitedMaps数据还有我自己采集的数据进行一系列处理之后，把去年写的pymmrouting进行了大幅修正，然后又基于flask-jsonrpc实现了JSON RPC风格的API service，现在多模式路径规划API服务mmrp-jsonapi已经上线了，就在我的这个网站上，地址为：
@@ -36,8 +36,8 @@ Content-Type: application/json
 Content-Length: 111
 
 {
-  "id": "1", 
-  "jsonrpc": "2.0", 
+  "id": "1",
+  "jsonrpc": "2.0",
   "result": "Welcome using Multimodal Route Planner (mmrp) JSON-RPC API"
 }
 ```

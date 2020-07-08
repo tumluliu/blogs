@@ -1,8 +1,8 @@
 ---
 tags: [Notebooks/blog]
 title: mapbox map matching api
-created: '2015-07-12T09:24:44+02:00'
-modified: '2015-07-12T09:24:44+02:00'
+date: '2015-07-12T09:24:44+02:00'
+updated: '2015-07-12T09:24:44+02:00'
 ---
 
 正当我看着Marienplatz那里一坨乱麻般的GPX思考该如何把它们match并snap到road network上去的时候，Mapbox的[matching API](https://www.mapbox.com/developers/api/map-matching/)在7月8日[发布了](https://www.mapbox.com/blog/map-matching-api/)。真是不得不佩服Mapbox，想人所想，及人所及，太善解人意了。

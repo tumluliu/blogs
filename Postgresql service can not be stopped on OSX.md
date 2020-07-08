@@ -1,8 +1,8 @@
 ---
 tags: [Notebooks/blog]
 title: Postgresql service can not be stopped on OSX
-created: '2016-12-29T12:03:00+01:00'
-modified: '2016-12-29T12:03:00+01:00'
+date: '2016-12-29T12:03:00+01:00'
+updated: '2016-12-29T12:03:00+01:00'
 ---
 
 As I experieced many times before, migrating/upgrating a database always hurts. That's the reason I won't upgrade my Postgresql to the latest version until I have to. And the day finally comes.

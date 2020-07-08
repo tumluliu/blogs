@@ -1,8 +1,8 @@
 ---
 tags: [Notebooks/blog]
 title: why not wechat
-created: '2017-10-18T14:20:12+02:00'
-modified: '2017-10-18T14:20:12+02:00'
+date: '2017-10-18T14:20:12+02:00'
+updated: '2017-10-18T14:20:12+02:00'
 ---
 
 # 为什么我不喜欢微信
