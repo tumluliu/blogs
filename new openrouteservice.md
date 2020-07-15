@@ -2,7 +2,7 @@
 tags: [Notebooks/blog]
 title: new openrouteservice
 date: '2017-04-29T14:11:30+02:00'
-updated: '2017-04-29T14:11:30+02:00'
+updated: '2020-07-15 09:27:56'
 ---
 
 - [New OpenRouteService.org](https://openrouteservice.org/)
