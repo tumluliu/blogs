@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "26164ea8223201b5",
+        "id": "ba301692dc1ac090",
         "type": "tabs",
         "children": [
           {
-            "id": "d5647c4c9cecc768",
+            "id": "aa3bd5cbf69e893e",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": "Experiences over Things.md",
-                "bFile": "Experiences over Things.md",
-                "aRef": ""
+                "file": "天津的点滴.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "diff",
-              "title": "Diff: Experiences over Things"
+              "icon": "lucide-file",
+              "title": "天津的点滴"
             }
           }
         ]
@@ -40,7 +40,7 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical",
+                "sortOrder": "byModifiedTime",
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
@@ -94,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "这世界还会好吗？.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for 这世界还会好吗？"
             }
           },
           {
@@ -112,11 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "这世界还会好吗？.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from 这世界还会好吗？"
             }
           },
           {
@@ -140,12 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "这世界还会好吗？.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Outline of 这世界还会好吗？"
             }
           },
           {
@@ -191,9 +194,13 @@
       "publish:Publish changes...": false
     }
   },
-  "active": "d5647c4c9cecc768",
+  "active": "aa3bd5cbf69e893e",
   "lastOpenFiles": [
+    "到处都是AI，已经让人感到恶心.md",
+    "天津的点滴.md",
+    "这世界还会好吗？.md",
     "Experiences over Things.md",
+    "涓涓细流也能摧毁高墙.md",
     "2023，但愿平凡.md",
     "Untitled.canvas"
   ]
