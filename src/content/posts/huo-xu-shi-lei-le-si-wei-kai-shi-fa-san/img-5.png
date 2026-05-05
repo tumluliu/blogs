@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />            
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    <title>张逸 - 博客园</title>
+    
+        
+    
+        
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=9xvyan1yGH1Ggi8nKJ01Xc2nqMWMqJCy_-EYS2m06xA" />
+    
+
+    <link id="MainCss" rel="stylesheet" href="/skins/lessismoreright/bundle-lessismoreright.min.css?v=njlzzd6-e4rzNsMOZIOLCRj8FOrAKo94SbD97L-On_o" />
+        
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/wayfarer/custom.css?v=sTMCzOaDpQ3FlrLUwPvQ9Mdhhfc=" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/lessismoreright/bundle-lessismoreright-mobile.min.css?v=RLayb_2cwXrs0_jhclS5wrPefjb1Y2g2R8tDHfKL4yA" />
+    
+    <link id="favicon" rel="icon" type="image/x-icon" sizes="32x32" href="https://assets.cnblogs.com/favicon_v3_3.ico" />
+    <link id="favicon_svg" rel="icon" type="image/svg+xml" href="https://assets.cnblogs.com/favicon_v3_3.svg" />
+    <link rel="apple-touch-icon" href="https://assets.cnblogs.com/apple-touch-icon.png?v=2" />
+    <link rel="canonical" href="https://www.cnblogs.com/wayfarer" />
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/wayfarer/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/wayfarer/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/wayfarer/wlwmanifest.xml" />
+    
+
+    <script>
+        var currentBlogId = 819;
+        var currentBlogApp = 'wayfarer';
+        var isLogined = false;
+        var isBlogOwner = false;
+        window.isCorp = false;
+        window.skinName = 'LessIsMoreRight';
+        var visitorUserId = '';
+        window.hasCustomScript = false;
+        window.cb_enable_mathjax = false;
+        window.mathEngine = 0;
+        window.codeHighlightEngine = 1;
+        window.enableCodeLineNumber = false;
+        window.codeHighlightTheme = 'cnblogs';
+        window.darkModeCodeHighlightTheme = 'vs2015';
+        window.isDarkCodeHighlightTheme = false;
+        window.isDarkModeCodeHighlightThemeDark = true;
+        window.isDisableCodeHighlighter = false;
+        window.enableCodeThemeTypeFollowSystem = false;
+        window.enableMacStyleCodeBlock = false;        
+    </script>
+    <script src="https://assets.cnblogs.com/scripts/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn-www.cnblogs.com/js/blog-common.min.js?v=FwnIdzeYfDo281O8EGYSQv8PVSIaL2l9cB9M4kEu8LI"></script>
+    
+</head>
+<body class="skin-lessismoreright has-navbar">
+    <a name="top"></a>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding">
+                    <a href="https://www.cnblogs.com/" title="开发者的网上家园" role="banner">
+                        <img src="//assets.cnblogs.com/logo.svg" alt="博客园logo" />
+                    </a>
+                </li>
+                <li><a href="https://cnblogs.vip/">会员</a></li>
+                <li><a href="https://cnblogs.vip/store">周边</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-q')">博问</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-ing')">闪存</a></li>                
+                <li><a href="https://www.cnblogs.com/cmt/p/19316348">赞助商</a></li>
+                <li><a href="https://youclaw.dev/" target="_blank" onclick="countClicks('nav', 'skin-navbar-youclaw')">YouClaw</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search dropdown" action="https://zzk.cnblogs.com/s" method="get" role="search">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="search" tabindex="3" autocomplete="off" />
+                        <button id="zzk_search_button" onclick="window.navbarSearchManager.triggerActiveOption()">
+                            <img id="search_icon" class="focus-hidden" src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                            <img class="hidden focus-visible" src="//assets.cnblogs.com/icons/enter.svg" alt="搜索" />
+                        </button>
+                        <ul id="navbar_search_options" class="dropdown-menu quick-search-menu">
+                            <li tabindex="0" class="active" onclick="zzkSearch(event, document.getElementById('zzk_search_input').value)">
+                                <div class="keyword-wrapper">
+                                    <img src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                                    <div class="keyword"></div>
+                                </div>
+                                <span class="search-area">所有博客</span>
+                            </li>
+                                    <li tabindex="1" onclick="zzkBlogSearch(event, 'wayfarer', document.getElementById('zzk_search_input').value)">
+                                        <div class="keyword-wrapper">
+                                            <img src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                                            <div class="keyword"></div>
+                                        </div>
+                                        <span class="search-area">当前博客</span>
+                                    </li>
+                        </ul>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://www.cnblogs.com/my" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/message.svg" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <a id="navbar_lite_mode_indicator" data-current-page="blog" style="display: none" href="javascript:void(0)" alt="简洁模式" title="简洁模式启用，您在访问他人博客时会使用简洁款皮肤展示">
+                        <img class="navbar-icon" src="//assets.cnblogs.com/icons/lite-mode-on.svg" alt="简洁模式" />
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="//assets.cnblogs.com/icons/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://www.cnblogs.com/my">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="https://vip.cnblogs.com/my">会员中心</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+
+    <div id="home">
+    <div id="header">
+        <div id="blogTitle">
+            <div class="title"><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/wayfarer">逸见</a>
+</div>
+<div class="subtitle">张逸的博客</div>
+
+        </div>
+        <div id="navigator">
+            
+<ul id="navList">
+    <li id="nav_sitehome"><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+    <li id="nav_myhome">
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/wayfarer/">
+首页</a>
+</li>
+    <li id="nav_newpost">
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+    <li id="nav_contact">
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E5%BC%A0%E9%80%B8">
+联系</a></li>
+    <li id="nav_rss">
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/wayfarer/rss/">
+订阅</a></li>
+    <li id="nav_admin">
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+            <div class="blogStats">
+                <div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+            </div>
+        </div>
+    </div>
+    <div id="main">
+        <div id="mainContent">
+            <div class="forFlow">
+                
+
+
+
+
+
+
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_8419532">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/wayfarer/p/archive/2018/02">2018年2月
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/wayfarer/p/summary-of-reactive-programming.html">
+    <span>
+        响应式编程的实践
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_8419532">
+摘要：        
+响应式编程在前端开发以及Android开发中有颇多运用，然而它的非阻塞异步编程模型以及对消息流的处理模式也在后端得到越来越多的应用。除了Netflix的OSS中大量使用了响应式编程之外，最近阿里也提出Dubbo 3.0版本将全面拥抱响应式编程。 我之前针对某些项目需求也给出了响应式编程的方案，较好地    <a href="https://www.cnblogs.com/wayfarer/p/summary-of-reactive-programming.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2018-02-05 21:41
+张逸
+<span data-post-id="8419532" class="post-view-count">阅读(4361)</span>
+<span data-post-id="8419532" class="post-comment-count">评论(1)</span>
+<span data-post-id="8419532" class="post-digg-count">推荐(0)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_8179302">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/wayfarer/p/archive/2018/01">2018年1月
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/wayfarer/p/feature-of-high-quality-code.html">
+    <span>
+        高质量代码的特征
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_8204676">
+摘要：        
+回想起来，我觉得我们似乎在误读Uncle Bob的Clean Code，至少我们错误地将所谓Clean与可读性代码简单地划上了等号。尤为不幸的是，在Clean Code一书中，从第二章到第五章都围绕着可读性代码做文章，于是加深了这种错误的印象。 许多具有代码洁癖的程序员将代码可读性视为神圣不可侵犯的    <a href="https://www.cnblogs.com/wayfarer/p/feature-of-high-quality-code.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2018-01-05 15:11
+张逸
+<span data-post-id="8204676" class="post-view-count">阅读(5947)</span>
+<span data-post-id="8204676" class="post-comment-count">评论(5)</span>
+<span data-post-id="8204676" class="post-digg-count">推荐(4)</span>
+
+
+        </div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/wayfarer/p/data-process-for-big-data.html">
+    <span>
+        剖析大数据平台的数据处理
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_8179463">
+摘要：        
+我在一次社区活动中做过一次分享，演讲题目为《大数据平台架构技术选型与场景运用》。在演讲中，我主要分析了大数据平台架构的生态环境，并主要以数据源、数据采集、数据存储与数据处理四个方面展开分析与讲解，并结合具体的技术选型与需求场景，给出了我个人对大数据平台的理解。本文讲解数据处理部分。 无论是采集数据，    <a href="https://www.cnblogs.com/wayfarer/p/data-process-for-big-data.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2018-01-02 21:54
+张逸
+<span data-post-id="8179463" class="post-view-count">阅读(2416)</span>
+<span data-post-id="8179463" class="post-comment-count">评论(0)</span>
+<span data-post-id="8179463" class="post-digg-count">推荐(2)</span>
+
+
+        </div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/wayfarer/p/data-storage-for-big-data.html">
+    <span>
+        剖析大数据平台的数据存储
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_8179302">
+摘要：        
+我在一次社区活动中做过一次分享，演讲题目为《大数据平台架构技术选型与场景运用》。在演讲中，我主要分析了大数据平台架构的生态环境，并主要以数据源、数据采集、数据存储与数据处理四个方面展开分析与讲解，并结合具体的技术选型与需求场景，给出了我个人对大数据平台的理解。本文讲解数据存储部分。 数据作为一种资产    <a href="https://www.cnblogs.com/wayfarer/p/data-storage-for-big-data.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2018-01-02 21:42
+张逸
+<span data-post-id="8179302" class="post-view-count">阅读(5776)</span>
+<span data-post-id="8179302" class="post-comment-count">评论(0)</span>
+<span data-post-id="8179302" class="post-digg-count">推荐(1)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_8053509">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/wayfarer/p/archive/2017/12">2017年12月
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/wayfarer/p/data-ingestion-for-big-data.html">
+    <span>
+        剖析大数据平台的数据采集
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_8067819">
+摘要：        
+我在一次社区活动中做过一次分享，演讲题目为《大数据平台架构技术选型与场景运用》。在演讲中，我主要分析了大数据平台架构的生态环境，并主要以数据源、数据采集、数据存储与数据处理四个方面展开分析与讲解，并结合具体的技术选型与需求场景，给出了我个人对大数据平台的理解。本文讲解数据采集部分。 数据采集的设计，    <a href="https://www.cnblogs.com/wayfarer/p/data-ingestion-for-big-data.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2017-12-19 21:27
+张逸
+<span data-post-id="8067819" class="post-view-count">阅读(8121)</span>
+<span data-post-id="8067819" class="post-comment-count">评论(0)</span>
+<span data-post-id="8067819" class="post-digg-count">推荐(2)</span>
+
+
+        </div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/wayfarer/p/data-source-for-big-data.html">
+    <span>
+        剖析大数据平台的数据源
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_8056061">
+摘要：        
+我在一次社区活动中做过一次分享，演讲题目为《大数据平台架构技术选型与场景运用》。在演讲中，我主要分析了大数据平台架构的生态环境，并主要以数据源、数据采集、数据存储与数据处理四个方面展开分析与讲解，并结合具体的技术选型与需求场景，给出了我个人对大数据平台的理解。本文是演讲内容的第一部分。 大数据平台是    <a href="https://www.cnblogs.com/wayfarer/p/data-source-for-big-data.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2017-12-18 09:10
+张逸
+<span data-post-id="8056061" class="post-view-count">阅读(7424)</span>
+<span data-post-id="8056061" class="post-comment-count">评论(0)</span>
+<span data-post-id="8056061" class="post-digg-count">推荐(1)</span>
+
+
+        </div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/wayfarer/p/2017-ddd-submit-china.html">
+    <span>
+        DDD峰会归来话DDD
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_8053509">
+摘要：        
+一场大戏落幕，首届DDD中国峰会如大会主题色一般的红。或许在12月9日这一天，全中国的DDD粉丝大约有一半都汇聚在了国家会议中心。听起来是幸，其实是不幸，因为DDD在中国的人群基数实在是太少了。 因为要负责大会的其中一个Track，期间又要接受采访，另外还有朋友到访，所以除了前面的两个keynote    <a href="https://www.cnblogs.com/wayfarer/p/2017-ddd-submit-china.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2017-12-17 21:51
+张逸
+<span data-post-id="8053509" class="post-view-count">阅读(14730)</span>
+<span data-post-id="8053509" class="post-comment-count">评论(29)</span>
+<span data-post-id="8053509" class="post-digg-count">推荐(40)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_5450877">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/wayfarer/p/archive/2016/05">2016年5月
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/wayfarer/p/5450877.html">
+    <span>
+        贝叶斯定理与直觉
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_5450877">
+摘要：        
+本文为阅读 &quot;Data Science from Scratch&quot; 之笔记，文中案例、公式分析皆来自此书 让我们先来看看生活中的一个小例子。假设有某种疾病D，在10000人中会有1人患此病；又假设对患此病的人进行测试，测试为阳性的比例达到99%，也就是说100名患者中，有99名患者检测结果皆为阳性（    <a href="https://www.cnblogs.com/wayfarer/p/5450877.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2016-05-01 18:07
+张逸
+<span data-post-id="5450877" class="post-view-count">阅读(3549)</span>
+<span data-post-id="5450877" class="post-comment-count">评论(6)</span>
+<span data-post-id="5450877" class="post-digg-count">推荐(3)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_5364115">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/wayfarer/p/archive/2016/04">2016年4月
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/wayfarer/p/5364115.html">
+    <span>
+        重新审视演进式设计
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_5364115">
+摘要：        
+说起来，所谓Evolutionary Design已经是老生常谈了。早在2004年，Martin Fowler在文章 &quot;Is Design Dead&quot; 中就深刻地比较了计划式设计与演进式设计，至今阅读这篇文章，对于理解敏捷和演进式设计依旧振聋发聩。我在博客 &quot;设计恰如其分的架构&quot; 中，也算得上是旁征    <a href="https://www.cnblogs.com/wayfarer/p/5364115.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2016-04-07 16:21
+张逸
+<span data-post-id="5364115" class="post-view-count">阅读(2508)</span>
+<span data-post-id="5364115" class="post-comment-count">评论(7)</span>
+<span data-post-id="5364115" class="post-digg-count">推荐(11)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_5342610">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/wayfarer/p/archive/2016/03">2016年3月
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/wayfarer/p/5342610.html">
+    <span>
+        设计恰如其分的架构
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_5342610">
+摘要：        
+远在2009年，Martin Fowler与Rebecca Parsons在QCon SF做了一次题为Agilists and Architects: Allies not Adversaries Presentation的演讲。演讲主要讨论了在敏捷方法中的架构活动。相似的话题，Neal Ford则    <a href="https://www.cnblogs.com/wayfarer/p/5342610.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2016-03-31 20:25
+张逸
+<span data-post-id="5342610" class="post-view-count">阅读(2744)</span>
+<span data-post-id="5342610" class="post-comment-count">评论(1)</span>
+<span data-post-id="5342610" class="post-digg-count">推荐(5)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+
+<div class="topicListFooter">
+    <div id="nav_next_page">
+        
+    <a href="https://www.cnblogs.com/wayfarer?page=2">
+        下一页
+    </a>
+
+    </div>    
+</div>
+
+
+
+
+<script>
+    updatePostStats(
+        $(".post-view-count").map(function () { return this.dataset.postId }).get(),
+        function(id, count) { $(".post-view-count[data-post-id=" + id + "]").text("阅读(" + count + ")") },
+        function(id, count) { $(".post-comment-count[data-post-id=" + id + "]").text("评论(" + count + ")") },
+        function(id, count) { $(".post-digg-count[data-post-id=" + id + "]").text("推荐(" + count + ")") });
+</script>
+            </div>
+        </div>
+
+        <div id="sideBar">
+            <div id="sideBarMain">
+                <div id="sidebar_news" class="newsItem">
+    
+<h3 class="catListTitle">公告</h3>
+<div id="blog-news" class="sidebar-news">
+    <div id="sidebar_news_container">
+    </div>
+</div>
+<script>loadBlogNews();</script>
+</div>
+                <div id="calendar"><div id="blog-calendar" style="display:none"></div></div>                
+                <script>loadBlogDefaultCalendar();</script>
+                <div id="leftcontentcontainer">
+                    <!-- begin:SingleColumn -->
+                    <div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+                    <!-- end:  SingleColumn -->
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+    <div id="footer">
+        
+<a href="https://www.cnblogs.com/" id="footer_site_link" class="footer-brand">博客园</a>
+<span class="footer-copyright"> &nbsp;&copy;&nbsp; 2004-2026</span>
+<br /><span class="footer-icp">
+    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602011771"><img src="//assets.cnblogs.com/images/ghs.png" />浙公网安备 33010602011771号</a>
+    <a href="https://beian.miit.gov.cn" target="_blank">浙ICP备2021040463号-3</a>
+</span>
+
+    </div>
+</div>
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8OBZrxGJLy5MvghieKIKXCzxmUbogSquOWDC9jAHHLChmBaZbzoEfOMlm0Agpg_cRvYiJd3biiShz2l2PJhJ7jIs__XHzxfQEitV-B4SCweFvGxz4q2dgyL1x3XVbG1xjZ6qJniI4DRd5mW__xk_fKs" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M95P3TTWJZ"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-M95P3TTWJZ');
+</script>
+<script defer src="https://hm.baidu.com/hm.js?866c9be12d4a814454792b1fd0fed295"></script>
+</body>
+</html>

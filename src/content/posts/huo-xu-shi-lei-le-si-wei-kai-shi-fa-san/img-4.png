@@ -1,0 +1,2572 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />            
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    <title>idior - 博客园</title>
+    
+        
+    
+        
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=9xvyan1yGH1Ggi8nKJ01Xc2nqMWMqJCy_-EYS2m06xA" />
+    
+
+    <link id="MainCss" rel="stylesheet" href="/skins/kjc/bundle-kjc.min.css?v=Fi4_AqSodKEelzhAlQOThx74K5fkNsq_u7gaiFaxUhI" />
+        
+    
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/kjc/bundle-kjc-mobile.min.css?v=a5tjm35tHR3Bq88JZf8V-jiXDhgs5wg823qWgRI6uRY" />
+    
+    <link id="favicon" rel="icon" type="image/x-icon" sizes="32x32" href="https://assets.cnblogs.com/favicon_v3_3.ico" />
+    <link id="favicon_svg" rel="icon" type="image/svg+xml" href="https://assets.cnblogs.com/favicon_v3_3.svg" />
+    <link rel="apple-touch-icon" href="https://assets.cnblogs.com/apple-touch-icon.png?v=2" />
+    <link rel="canonical" href="https://www.cnblogs.com/idior" />
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/idior/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/idior/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/idior/wlwmanifest.xml" />
+    
+
+    <script>
+        var currentBlogId = 1709;
+        var currentBlogApp = 'idior';
+        var isLogined = false;
+        var isBlogOwner = false;
+        window.isCorp = false;
+        window.skinName = 'KJC';
+        var visitorUserId = '';
+        window.hasCustomScript = true;
+        window.cb_enable_mathjax = false;
+        window.mathEngine = 0;
+        window.codeHighlightEngine = 1;
+        window.enableCodeLineNumber = false;
+        window.codeHighlightTheme = 'cnblogs';
+        window.darkModeCodeHighlightTheme = 'vs2015';
+        window.isDarkCodeHighlightTheme = false;
+        window.isDarkModeCodeHighlightThemeDark = true;
+        window.isDisableCodeHighlighter = false;
+        window.enableCodeThemeTypeFollowSystem = false;
+        window.enableMacStyleCodeBlock = false;        
+    </script>
+    <script src="https://assets.cnblogs.com/scripts/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn-www.cnblogs.com/js/blog-common.min.js?v=FwnIdzeYfDo281O8EGYSQv8PVSIaL2l9cB9M4kEu8LI"></script>
+        <script>updateCustomBlogReferrer();</script>
+    
+</head>
+<body class="skin-kjc no-navbar">
+    <a name="top"></a>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding">
+                    <a href="https://www.cnblogs.com/" title="开发者的网上家园" role="banner">
+                        <img src="//assets.cnblogs.com/logo.svg" alt="博客园logo" />
+                    </a>
+                </li>
+                <li><a href="https://cnblogs.vip/">会员</a></li>
+                <li><a href="https://cnblogs.vip/store">周边</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-q')">博问</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-ing')">闪存</a></li>                
+                <li><a href="https://www.cnblogs.com/cmt/p/19316348">赞助商</a></li>
+                <li><a href="https://youclaw.dev/" target="_blank" onclick="countClicks('nav', 'skin-navbar-youclaw')">YouClaw</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search dropdown" action="https://zzk.cnblogs.com/s" method="get" role="search">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="search" tabindex="3" autocomplete="off" />
+                        <button id="zzk_search_button" onclick="window.navbarSearchManager.triggerActiveOption()">
+                            <img id="search_icon" class="focus-hidden" src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                            <img class="hidden focus-visible" src="//assets.cnblogs.com/icons/enter.svg" alt="搜索" />
+                        </button>
+                        <ul id="navbar_search_options" class="dropdown-menu quick-search-menu">
+                            <li tabindex="0" class="active" onclick="zzkSearch(event, document.getElementById('zzk_search_input').value)">
+                                <div class="keyword-wrapper">
+                                    <img src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                                    <div class="keyword"></div>
+                                </div>
+                                <span class="search-area">所有博客</span>
+                            </li>
+                                    <li tabindex="1" onclick="zzkBlogSearch(event, 'idior', document.getElementById('zzk_search_input').value)">
+                                        <div class="keyword-wrapper">
+                                            <img src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                                            <div class="keyword"></div>
+                                        </div>
+                                        <span class="search-area">当前博客</span>
+                                    </li>
+                        </ul>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://www.cnblogs.com/my" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/message.svg" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <a id="navbar_lite_mode_indicator" data-current-page="blog" style="display: none" href="javascript:void(0)" alt="简洁模式" title="简洁模式启用，您在访问他人博客时会使用简洁款皮肤展示">
+                        <img class="navbar-icon" src="//assets.cnblogs.com/icons/lite-mode-on.svg" alt="简洁模式" />
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="//assets.cnblogs.com/icons/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://www.cnblogs.com/my">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="https://vip.cnblogs.com/my">会员中心</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="page_begin_html">
+        <style type="text/css">
+.markdown-post h1 
+{
+	font-weight: bold;
+	font-size: 2.2em;
+    margin: 25px 0px 15px;
+}
+.markdown-post h2
+{
+	font-size: 2em;
+    font-weight: bold;
+    margin: 25px 0 15px;
+}
+.markdown-post h3
+{
+	font-weight: bold;
+	font-size: 1.2em;
+    margin: 10px 0px 5px;
+}
+.markdown-post pre.prettyprint 
+{ 
+    border-left: 5px solid #EEEEEE;
+    padding: 5px 10px;
+    margin-left: 25px;
+}
+.markdown-post img {
+    border: 2px solid #EFEFEF;
+    margin-left: 25px;
+    padding: 5px;
+}
+
+/* Pretty printing styles. Used with prettify.js. */
+.markdown-post .str { color: #080; }
+.markdown-post .kwd { color: #008; }
+.markdown-post .com { color: #800; }
+.markdown-post .typ { color: #606; }
+.markdown-post .lit { color: #066; }
+.markdown-post .pun { color: #660; }
+.markdown-post .pln { color: #000; }
+.markdown-post .tag { color: #008; }
+.markdown-post .atn { color: #606; }
+.markdown-post .atv { color: #080; }
+.markdown-post .dec { color: #606; }
+</style>
+    </div>
+
+    <table class="Framework" cellspacing="0" cellpadding="0" width="100%">
+	<tr>
+		<td colspan="3">
+			
+<div id="top">
+<table cellpadding="10" cellspacing="0">
+	<tr>
+		<td>
+			<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/idior">享受代码,享受人生</a>
+</h1>
+			<strong><em>SOA is an&nbsp;<span style="COLOR: red">integration</span> solution.    SOA is<span style="COLOR: red"> message oriented</span> first.<br>The Key character of SOA is <span style="COLOR: red">loosely coupled</span>. <span>SOA is enriched</span></em></strong><span><strong><em> by creating <span style="COLOR: red">composite</span> apps.
+		</td>
+	</tr>
+</table>
+</div>
+<div id="sub">
+	<div id="sub-right"><div id="blog_stats_place_holder"><script>loadBlogStats();</script></div></div>
+	&nbsp;
+<a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+&nbsp;::
+
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/idior/">
+首页</a>
+&nbsp;::
+
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+&nbsp;::
+
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/idior">
+联系</a>&nbsp;::
+
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/idior/rss/">
+订阅</a>
+
+<a id="blog_nav_rss_image" href="https://www.cnblogs.com/idior/rss/">
+    <img src="/skins/kjc/images/xml.gif" alt="订阅" />
+</a>&nbsp;::
+
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+
+
+
+</div>
+
+
+		</td>
+	</tr>
+	<tr>
+		<td class="LeftCell">
+			<div id="leftmenu">
+		            <div id="calendar"><div id="blog-calendar" style="display:none"></div></div>                
+                    <script>loadBlogDefaultCalendar();</script>
+		            <div id="sidebar_news" class="newsItem">
+    <div id="cell" class="cell sidebar-card">
+<h3>公告</h3>
+<div id="news">
+	<div id="blog-news" class="sidebar-news">
+    <div id="sidebar_news_container">
+    </div>
+</div>
+<script>loadBlogNews();</script>
+</div>
+</div>
+
+
+</div>
+	            <div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+		</td>
+		<td class="MainCell">
+			<div id="main">
+				
+
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2007/11/25"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_971279">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2007/11/25/971279.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        Inside WCF Runtime
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_971279">
+摘要：        
+WCF成功的一个重要原因在于它简单易用的编程模型。用户不用关心分布式应用的底层细节，仅仅通过定义一些ABC再设置一些特性（Attribute）就可以很方便的完成服务的开发与发布。但是当你在为你的服务类或方法添加一些诸如OperationContractAttribute与SeriveBehaviorAttribute等特性的时候，你有没有想过WCF框架最终是如何处理他们的？为什么仅仅通过一些特性的...    <a href="https://www.cnblogs.com/idior/archive/2007/11/25/971279.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2007-11-25 22:09
+idior
+<span data-post-id="971279" class="post-view-count">阅读(5234)</span>
+<span data-post-id="971279" class="post-comment-count">评论(7)</span>
+<span data-post-id="971279" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2007/08/28"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_864595">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2007/08/28/864595.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        Practical .NET2 and C#2 翻译样章
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_864595">
+摘要：        
+Practical .Net2 and C#2: Harness the Platform, the Language, the Framework (Paperback) by Patrick Smacchia  (34 customer reviews) Translated by Shi fan, Xu ning,Tan yinghua,Li yonglun Most Helpful Cus...    <a href="https://www.cnblogs.com/idior/archive/2007/08/28/864595.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2007-08-28 09:47
+idior
+<span data-post-id="864595" class="post-view-count">阅读(9675)</span>
+<span data-post-id="864595" class="post-comment-count">评论(64)</span>
+<span data-post-id="864595" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2007/03/06"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_665479">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2007/03/06/665479.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        Remoting基本原理及其扩展机制
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_665479">
+摘要：        
+在本系列的文章中将介绍.NET Remoting框架实现远程调用的基本原理，以及如何对其加以扩展。Remoting基本原理及其扩展机制（上）Remoting基本原理及其扩展机制（中）Remoting基本原理及其扩展机制（下）参考资料：《Advanced Remoting》《Pattern oriented software architecture vol1》《Remoting Patterns》...    <a href="https://www.cnblogs.com/idior/archive/2007/03/06/665479.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2007-03-06 14:29
+idior
+<span data-post-id="665479" class="post-view-count">阅读(10453)</span>
+<span data-post-id="665479" class="post-comment-count">评论(16)</span>
+<span data-post-id="665479" class="post-digg-count">推荐(1)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/12/29"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_606970">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2006/12/29/606970.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        沿着&ldquo;重用&rdquo;我们一路走来&mdash;&mdash;SA、OO（DP）、Component、SOA、AOP
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_606970">
+摘要：        
+自从有了软件开发以来，消除重复，提高软件的重用性就一直是我们所追求的一个重要目标，本文将围绕着这一主题，带大家重走一遍结构化（SA）、面向对象（OO）与设计模式（Design Pattern）、组建化（Component）、面向方面（AOP）直至面向服务（SOA）这条软件开发技术的发展之路。让我从&#8220;重用&#8221;这么一个简单甚至是片面的的角度让大家对这些出现在众多文章中的名词有一个...    <a href="https://www.cnblogs.com/idior/archive/2006/12/29/606970.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-12-29 13:37
+idior
+<span data-post-id="606970" class="post-view-count">阅读(5514)</span>
+<span data-post-id="606970" class="post-comment-count">评论(0)</span>
+<span data-post-id="606970" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/09/11"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_491797">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2006/09/11/491797.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        Distributed Application in .Net
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_491797">
+摘要：        
+在接下去的几篇文章中，我将对分布式应用中的一些问题做一些介绍，希望通过这些介绍能够加深我们对分布式应用的了解，这些话题所讨论的内容可以说很基础，但是在进行分布式设计和开发中所必须深刻理解的。我们经常谈到所谓的企业级应用，那么什么样的程序才算是企业级的呢？ 使用数据库，持久化技术，可以算是企业开发的一个明显特征，而需要用到分布式技术也可以算是企业级应用中的一个特征。分布式？ 太高深，和我无关，哎你还...    <a href="https://www.cnblogs.com/idior/archive/2006/09/11/491797.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-09-11 10:36
+idior
+<span data-post-id="491797" class="post-view-count">阅读(7589)</span>
+<span data-post-id="491797" class="post-comment-count">评论(8)</span>
+<span data-post-id="491797" class="post-digg-count">推荐(1)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/06/28"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_431017">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2006/06/28/431017.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        WS-Addressing 从理论到实践 --- SOA基础规范介绍
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_431017">
+摘要：        
+为了让SOA的应用能够更加的成熟，一些标准化组织(主要有W3C，OASIS)对Web Services的功能进行了扩展，为此制定了一系列的WS-*规范。通过这些规范，使得Web Services在实际应用中的能力得到了很大的增强，这些能力主要体现在对服务质量的保障上，例如安全，可靠性，事务等等。其中，WS-Addressing规范作为一个基础，为其余的规范提供了重要的支持功能，因此有必要在了解其他...    <a href="https://www.cnblogs.com/idior/archive/2006/06/28/431017.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-06-28 13:38
+idior
+<span data-post-id="431017" class="post-view-count">阅读(15496)</span>
+<span data-post-id="431017" class="post-comment-count">评论(12)</span>
+<span data-post-id="431017" class="post-digg-count">推荐(1)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/05/16"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_354066">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2006/05/16/354066.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        Web Services Security
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_354066">
+摘要：        
+本系列将介绍有关Web Services 安全有关的内容，其中涉及技术: XML Signature，XML Encryption和SAML,WS-Security，WS-Trust等等。在本系列的文章中将主要关注其原理，以及个人对相关技术的理解。在MS不断更新的WSE系列中，安全可以算是其中的重要内容，如果可能将结合原理用WSE做一些技术实践。Web Services Security --- ...    <a href="https://www.cnblogs.com/idior/archive/2006/05/16/354066.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-05-16 09:57
+idior
+<span data-post-id="354066" class="post-view-count">阅读(33080)</span>
+<span data-post-id="354066" class="post-comment-count">评论(35)</span>
+<span data-post-id="354066" class="post-digg-count">推荐(3)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/04/27"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_124373">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2006/04/27/124373.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        dotLucene 系列文章
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_124373">
+摘要：        
+Introduce dotLucene 系列一 --- 一个小例子 Index dotLucene 系列二 --- index 上 dotLucene 系列三 --- index 中 dotLucene 系列四 --- index 下 Search dotLucene 系列五 --- search 上 dotLucene 系列五 --- search 下 Analyse ... 本地链接测试代码下...    <a href="https://www.cnblogs.com/idior/archive/2006/04/27/124373.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-04-27 21:54
+idior
+<span data-post-id="124373" class="post-view-count">阅读(11790)</span>
+<span data-post-id="124373" class="post-comment-count">评论(18)</span>
+<span data-post-id="124373" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/02/05"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_325827">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2006/02/05/325827.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        Double Dispatch And Visitor Pattern
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_325827">
+摘要：        
+Visitor Pattern本来应该是什么样？什么是Double-Dispatch？为什么Visitor Pattern 需要使用Double-Dispatch. 不使用Double-Dispatch能实现Visitor Pattern吗？本文将进一步解读&lt;&lt;Design Pattern&gt;&gt;中的Visitor 模式。详细内容    <a href="https://www.cnblogs.com/idior/archive/2006/02/05/325827.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-02-05 22:52
+idior
+<span data-post-id="325827" class="post-view-count">阅读(3481)</span>
+<span data-post-id="325827" class="post-comment-count">评论(0)</span>
+<span data-post-id="325827" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/01/12"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_315947">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2006/01/12/315947.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        Separate Contract from Implementation
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_315947">
+摘要：        
+从一个遗留问题谈起, 涉及技术(oo, dynamic proxy, duck type, template)    <a href="https://www.cnblogs.com/idior/archive/2006/01/12/315947.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-01-12 14:06
+idior
+<span data-post-id="315947" class="post-view-count">阅读(3919)</span>
+<span data-post-id="315947" class="post-comment-count">评论(9)</span>
+<span data-post-id="315947" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2005/09/20"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_240324">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2005/09/20/240324.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        C# 3.0 Orcas 简介 
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_240324">
+摘要：        
+以一些代码片段和个人的理解对LINQ的介绍:(我更愿意叫它LINQ,而不是Orcas, 因为它可能根本不是Orcas,而是.Net2.1)主要内容包括: Implicitly typed local variables Extension methods Lambda Expressions Object and Collection initializers Anonymous types Qu...    <a href="https://www.cnblogs.com/idior/archive/2005/09/20/240324.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2005-09-20 11:49
+idior
+<span data-post-id="240324" class="post-view-count">阅读(4081)</span>
+<span data-post-id="240324" class="post-comment-count">评论(3)</span>
+<span data-post-id="240324" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+    <div class="post" role="article" aria-describedby="postlist_description_237089">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/articles/237089.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        C# 3.0 Orcas 简介
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_237089">
+摘要：        
+以一些代码片段和个人的理解对LINQ的介绍: (我更愿意叫它LINQ,而不是Orcas, 因为它可能根本不是Orcas,而是.Net2.1) 主要内容包括: Implicitly typed local variables Extension methods Lambda Expressions Object and Collection initializers Anonymous types Query Expressions    <a href="https://www.cnblogs.com/idior/articles/237089.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2005-09-20 11:42
+idior
+<span data-post-id="237089" class="post-view-count">阅读(12060)</span>
+<span data-post-id="237089" class="post-comment-count">评论(115)</span>
+<span data-post-id="237089" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2005/08/09"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_210567">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2005/08/09/210567.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        Enterprise Test Driven Develop 
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_210567">
+摘要：        
+TDD这个概念出现至少也有两年多了, 在大家刚接触它时候, 几乎没人不拍手鼓掌, 测试驱动的概念确实可以为我们带来很多的好处. 泡泡在前不久写了一篇很不错的TDD的文章, 可是我还是忍不住在他的评论中说到这篇文章有点&#8221;老&#8221;. 确实,同样的概念在书中, 在大家的口中已经被说烂了. 但是TDD真正给我们带来什么呢? 有多少人在用TDD呢? 为什么这么好的技术到了应用中就被人们&...    <a href="https://www.cnblogs.com/idior/archive/2005/08/09/210567.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2005-08-09 10:15
+idior
+<span data-post-id="210567" class="post-view-count">阅读(4964)</span>
+<span data-post-id="210567" class="post-comment-count">评论(5)</span>
+<span data-post-id="210567" class="post-digg-count">推荐(1)</span>
+
+
+        </p>
+    </div>    
+    <div class="post" role="article" aria-describedby="postlist_description_210320">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/articles/210320.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        Enterprise Test Driven Develop
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_210320">
+摘要：        
+Enterprise Test Driven Develop TDD这个概念出现至少也有两年多了, 在大家刚接触它时候, 几乎没人不拍手鼓掌, 测试驱动的概念确实可以为我们带来很多的好处. 泡泡在前不久写了一篇很不错的TDD的文...    <a href="https://www.cnblogs.com/idior/articles/210320.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2005-08-09 10:09
+idior
+<span data-post-id="210320" class="post-view-count">阅读(6964)</span>
+<span data-post-id="210320" class="post-comment-count">评论(21)</span>
+<span data-post-id="210320" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2005/07/18"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_195222">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2005/07/18/195222.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        Enterprise Persistence Design 
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_195222">
+摘要：        
+在前不久发布的&#8221;质疑国内.Net社区&#8221;的随笔中, 我个人算是对社区的力量抱怨了一把. 下面该有些实际行动来推动社区的发展, 其实在写那篇随笔的时候正在总结一些心得, 现在我把它发表出来供大家讨论,也算是带个好头,希望能起到抛砖引玉的作用. 在阅读此文之前推荐阅读O/R Mapping 基本概念,在基本概念上达成共识. Enterprise Persistence Desig...    <a href="https://www.cnblogs.com/idior/archive/2005/07/18/195222.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2005-07-18 16:32
+idior
+<span data-post-id="195222" class="post-view-count">阅读(3573)</span>
+<span data-post-id="195222" class="post-comment-count">评论(2)</span>
+<span data-post-id="195222" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2005/04/25"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_144573">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2005/04/25/144573.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        .Net2.0的集合(windbey collection)
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_144573">
+摘要：        
+.Net的新功能: 泛型,匿名方法,新的迭代器 这些功能都是与集合的应用紧密相关的,希望以后能有新的发现,将这个系列完善.欢迎提出你的看法 .Net2.0的集合操作 --- What i know? .Net2.0的集合操作 --- What i hope? .Net2.0的集合操作 --- What i forgot? CollectionClosureMethod in .NetArray &...    <a href="https://www.cnblogs.com/idior/archive/2005/04/25/144573.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2005-04-25 00:04
+idior
+<span data-post-id="144573" class="post-view-count">阅读(4324)</span>
+<span data-post-id="144573" class="post-comment-count">评论(1)</span>
+<span data-post-id="144573" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2005/04/22"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_143079">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2005/04/22/143079.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        VSTS Overview
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_143079">
+摘要：        
+看着大家都把beta2装上了, 下面这篇文章可以让你快速了解有关VSTS的全面知识. VSTS OverView 译自Msdn Magazine 3 2005    <a href="https://www.cnblogs.com/idior/archive/2005/04/22/143079.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2005-04-22 01:26
+idior
+<span data-post-id="143079" class="post-view-count">阅读(2778)</span>
+<span data-post-id="143079" class="post-comment-count">评论(4)</span>
+<span data-post-id="143079" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2005/03/04"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_100667">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2005/03/04/100667.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        Delegate比较全面的例子(原创)
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_100667">
+摘要：        
+如题 http://www.cnblogs.com/idior/articles/100666.html    <a href="https://www.cnblogs.com/idior/archive/2005/03/04/100667.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2005-03-04 19:02
+idior
+<span data-post-id="100667" class="post-view-count">阅读(2943)</span>
+<span data-post-id="100667" class="post-comment-count">评论(1)</span>
+<span data-post-id="100667" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2005/02/28"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_108292">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2005/02/28/108292.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        责任分离的思想--- oo dp orm aop
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_108292">
+摘要：        
+从责任分离的角度看待当前的技术 http://www.cnblogs.com/idior/articles/108291.html    <a href="https://www.cnblogs.com/idior/archive/2005/02/28/108292.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2005-02-28 12:13
+idior
+<span data-post-id="108292" class="post-view-count">阅读(2177)</span>
+<span data-post-id="108292" class="post-comment-count">评论(1)</span>
+<span data-post-id="108292" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2004/12/13"></a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_76600">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle pinned-post" href="https://www.cnblogs.com/idior/archive/2004/12/13/76600.html">
+    <span>
+            <span class="pinned-post-mark">[置顶]</span>
+        Webservice 的设计和模式
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_76600">
+摘要：        
+本文是篇译文（原文在devx），对于想初步了解webservice的朋友可能有些帮助。Webservice 作为一项新的技术出现在我们面前，它的出世是用于解决在不同的平台下的应用的协同的。目前几乎每家厂商都要去开发Webservice 应用，然而如果缺乏对Webservice更深的了解，不能很好的在设计阶段处理好一些重要的问题，那么最终完成的系统必然是效率低下，没有可靠性的产品。 在设计Webse...    <a href="https://www.cnblogs.com/idior/archive/2004/12/13/76600.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2004-12-13 21:48
+idior
+<span data-post-id="76600" class="post-view-count">阅读(44708)</span>
+<span data-post-id="76600" class="post-comment-count">评论(19)</span>
+<span data-post-id="76600" class="post-digg-count">推荐(3)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2013/07/01">2013年7月1日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_3164495">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/p/3164495.html">
+    <span>
+        每日代码 - 7/1 减小方法参数的依赖
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_3164495">
+摘要：        
+public List queryItemDetails(List carts){ ItemRepository itemRepository=...; List result = List.newArrayList(); List ids...    <a href="https://www.cnblogs.com/idior/p/3164495.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2013-07-01 11:03
+idior
+<span data-post-id="3164495" class="post-view-count">阅读(807)</span>
+<span data-post-id="3164495" class="post-comment-count">评论(0)</span>
+<span data-post-id="3164495" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2013/06/28">2013年6月28日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_3160922">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/p/3160922.html">
+    <span>
+        每日代码 - 6/29 读写分离
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_3160922">
+摘要：        
+public class CartMainTypeSelector {public static void selectCartMainType(CartContext context,CartOption options){Params params = context.getParams()...    <a href="https://www.cnblogs.com/idior/p/3160922.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2013-06-28 15:16
+idior
+<span data-post-id="3160922" class="post-view-count">阅读(732)</span>
+<span data-post-id="3160922" class="post-comment-count">评论(0)</span>
+<span data-post-id="3160922" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+    <div class="post" role="article" aria-describedby="postlist_description_3160374">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/p/3160374.html">
+    <span>
+        每日代码 - 6/28 代码逻辑分组
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_3160374">
+摘要：        
+int officialShopId = shopId;group.setShopId(officialShopId);XmpUser xmpSeller = buildXmpUser(seller.getSellerInfo());group.setSeller(xmpSeller);L...    <a href="https://www.cnblogs.com/idior/p/3160374.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2013-06-28 10:32
+idior
+<span data-post-id="3160374" class="post-view-count">阅读(656)</span>
+<span data-post-id="3160374" class="post-comment-count">评论(0)</span>
+<span data-post-id="3160374" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2013/06/27">2013年6月27日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_3159093">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/p/3159093.html">
+    <span>
+        每日代码 - 6/26 lambda表达式
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_3159093">
+摘要：        
+public class CartViewRender { public static CartView renderMyCartView(Cart cart){ ErrorCodeEnum errorCode = null; try { ...    <a href="https://www.cnblogs.com/idior/p/3159093.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2013-06-27 16:46
+idior
+<span data-post-id="3159093" class="post-view-count">阅读(704)</span>
+<span data-post-id="3159093" class="post-comment-count">评论(0)</span>
+<span data-post-id="3159093" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+    <div class="post" role="article" aria-describedby="postlist_description_3158896">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/p/3158896.html">
+    <span>
+        每日代码 - 6/27 避免创建非法对象
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_3158896">
+摘要：        
+public class BuyerHelper{ private static final UserRepository userRepository; public static void createAndCheckBuyer(Cart cart) { ...    <a href="https://www.cnblogs.com/idior/p/3158896.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2013-06-27 15:38
+idior
+<span data-post-id="3158896" class="post-view-count">阅读(595)</span>
+<span data-post-id="3158896" class="post-comment-count">评论(0)</span>
+<span data-post-id="3158896" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2010/06/23">2010年6月23日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_1763924">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2010/06/23/1763924.html">
+    <span>
+        Resume
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1763924">
+摘要：        
+Summary Ning Xu is the architect manager of PFS group in State Street Technology (Zhejiang). Mr. Xu is responsible for implementing the architecture d...    <a href="https://www.cnblogs.com/idior/archive/2010/06/23/1763924.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2010-06-23 20:10
+idior
+<span data-post-id="1763924" class="post-view-count">阅读(1398)</span>
+<span data-post-id="1763924" class="post-comment-count">评论(0)</span>
+<span data-post-id="1763924" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2010/06/20">2010年6月20日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_1761383">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2010/06/20/1761383.html">
+    <span>
+        Covariance and Contravariance
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1761383">
+摘要：        
+协变和逆变，这两个词的翻译实在很难表达出他们的真实含义。其实他们是继承和多态的衍生物，而且在.Net 1.0 和2.0中都提供了某种程度的支持，只是在.Net 4.0中支持的更加完善了。 简单说来，协变和逆变就是希望支持更多情况的隐式类型转换,使得我们的编程更加方便，而通常来说只有具备继承关系的两...    <a href="https://www.cnblogs.com/idior/archive/2010/06/20/1761383.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2010-06-20 14:36
+idior
+<span data-post-id="1761383" class="post-view-count">阅读(3859)</span>
+<span data-post-id="1761383" class="post-comment-count">评论(8)</span>
+<span data-post-id="1761383" class="post-digg-count">推荐(6)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2010/06/14">2010年6月14日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_1758232">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2010/06/14/1758232.html">
+    <span>
+        How does ElementName Binding work?
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1758232">
+摘要：        
+How does ElementName Binding work? - Part 1 Logical Tree &amp; NameScopeHow does ElementName Binding work – Part 2 BindingExpressionHow does ElementName B...    <a href="https://www.cnblogs.com/idior/archive/2010/06/14/1758232.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2010-06-14 14:49
+idior
+<span data-post-id="1758232" class="post-view-count">阅读(893)</span>
+<span data-post-id="1758232" class="post-comment-count">评论(0)</span>
+<span data-post-id="1758232" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2010/06/13">2010年6月13日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_1757974">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2010/06/13/1757974.html">
+    <span>
+        Weird behavior of DataContext Inheritance
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1757974">
+摘要：        
+Actually there are several questions in this post, though all of them are about DataContext inheritance. I think you will have have fun with these que...    <a href="https://www.cnblogs.com/idior/archive/2010/06/13/1757974.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2010-06-13 20:16
+idior
+<span data-post-id="1757974" class="post-view-count">阅读(887)</span>
+<span data-post-id="1757974" class="post-comment-count">评论(0)</span>
+<span data-post-id="1757974" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2010/06/12">2010年6月12日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_1757151">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2010/06/12/1757151.html">
+    <span>
+        How does ElementName Binding work – Part 3 InheritanceContext
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1757151">
+摘要：        
+In this part, I am going to introduce a new concept called InheritanceContext. In WPF, there are some elements are not FrameworkElement or even Vi...    <a href="https://www.cnblogs.com/idior/archive/2010/06/12/1757151.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2010-06-12 15:19
+idior
+<span data-post-id="1757151" class="post-view-count">阅读(2290)</span>
+<span data-post-id="1757151" class="post-comment-count">评论(1)</span>
+<span data-post-id="1757151" class="post-digg-count">推荐(2)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2010/06/07">2010年6月7日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_1753452">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2010/06/07/1753452.html">
+    <span>
+        How does ElementName Binding work – Part 2 BindingExpression
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1753452">
+摘要：        
+In part 1, I gave a general finding rule for ElementName binding, it works in most cases, however there are some cases you cannot explain them with th...    <a href="https://www.cnblogs.com/idior/archive/2010/06/07/1753452.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2010-06-07 20:28
+idior
+<span data-post-id="1753452" class="post-view-count">阅读(2955)</span>
+<span data-post-id="1753452" class="post-comment-count">评论(0)</span>
+<span data-post-id="1753452" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2010/06/04">2010年6月4日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_1751738">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2010/06/04/1751738.html">
+    <span>
+        Logical Tree &amp; Visual Tree
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1751738">
+摘要：        
+The existing documentation about the visual tree and logical tree in the Windows SDK leaves much to be desired. Ever since I started with WPF, I have ...    <a href="https://www.cnblogs.com/idior/archive/2010/06/04/1751738.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2010-06-04 21:14
+idior
+<span data-post-id="1751738" class="post-view-count">阅读(2690)</span>
+<span data-post-id="1751738" class="post-comment-count">评论(1)</span>
+<span data-post-id="1751738" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+    <div class="post" role="article" aria-describedby="postlist_description_1751569">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2010/06/04/1751569.html">
+    <span>
+        Memory leak caused by EventHandle - weak event
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1751569">
+摘要：        
+When using normal C# events, registering an event handler creates a strong reference from the event source to the listening object.If the source objec...    <a href="https://www.cnblogs.com/idior/archive/2010/06/04/1751569.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2010-06-04 16:48
+idior
+<span data-post-id="1751569" class="post-view-count">阅读(2457)</span>
+<span data-post-id="1751569" class="post-comment-count">评论(5)</span>
+<span data-post-id="1751569" class="post-digg-count">推荐(2)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2010/05/31">2010年5月31日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_1748112">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2010/05/31/1748112.html">
+    <span>
+        Resources on Debugging/Tracing WPF
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1748112">
+摘要：        
+It is proven that we software developers spend more time debugging than actually writing code. Guess what?!! WPF is no different… We have to debug and...    <a href="https://www.cnblogs.com/idior/archive/2010/05/31/1748112.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2010-05-31 13:05
+idior
+<span data-post-id="1748112" class="post-view-count">阅读(943)</span>
+<span data-post-id="1748112" class="post-comment-count">评论(0)</span>
+<span data-post-id="1748112" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2010/05/28">2010年5月28日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_1746513">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2010/05/28/1746513.html">
+    <span>
+        How does ElementName Binding work? - Part 1 Logical Tree &amp; NameScope
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1746513">
+摘要：        
+Most developers have used {Binding ElementName= myControl , Path = myProperty} in their WPF projects, however you may find it didn’t work for you in ...    <a href="https://www.cnblogs.com/idior/archive/2010/05/28/1746513.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2010-05-28 17:31
+idior
+<span data-post-id="1746513" class="post-view-count">阅读(3800)</span>
+<span data-post-id="1746513" class="post-comment-count">评论(6)</span>
+<span data-post-id="1746513" class="post-digg-count">推荐(4)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2007/09/22">2007年9月22日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_902694">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2007/09/22/902694.html">
+    <span>
+        有谁准备参加10月份的MVP聚会？
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_902694">
+摘要：        
+如题，到时联系一下吧。    <a href="https://www.cnblogs.com/idior/archive/2007/09/22/902694.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2007-09-22 18:40
+idior
+<span data-post-id="902694" class="post-view-count">阅读(1903)</span>
+<span data-post-id="902694" class="post-comment-count">评论(0)</span>
+<span data-post-id="902694" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2007/09/07">2007年9月7日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_885562">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2007/09/07/885562.html">
+    <span>
+        MVP聚会
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_885562">
+摘要：        
+明天在上海的MVP聚会，不知道园子里有多少朋友会去？有机会大家见个面吧，请准备参加的朋友留个联系方式，如邮件，blog地址。    <a href="https://www.cnblogs.com/idior/archive/2007/09/07/885562.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2007-09-07 12:23
+idior
+<span data-post-id="885562" class="post-view-count">阅读(2812)</span>
+<span data-post-id="885562" class="post-comment-count">评论(3)</span>
+<span data-post-id="885562" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2007/07/06">2007年7月6日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_808967">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2007/07/06/808967.html">
+    <span>
+        Be evil or not?
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_808967">
+摘要：        
+今天看了IT界的悲哀--做互联网，就要跳出互联网回想起以前的一些感受，忍不住到首页上抱怨一把。为什么在国内，能够赚钱的点子大多是些作恶的电子呢？恶心的脑白金，害人的网游，垃圾的3721，骗人的科研项目。天哪，为什么随便能想到的一些国内比较赚钱的项目大多是作恶的呢？我承认那些人很有商业头脑，很牛，不过除了比较羡慕他们赚到的money之外，我对这些人是坚决鄙视的。你赚钱无可后非，为啥总是靠这些恶心的事...    <a href="https://www.cnblogs.com/idior/archive/2007/07/06/808967.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2007-07-06 19:38
+idior
+<span data-post-id="808967" class="post-view-count">阅读(3929)</span>
+<span data-post-id="808967" class="post-comment-count">评论(20)</span>
+<span data-post-id="808967" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2007/07/02">2007年7月2日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_803121">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2007/07/02/803121.html">
+    <span>
+        MVP Award July 2007
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_803121">
+摘要：        
+自从开始忙着毕业答辩以后，就很少更新blog了，四月份的时候在dudu的推荐下，申请了七月份的MVP，今天终于收到了MS的邮件，也算是一份让我十分开心的大礼了。 这段时间刚刚在公司入职，MVP的奖励算是对我的blog生涯的一个非常好的总结了。后面的时间将主要集中在本职工作中，并希望在.NET领域有更加深入的研究。 虽然在最近的这段时间更新blog的频率会大大降低，但是我也会通过翻译一些.NET书籍...    <a href="https://www.cnblogs.com/idior/archive/2007/07/02/803121.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2007-07-02 14:21
+idior
+<span data-post-id="803121" class="post-view-count">阅读(1708)</span>
+<span data-post-id="803121" class="post-comment-count">评论(5)</span>
+<span data-post-id="803121" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2007/01/29">2007年1月29日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_633951">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2007/01/29/633951.html">
+    <span>
+        征集译者
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_633951">
+摘要：        
+现有一本英文书需要找人（2-4人）翻译，书名为Microsoft Visual Studio 2005 Unleashed是Sams公司的Unleashed系列图书之一，全书840多页，希望在5月底完成。相关链接如下：http://www.amazon.com/Microsoft-Visual-Studio-2005-Unleashed/dp/0672328194/sr=8-1/qid=11695...    <a href="https://www.cnblogs.com/idior/archive/2007/01/29/633951.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2007-01-29 21:57
+idior
+<span data-post-id="633951" class="post-view-count">阅读(5047)</span>
+<span data-post-id="633951" class="post-comment-count">评论(27)</span>
+<span data-post-id="633951" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/10/24">2006年10月24日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_538387">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/10/24/538387.html">
+    <span>
+        筹建博客园译书团队
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_538387">
+摘要：        
+今天在博客园出书团队的Team Meeting上，大家谈到了翻译出书的事情，也就萌生了组建一个译书团队的念头。该团队的主要任务是翻译国外出版的与.NET相关的优秀书籍。大致的流程是这样的：我们策划想翻译的书，然后联系出版设，出版社方面评估市场前景，如果确认有市场，就由版权部门去申请翻译版权，如果拿到版权我们就可以进行翻译。现在博客园已经和电子工业出版社的博文视点公司建立联系。 在Team Meet...    <a href="https://www.cnblogs.com/idior/archive/2006/10/24/538387.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-10-24 14:13
+idior
+<span data-post-id="538387" class="post-view-count">阅读(4290)</span>
+<span data-post-id="538387" class="post-comment-count">评论(28)</span>
+<span data-post-id="538387" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/10/21">2006年10月21日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_535832">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/10/21/535832.html">
+    <span>
+        翻译校正
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_535832">
+摘要：        
+个人最近正在翻译一本书，其中涉及到以下内容：生成、部署和配置.NET应用程序进程、线程与同步反射,后期绑定,Attribute.NET与本机代码,COM,COM+的互操作如果你对此有兴趣并且有一定的英文或技术背景，可以与我联系，我可以把相应的内容share给你，也请你帮我校正一下我的翻译内容。BTW. I'm still looking for a job...Have a look atmy r...    <a href="https://www.cnblogs.com/idior/archive/2006/10/21/535832.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-10-21 16:42
+idior
+<span data-post-id="535832" class="post-view-count">阅读(2779)</span>
+<span data-post-id="535832" class="post-comment-count">评论(1)</span>
+<span data-post-id="535832" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/09/11">2006年9月11日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_500902">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/09/11/500902.html">
+    <span>
+        WS-* Support On .Net Platform
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_500902">
+摘要：        
+^ MS have already made anextends. * Custom WSE-specific serialization, not compatible with WCF.** Need to be aware what feature to use; no proactive checks for conformance.    <a href="https://www.cnblogs.com/idior/archive/2006/09/11/500902.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-09-11 13:46
+idior
+<span data-post-id="500902" class="post-view-count">阅读(2615)</span>
+<span data-post-id="500902" class="post-comment-count">评论(0)</span>
+<span data-post-id="500902" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/08/15">2006年8月15日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_477258">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/08/15/ObjectBuildvsCastle.html">
+    <span>
+        EnterLib ObjectBuild vs Castle WindsorContainer,  part 1
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_477258">
+摘要：        
+本文通过一个实例比较了在Enterprise Library中的ObjectBuild和Castle中WindsorContainer这两个Ioc/DI框架的使用方式。    <a href="https://www.cnblogs.com/idior/archive/2006/08/15/ObjectBuildvsCastle.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-08-15 14:35
+idior
+<span data-post-id="477258" class="post-view-count">阅读(6596)</span>
+<span data-post-id="477258" class="post-comment-count">评论(16)</span>
+<span data-post-id="477258" class="post-digg-count">推荐(1)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/07/14">2006年7月14日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_451113">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/07/14/451113.html">
+    <span>
+        Constains --- Something i want
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_451113">
+摘要：        
+Something i Want如果你经常重构的话，那么你会发现Extract Method是一个常用的方法，并且随着你不断的Extract Method，渐渐的你的代码种就会浮现出Template Method模式。以下就是一个Template Method的示例abstract class CheckBackground{ protected abstract void CheckBank()...    <a href="https://www.cnblogs.com/idior/archive/2006/07/14/451113.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-07-14 23:41
+idior
+<span data-post-id="451113" class="post-view-count">阅读(2383)</span>
+<span data-post-id="451113" class="post-comment-count">评论(0)</span>
+<span data-post-id="451113" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/06/07">2006年6月7日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_419999">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/06/07/419999.html">
+    <span>
+        O/R Mapping乱弹
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_419999">
+摘要：        
+O/R M一个相当常见的概念，不过也是一个被很多人误解的概念。O/R M据我所知是从Java社区产生的，而到了.Net社区它的意味就完全变了。首先让我们来看看为什么是O/R M而不是R/O M？其实之所以很多人没有理解O/R M的含义就是因为没有充分的考虑上面这个问题。以O为主还是以R为主？你是从面向对象的角度分析考虑问题还是从关系的角度分析考虑问题。从面向对象的角度考虑问题，意味着你可以使用封装...    <a href="https://www.cnblogs.com/idior/archive/2006/06/07/419999.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-06-07 21:32
+idior
+<span data-post-id="419999" class="post-view-count">阅读(20028)</span>
+<span data-post-id="419999" class="post-comment-count">评论(57)</span>
+<span data-post-id="419999" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/05/24">2006年5月24日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_408325">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/05/24/408325.html">
+    <span>
+        WS-Coordination简介
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_408325">
+摘要：        
+在你的分布式应用中，是否常常需要有一个协调者来协调你的活动。如果你有这个需求，那么你可以考虑利用WS-Coordination规范来实现你的协调框架。该规范同时是在Web Services环境中实现业务过程事务性的基础，如果你对此感兴趣，请阅读本文。注: WCF中已经实现了该规范，甚至实现了WS-AtomicTransaction规范，即原子性事务。另外对于SOA有兴趣的朋友最近可以关注一下MS的...    <a href="https://www.cnblogs.com/idior/archive/2006/05/24/408325.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-05-24 20:28
+idior
+<span data-post-id="408325" class="post-view-count">阅读(4819)</span>
+<span data-post-id="408325" class="post-comment-count">评论(0)</span>
+<span data-post-id="408325" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/05/05">2006年5月5日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_392228">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/05/05/392228.html">
+    <span>
+        RhinoMock2 续(TDD Mock)
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_392228">
+摘要：        
+在去年8月份我曾经写过两篇介绍RhinoMock的文章，最近有人在评论中指出在文章介绍的Mock对象的创建方式在新版本的RhinoMock中不再支持。由于我最近一直没有使用RhinoMock，于是我特地去查了一下有关资料，发现卢彦在去年12月份写的一篇文章中同样出现了这个问题，我赶紧到RhinoMock的讨论组查了一下资料，发现我之前的使用方法确实出了问题，该方法被Ayende cut掉了。为了避...    <a href="https://www.cnblogs.com/idior/archive/2006/05/05/392228.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-05-05 21:15
+idior
+<span data-post-id="392228" class="post-view-count">阅读(3168)</span>
+<span data-post-id="392228" class="post-comment-count">评论(1)</span>
+<span data-post-id="392228" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/03/20">2006年3月20日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_354027">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/03/20/354027.html">
+    <span>
+        Kerberos简介
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_354027">
+摘要：        
+Kerberos协议：Kerberos协议主要用于计算机网络的身份鉴别(Authentication), 其特点是用户只需输入一次身份验证信息就可以凭借此验证获得的票据(ticket-granting ticket)访问多个服务，即SSO(Single Sign On)。由于在每个Client和Service之间建立了共享密钥，使得该协议具有相当的安全性。条件先来看看Kerberos协议的前提条件...    <a href="https://www.cnblogs.com/idior/archive/2006/03/20/354027.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-03-20 15:24
+idior
+<span data-post-id="354027" class="post-view-count">阅读(86032)</span>
+<span data-post-id="354027" class="post-comment-count">评论(27)</span>
+<span data-post-id="354027" class="post-digg-count">推荐(1)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/02/05">2006年2月5日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_325809">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/02/05/325809.html">
+    <span>
+        重构－－－Who are you?!
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_325809">
+摘要：        
+刚刚看了小陆的我对系统重构的理解有些想法，就随便激扬一下文字,谈谈自己对重构的片面理解。  Tip 不要当你需要新的功能的时候，或者原来的程序出了Bug，你才想起重构。 什么时候开始重构？这是首先需要考虑的问题。一个功能没有完成就开始重构吗？不是。所有功能都完成开始重构吗？更不是。重构是一项贯穿我们程序开发的工作，当一个功能完成（能够正常工作，通过单元测试）的时候就应该开始重构。既然都通过测试了，...    <a href="https://www.cnblogs.com/idior/archive/2006/02/05/325809.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-02-05 21:25
+idior
+<span data-post-id="325809" class="post-view-count">阅读(6034)</span>
+<span data-post-id="325809" class="post-comment-count">评论(9)</span>
+<span data-post-id="325809" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/02/03">2006年2月3日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_325036">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/02/03/325036.html">
+    <span>
+        Double Dispatch And Visitor Pattern
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_325036">
+摘要：        
+1： Override VS. Overload 多态可以说是面向对象世界中一件锋利的武器， 封装变化是它的能力的体现。但是你听说过几种多态？Simple Polymorphism ：the object whose method is called is decided run-time. multi- polymorphism ：the object which method is calle...    <a href="https://www.cnblogs.com/idior/archive/2006/02/03/325036.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-02-03 16:45
+idior
+<span data-post-id="325036" class="post-view-count">阅读(4164)</span>
+<span data-post-id="325036" class="post-comment-count">评论(5)</span>
+<span data-post-id="325036" class="post-digg-count">推荐(1)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/01/21">2006年1月21日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_321343">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/01/21/321343.html">
+    <span>
+        Short Explanation of REST
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_321343">
+摘要：        
+或许你在一些国外的Blog上看到过REST这个词,下面用一个很简单的例子说明一下REST的定义.以浏览网页为例, 当你要查看某个网页的时候, 你需要在浏览器上输入该网页的URL. 当你发出对idior.cnblogs.com这个资源的请求后, 一个该资源的表现形式(Representation)将返回给你, 也就是idior.cnblogs.com相应的html文件. 这时候你就进入一个状态(St...    <a href="https://www.cnblogs.com/idior/archive/2006/01/21/321343.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-01-21 15:48
+idior
+<span data-post-id="321343" class="post-view-count">阅读(1454)</span>
+<span data-post-id="321343" class="post-comment-count">评论(0)</span>
+<span data-post-id="321343" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2006/01/14">2006年1月14日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_317180">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2006/01/14/317180.html">
+    <span>
+        webservice Quiz（Wsdl ＆Soap）
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_317180">
+摘要：        
+Document Exchange or Remote Procedure Call?文中的问题我没有在任何一片文章或书中看到有人提过， 在google上也未有任何说明， 难道这是一个最基本的问题？ 大家都知道了吗？    <a href="https://www.cnblogs.com/idior/archive/2006/01/14/317180.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2006-01-14 12:29
+idior
+<span data-post-id="317180" class="post-view-count">阅读(5739)</span>
+<span data-post-id="317180" class="post-comment-count">评论(13)</span>
+<span data-post-id="317180" class="post-digg-count">推荐(1)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2005/10/10">2005年10月10日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_251220">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2005/10/10/251220.html">
+    <span>
+        No Buzzword AOP
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_251220">
+摘要：        
+近日在园子里频繁出现的一些有关AOP文章，相信有不少人对此产生了一些兴趣。 不过从文章的评论中看出有些朋友还是对AOP不知所谓，对文章出现的各种术语不得其解，可能更多的希望看到更简单生动的介绍。下面我就试着用最简单的语言来谈谈我对Aop的一点小小的理解，不需要你对面向对象很了解，更不需要你了解所谓的设计模式.为什么我们需要函数(结构化编程)? --- 为了消除重复为什么我们需要类(面向对象)? -...    <a href="https://www.cnblogs.com/idior/archive/2005/10/10/251220.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2005-10-10 18:13
+idior
+<span data-post-id="251220" class="post-view-count">阅读(3579)</span>
+<span data-post-id="251220" class="post-comment-count">评论(9)</span>
+<span data-post-id="251220" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2005/09/18">2005年9月18日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_239342">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2005/09/18/239342.html">
+    <span>
+        Lambda表达式的应用
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_239342">
+摘要：        
+Windbey中为了增强对集合的访问能力, MS设计了List&lt;T&gt;这么一个泛型集合, 其中有不少的增强功能,比如Foreach,ConvertAll,FindAll等等,并且为了方便使用MS在System名空间下引入了一些特制的Delegate.主要包括以下几个:20public delegate void Action&lt;T&gt;(T obj); //Used by ForE...    <a href="https://www.cnblogs.com/idior/archive/2005/09/18/239342.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2005-09-18 22:00
+idior
+<span data-post-id="239342" class="post-view-count">阅读(17113)</span>
+<span data-post-id="239342" class="post-comment-count">评论(7)</span>
+<span data-post-id="239342" class="post-digg-count">推荐(2)</span>
+
+
+        </p>
+    </div>    
+
+
+
+	
+<p class="date">
+    <span>
+        <a href="https://www.cnblogs.com/idior/p/archive/2005/09/14">2005年9月14日
+</a>
+    </span>
+</p>
+    <div class="post" role="article" aria-describedby="postlist_description_236935">
+        <div class="posthead">
+            <h2 style="padding-top: 4px; padding-bottom: 4px;">
+                <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/idior/archive/2005/09/14/236935.html">
+    <span>
+        .Net Framework 3.0 & C#3.0
+    </span>
+    
+
+</a></h2>
+        </div>
+        <div class="postbody">
+            
+
+<div class="c_b_p_desc" id="postlist_description_236935">
+摘要：        
+MSDN有关.Net平台未来新增功能的介绍.网址链接    <a href="https://www.cnblogs.com/idior/archive/2005/09/14/236935.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+</div>
+
+        <p class="postfoot">
+            posted @ 2005-09-14 17:17
+idior
+<span data-post-id="236935" class="post-view-count">阅读(2346)</span>
+<span data-post-id="236935" class="post-comment-count">评论(2)</span>
+<span data-post-id="236935" class="post-digg-count">推荐(0)</span>
+
+
+        </p>
+    </div>    
+
+
+
+
+<div class="topicListFooter">
+    <div id="nav_next_page">
+        
+    <a href="https://www.cnblogs.com/idior?page=2">
+        下一页
+    </a>
+
+    </div>    
+</div>
+
+
+
+
+
+<script>
+    updatePostStats(
+        $(".post-view-count").map(function () { return this.dataset.postId }).get(),
+        function(id, count) { $(".post-view-count[data-post-id=" + id + "]").text("阅读(" + count + ")") },
+        function(id, count) { $(".post-comment-count[data-post-id=" + id + "]").text("评论(" + count + ")") },
+        function(id, count) { $(".post-digg-count[data-post-id=" + id + "]").text("推荐(" + count + ")") });
+</script>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="FooterCell">
+			<p id="footer">
+    <a href="https://www.cnblogs.com/" id="footer_site_link" class="footer-brand">博客园</a><span class="footer-copyright"> &nbsp;&copy;&nbsp; 2004-2026</span>
+<br /><span class="footer-icp">
+    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602011771"><img src="//assets.cnblogs.com/images/ghs.png" />浙公网安备 33010602011771号</a>
+    <a href="https://beian.miit.gov.cn" target="_blank">浙ICP备2021040463号-3</a>
+</span>
+
+</p>
+
+
+		</td>
+	</tr>
+</table>
+
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8OBZrxGJLy5MvghieKIKXCy5kLiUhL9JJKZQtP1r6PqTXBZi8feXOF-biSnQfPxQDCrchnxpr3gm3kelbLzt7Ssqh1SZCK9g7ge1JDuXBB8HA_fa2fE4twaN4HpC-UJj6CNggP9J_fyapEEpVO7wa_0" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M95P3TTWJZ"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-M95P3TTWJZ');
+</script>
+<script defer src="https://hm.baidu.com/hm.js?866c9be12d4a814454792b1fd0fed295"></script>
+</body>
+</html>
