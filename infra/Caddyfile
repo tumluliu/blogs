@@ -1,0 +1,33 @@
+luliu.me {
+    root * /var/www/luliu.me
+    file_server
+
+    encode gzip zstd
+
+    # Legacy /blog and /blog/* (Hexo prefix) → root
+    redir /blog /  permanent
+    redir /blog/* / permanent
+
+    @notfound {
+        not file
+        not path /
+    }
+    handle @notfound {
+        rewrite * /404.html
+        file_server
+    }
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Cache-Control "public, max-age=3600"
+    }
+    header /_astro/* Cache-Control "public, max-age=31536000, immutable"
+    header /assets/* Cache-Control "public, max-age=31536000, immutable"
+}
+
+# www → apex (canonical)
+www.luliu.me {
+    redir https://luliu.me{uri} permanent
+}
