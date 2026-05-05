@@ -1,0 +1,37 @@
+VM_HOST=luliu.me
+VM_IP=159.69.15.195
+VM_USER=lu
+VM_OS=Ubuntu 18.04.6 LTS (Bionic)
+VM_KERNEL=4.15.0-210-generic
+HEXO_ROOT=/home/lu/blogs
+COMPOSE_FILE=/home/lu/blogs/docker-compose.yml
+WEB_SERVER=nginx
+NGINX_CONF=/etc/nginx
+CERT_DIR=/etc/letsencrypt
+CERT_NAME=luliu.me
+HEXO_THEME=next
+DOCKER_IMAGE=tumluliu/hexo:6.3.0
+DOCKER_PORTS=0.0.0.0:4000->4321
+LEGACY_DIRS=/home/lu/aws-bak /home/lu/hexo_lustyle /home/lu/docker-hexo
+DISCOVERY_DATE=2026-05-05
+SUDO_NOPASSWD=true
+
+# Hexo runtime details (discovered during Task 7)
+HEXO_RUNTIME=docker
+HEXO_THEME_LOCATION=npm package hexo-theme-next@^8.16.0 inside container node_modules
+HEXO_URL_BASE=https://luliu.me/blog
+NGINX_PROXIES_TO=http://127.0.0.1:4000
+DOCKER_IMAGE_LOCAL_BUILD=true
+DOCKER_IMAGE_BACKUP=docker/image-tumluliu-hexo-6.3.0.tar.gz
+ACTIVE_COMPOSE_FILE=/home/lu/blogs/docker-compose.yml
+LEGACY_COMPOSE_FILE=/home/lu/docker-hexo/docker-compose.yml
+HEXO_PLUGINS=hexo-generator-archive,category,feed,index,sitemap,tag,renderer-ejs,renderer-marked,renderer-stylus,server,theme-landscape,theme-next,word-counter
+NO_DEPLOY_CRON=true
+
+# Deploy mechanism (discovered during Task 9)
+DEPLOY_MECHANISM=cron daily
+DEPLOY_CRON_FILE=/etc/cron.daily/sync-lustyle-blogs
+DEPLOY_COMMAND='su lu -c "cd /home/lu/blogs/source/_posts && /usr/bin/git pull origin master"'
+GIT_REMOTE=https://github.com/tumluliu/blogs.git
+GIT_HEAD_VM=a467cda
+GIT_TRACKED_DIR=/home/lu/blogs/source/_posts

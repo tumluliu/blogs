@@ -1,0 +1,418 @@
+Linux lu-hetzner 4.15.0-210-generic #221-Ubuntu SMP Tue Apr 18 08:32:52 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+NAME="Ubuntu"
+VERSION="18.04.6 LTS (Bionic Beaver)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 18.04.6 LTS"
+VERSION_ID="18.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=bionic
+UBUNTU_CODENAME=bionic
+Filesystem      Size  Used Avail Use% Mounted on
+udev            1.9G     0  1.9G   0% /dev
+tmpfs           385M  800K  385M   1% /run
+/dev/sda1        38G   14G   23G  37% /
+tmpfs           1.9G     0  1.9G   0% /dev/shm
+tmpfs           5.0M     0  5.0M   0% /run/lock
+tmpfs           1.9G     0  1.9G   0% /sys/fs/cgroup
+tmpfs           385M     0  385M   0% /run/user/1000
++ uname -a
++ cat /etc/os-release
++ df -h
++ free -h
+              total        used        free      shared  buff/cache   available
+Mem:           3.8G        274M        301M        1.6M        3.2G        3.2G
+Swap:          135M         12M        122M
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback <MAC_REDACTED> brd <MAC_REDACTED>
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether <MAC_REDACTED> brd <MAC_REDACTED>
+    inet 159.69.15.195/32 brd 159.69.15.195 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 <IPv6_REDACTED>/64 scope global deprecated 
+       valid_lft forever preferred_lft 0sec
+    inet6 <IPv6_LL_REDACTED>/64 scope link 
+       valid_lft forever preferred_lft forever
+3: br-7ab3ba930665: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether <MAC_REDACTED> brd <MAC_REDACTED>
+    inet 192.168.32.1/20 brd 192.168.47.255 scope global br-7ab3ba930665
+       valid_lft forever preferred_lft forever
+    inet6 <IPv6_LL_REDACTED>/64 scope link 
+       valid_lft forever preferred_lft forever
+4: br-09e81356dc7e: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default 
+    link/ether <MAC_REDACTED> brd <MAC_REDACTED>
+    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-09e81356dc7e
+       valid_lft forever preferred_lft forever
+5: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default 
+    link/ether <MAC_REDACTED> brd <MAC_REDACTED>
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+7: vethc140146@if6: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-7ab3ba930665 state UP group default 
+    link/ether <MAC_REDACTED> brd <MAC_REDACTED> link-netnsid 0
+    inet6 <IPv6_LL_REDACTED>/64 scope link 
+       valid_lft forever preferred_lft forever
++ ip addr
++ ufw status verbose
++ iptables -L -n
+/usr/bin/docker
+/usr/local/bin/docker-compose
+/usr/local/bin/hexo
+/usr/bin/node
+/usr/sbin/nginx
+CONTAINER ID   IMAGE                  COMMAND                  CREATED       STATUS                   PORTS                                       NAMES
+8174d7436986   tumluliu/hexo:6.3.0    "/docker-entrypoint.…"   2 years ago   Up 12 months             0.0.0.0:4000->4321/tcp, :::4000->4321/tcp   hexo
+05ff7997e4e8   528caa8bce2a           "/bin/sh -c 'npm ins…"   2 years ago   Exited (1) 2 years ago                                               inspiring_banach
+e84db5ff5600   528caa8bce2a           "/bin/sh -c 'npm ins…"   2 years ago   Exited (1) 2 years ago   iptables v1.6.1: can't initialize iptables table `filter': Permission denied (you must be root)
+Perhaps iptables or your kernel needs to be upgraded.
++ which docker docker-compose hexo node nginx caddy
++ docker ps -a
+                                            hopeful_mendeleev
+edfc01794860   jekyll/jekyll:latest   "/usr/jekyll/bin/ent…"   7 years ago   Exited (0) 7 years ago                                               jekyll_site_run_3
+cc50c15faf5c   jekyll/jekyll:latest   "/usr/jekyll/bin/ent…"   7 years ago   Exited (0) 7 years ago                                               jekyll_site_run_2
+89264822c11e   jekyll/jekyll:latest   "/usr/jekyll/bin/ent…"   7 years ago   Exited (1) 7 years ago                                               jekyll_site_run_1
+7c5a38007713   hello-world            "/hello"                 7 years ago   Exited (0) 7 years ago                                               xenodochial_rosalind
+REPOSITORY      TAG              IMAGE ID       CREATED       SIZE
+tumluliu/hexo   6.3.0            66f03eebc9b9   2 years ago   581MB
+<none>          <none>           a15dc66cd75f   2 years ago   301MB
+node            18.16.0-alpine   6f44d13dd258   3 years ago   175MB
+tumluliu/hexo   latest           c9ee2cd7bb72   6 years ago   196MB
+jekyll/jekyll   latest           912d23887605   7 years ago   438MB
+hello-world     latest           e38bc07ac18e   8 years ago   1.85kB
++ docker images
++ docker network ls
+NETWORK ID     NAME             DRIVER    SCOPE
+7ab3ba930665   blogs_default    bridge    local
+3aa271e6f3ac   bridge           bridge    local
+e073fa5bc39a   host             host      local
+09e81356dc7e   jekyll_default   bridge    local
+abb804f8ea20   none             null      local
++ docker volume ls
+DRIVER    VOLUME NAME
+local     2dc1b191bab7d1d91622e72bc58a7507afd202684a048fda38ec4f8cb8b4e8a0
+local     2e12476bc052af14ad533e3759497ed178dcbef99aa7b905264907590ce3d80c
+local     2ea1e84adbf0d89bbb7c415c25395b5fe2192df86bdfdf6c4b5416bfcb0152b2
+local     9b8fc845162dd2768c9aed12716dc737a246ed376d5d91d6a9a93dcd703cf083
+local     23f947acb449a46361f8324eb1a3fb1adf8c687a8c66a9787d2f044b81ae07fa
+local     27ba9845b6215fe710117fbe3b72cc9109da0438c1a5f4b6ff4a90bc39d6696f
+local     59c6c03d28a057075f421cc15b9d5c80782575bd74161501c18b30951f982b35
+local     69f0c241a02f845eb84f25159e32b6f8362df8ecd33139e79e58255bbf10f883
+local     225ab8e3017cc613a4187ddc963ddbb9a5e5265f343f21edec006a5165f454ed
+local     612e8f5b6d0f60bf6df047324254b60e295b4e9ab9f40374530fe58457f61279
+local     5501f9078441cfc16624aebfd936bee81b7199cb03eb54a5d47add1dad155530
+local     acf04201ea3350a296ccf17c737d0d63b3dbfe77b1d7daaf2492c8cd6bdae3e0
+local     b4d2384a7f7527ca88878c6d7c04e45f4311bec5b3051af542b43e964a5ff75d
+local     b4df37e600e3dd20e8d0995ae959d6d2e97a74836e6467262e04b04e9da9e8da
+local     ce1ddd3e9d980cb245996d36ce36274d1845f4e25b59e2a26f9b0134a42d8e6f
+local     d254f55e09d0a590cd5f8efb64ed0b7dfe1832dbd6c37b0c8676e5c2d092ea34
+local     d7567a5f98d72a39bacf7b1c6f53b421575b8635fe2aca6c78e8c63995f1cc34
+local     dd98cb9bc5b7e9ed9c720c3a1ef94c27960e2d5d08f7dd6029510a9ab376fc68
+local     f7e0ff622fd48f5ca463004788702602bf6c84bea5c6c99a4fa61a01f9b6007b
+local     f362637cd6186ba1202e9f71e5515287215889799abc3b18410495bb95aa2022
+local     f727048c50b67057bd18e2a119a99be04be4070d7770547230f7318c6bd6dcb4
+local     fa6353da014276df9802c848660ae8747eba71146585b79c847d2c8bcdcda99a
+local     fb46c929f64d27097a6dcc1f5cf1e74d67521a899ed50388d58ab283c85e91a9
+local     fd63582ed4514c5247e292ac3efc04e758a16fb32ba295a3a113ff1c6a88009b
++ ls -la /etc/nginx/
+total 72
+drwxr-xr-x   8 root root 4096 May  1 16:09 .
+drwxr-xr-x 103 root root 4096 May 14  2023 ..
+drwxr-xr-x   2 root root 4096 Apr 17  2018 conf.d
+-rw-r--r--   1 root root 1077 Apr  6  2018 fastcgi.conf
+-rw-r--r--   1 root root 1007 Apr  6  2018 fastcgi_params
+-rw-r--r--   1 root root 2837 Apr  6  2018 koi-utf
+-rw-r--r--   1 root root 2223 Apr  6  2018 koi-win
+-rw-r--r--   1 root root 3957 Apr  6  2018 mime.types
+drwxr-xr-x   2 root root 4096 Apr 17  2018 modules-available
+drwxr-xr-x   2 root root 4096 May 31  2018 modules-enabled
+-rw-r--r--   1 root root 1482 Apr  6  2018 nginx.conf
+-rw-r--r--   1 root root  180 Apr  6  2018 proxy_params
+-rw-r--r--   1 root root  636 Apr  6  2018 scgi_params
+drwxr-xr-x   2 root root 4096 May 14  2023 sites-available
+drwxr-xr-x   2 root root 4096 May 31  2018 sites-enabled
+drwxr-xr-x   2 root root 4096 May 14  2023 snippets
+-rw-r--r--   1 root root  664 Apr  6  2018 uwsgi_params
+-rw-r--r--   1 root root 3071 Apr  6  2018 win-utf
++ ls -la /etc/caddy/
++ ls -la /etc/letsencrypt/live/
+total 12
+drwxr-xr-x  3 root root 4096 May 24  2018 .
+drwxr-xr-x 23 root root 4096 Apr 12  2025 ..
+drwxr-xr-x 12 lu   lu   4096 May  5 09:55 lu
+total 8
+drwxr-xr-x  2 root root 4096 Apr 26  2018 .
+drwxr-xr-x 23 root root 4096 Apr 12  2025 ..
+total 12
+drwxr-xr-x  3 root root 4096 Dec 11  2019 .
+drwxr-xr-x 23 root root 4096 Apr 12  2025 ..
+drwx--x--x  4 root root 4096 Dec 11  2019 containerd
++ ls -la /root/
+ls: cannot open directory '/root/': Permission denied
++ ls -la /home/
++ ls -la /srv/
++ ls -la /opt/
++ crontab -l
++ systemctl list-timers --all --no-pager
+NEXT                          LEFT          LAST                          PASSED        UNIT                         ACTIVATES
+Tue 2026-05-05 13:22:06 CEST  39min left    Mon 2026-05-04 22:43:56 CEST  13h ago       apt-daily.timer              apt-daily.service
+Tue 2026-05-05 14:06:54 CEST  1h 24min left Tue 2026-05-05 09:35:31 CEST  3h 7min ago   certbot.timer                certbot.service
+Tue 2026-05-05 14:55:16 CEST  2h 12min left Tue 2026-05-05 10:47:06 CEST  1h 55min ago  motd-news.timer              motd-news.service
+Tue 2026-05-05 18:06:09 CEST  5h 23min left Tue 2026-05-05 11:58:34 CEST  44min ago     ua-timer.timer               ua-timer.service
+Tue 2026-05-05 21:27:11 CEST  8h left       Mon 2026-05-04 21:27:11 CEST  15h ago       systemd-tmpfiles-clean.timer systemd-tmpfiles-clean.service
+Wed 2026-05-06 06:14:20 CEST  17h left      Tue 2026-05-05 06:45:34 CEST  5h 57min ago  apt-daily-upgrade.timer      apt-daily-upgrade.service
+Mon 2026-05-11 00:00:00 CEST  5 days left   Mon 2026-05-04 00:00:06 CEST  1 day 12h ago fstrim.timer                 fstrim.service
+n/a                           n/a           n/a                           n/a           snapd.snap-repair.timer      snapd.snap-repair.service
+n/a                           n/a           n/a                           n/a           ureadahead-stop.timer        ureadahead-stop.service
+
+9 timers listed.
++ systemctl list-unit-files --state=enabled --no-pager
+UNIT FILE                              STATE  
+acpid.path                             enabled
+apport-autoreport.path                 enabled
+accounts-daemon.service                enabled
+apparmor.service                       enabled
+atd.service                            enabled
+autovt@.service                        enabled
+blk-availability.service               enabled
+cloud-config.service                   enabled
+cloud-final.service                    enabled
+cloud-init-local.service               enabled
+cloud-init.service                     enabled
+console-setup.service                  enabled
+containerd.service                     enabled
+cron.service                           enabled
+dbus-org.freedesktop.resolve1.service  enabled
+docker.service                         enabled
+ebtables.service                       enabled
+fail2ban.service                       enabled
+getty@.service                         enabled
+irqbalance.service                     enabled
+iscsi.service                          enabled
+keyboard-setup.service                 enabled
+lvm2-monitor.service                   enabled
+lxcfs.service                          enabled
+lxd-containers.service                 enabled
+networkd-dispatcher.service            enabled
+networking.service                     enabled
+nginx.service                          enabled
+ondemand.service                       enabled
+open-iscsi.service                     enabled
+open-vm-tools.service                  enabled
+pollinate.service                      enabled
+rsync.service                          enabled
+rsyslog.service                        enabled
+setvtrgb.service                       enabled
+snapd.aa-prompt-listener.service       enabled
+snapd.apparmor.service                 enabled
+snapd.autoimport.service               enabled
+snapd.core-fixup.service               enabled
+snapd.recovery-chooser-trigger.service enabled
+snapd.seeded.service                   enabled
+snapd.service                          enabled
+snapd.system-shutdown.service          enabled
+ssh.service                            enabled
+sshd.service                           enabled
+syslog.service                         enabled
+systemd-resolved.service               enabled
+systemd-timesyncd.service              enabled
+ua-reboot-cmds.service                 enabled
+ubuntu-advantage.service               enabled
+ufw.service                            enabled
+unattended-upgrades.service            enabled
+ureadahead.service                     enabled
+vgauth.service                         enabled
+vmtoolsd.service                       enabled
+acpid.socket                           enabled
+apport-forward.socket                  enabled
+cloud-init-hotplugd.socket             enabled
+dm-event.socket                        enabled
+docker.socket                          enabled
+iscsid.socket                          enabled
+lvm2-lvmetad.socket                    enabled
+lvm2-lvmpolld.socket                   enabled
+lxd.socket                             enabled
+snapd.socket                           enabled
+uuidd.socket                           enabled
+remote-fs.target                       enabled
+apt-daily-upgrade.timer                enabled
+apt-daily.timer                        enabled
+certbot.timer                          enabled
+fstrim.timer                           enabled
+motd-news.timer                        enabled
+snapd.snap-repair.timer                enabled
+ua-timer.timer                         enabled
+
+74 unit files listed.
++ find / -name 'docker-compose*.yml' -not -path '/proc/*' -not -path '/sys/*'
+/home/lu/docker-hexo/docker-compose.yml
+/home/lu/blogs/docker-compose.yml
++ find / -name _config.yml -not -path '/proc/*' -not -path '/sys/*' -not -path '*/node_modules/*'
+/home/lu/aws-bak/hexo_lustyle/_config.yml
+/home/lu/aws-bak/hexo_lustyle/themes/landscape/_config.yml
+/home/lu/aws-bak/hexo_lustyle/themes/next/_config.yml
+/home/lu/aws-bak/projects/lustyle/hexo_configs/_config.yml
+/home/lu/aws-bak/projects/lustyle/hexo_configs/themes/next/_config.yml
+/home/lu/hexo_lustyle/_config.yml
+/home/lu/hexo_lustyle/themes/landscape/_config.yml
+/home/lu/hexo_lustyle/themes/next/_config.yml
+/home/lu/blogs/_config.yml
+/home/lu/blogs/themes/next/_config.yml
+/usr/lib/nodejs/qs/package.json
+/usr/lib/nodejs/semver/package.json
+/usr/lib/nodejs/inherits/package.json
+/usr/lib/nodejs/tar/package.json
+/usr/lib/nodejs/fs.realpath/package.json
+/usr/lib/nodejs/fstream/package.json
+/usr/lib/nodejs/isexe/package.json
+/usr/lib/nodejs/mkdirp/package.json
+/usr/lib/nodejs/concat-map/package.json
+/usr/lib/nodejs/yallist/package.json
+/usr/lib/nodejs/is-builtin-module/package.json
+/usr/lib/nodejs/path-is-absolute/package.json
+/usr/lib/nodejs/node-uuid/package.json
+/usr/lib/nodejs/async/package.json
+/usr/lib/nodejs/spdx-expression-parse/package.json
+/usr/lib/nodejs/glob/package.json
+/usr/lib/nodejs/osenv/package.json
+/usr/lib/nodejs/github-url-from-git/package.json
+/usr/lib/nodejs/brace-expansion/package.json
+/usr/lib/nodejs/rimraf/package.json
+/usr/lib/nodejs/pseudomap/package.json
+/usr/lib/nodejs/validate-npm-package-license/package.json
+/usr/lib/nodejs/hosted-git-info/package.json
+/usr/lib/nodejs/which/package.json
+/usr/lib/nodejs/underscore/package.json
+/usr/lib/nodejs/wrappy/package.json
+/usr/lib/nodejs/ini/package.json
+/usr/lib/nodejs/graceful-fs/package.json
+/usr/lib/nodejs/minimatch/package.json
+/usr/lib/nodejs/balanced-match/package.json
+/usr/lib/nodejs/inflight/package.json
+/usr/lib/nodejs/slide/package.json
+/usr/lib/nodejs/spdx-correct/package.json
+/usr/lib/nodejs/lru-cache/package.json
+/usr/lib/nodejs/spdx-license-ids/package.json
+/usr/lib/nodejs/normalize-package-data/package.json
+/usr/lib/nodejs/ansi-color-table/package.json
+/usr/lib/nodejs/ansi/package.json
+/usr/lib/nodejs/archy/package.json
+/usr/lib/nodejs/builtin-modules/package.json
++ find / -name package.json -not -path '/proc/*' -not -path '*/node_modules/*'
+/usr/share/npm/package.json
+/usr/share/node-gyp/package.json
+/home/lu/aws-bak/hexo_lustyle/package.json
+/home/lu/aws-bak/hexo_lustyle/themes/landscape/package.json
+/home/lu/aws-bak/hexo_lustyle/themes/next/package.json
+/home/lu/.npm/safe-json-stringify/1.2.0/package/package.json
+/home/lu/.npm/inherits/2.0.3/package/package.json
+/home/lu/.npm/command-exists/1.2.6/package/package.json
+/home/lu/.npm/remove-trailing-separator/1.1.0/package/package.json
+/home/lu/.npm/for-in/1.0.2/package/package.json
+/home/lu/.npm/camel-case/3.0.0/package/package.json
+/home/lu/.npm/mv/2.1.1/package/package.json
+/home/lu/.npm/glob-parent/2.0.0/package/package.json
+/home/lu/.npm/isexe/2.0.0/package/package.json
+/home/lu/.npm/mkdirp/0.5.1/package/package.json
+/home/lu/.npm/concat-map/0.0.1/package/package.json
+/home/lu/.npm/yallist/2.1.2/package/package.json
+/home/lu/.npm/ansi-styles/2.2.1/package/package.json
+/home/lu/.npm/set-immediate-shim/1.0.1/package/package.json
+/home/lu/.npm/path-is-absolute/1.0.1/package/package.json
+/home/lu/.npm/arr-flatten/1.1.0/package/package.json
+/home/lu/.npm/is-equal-shallow/0.1.3/package/package.json
+/home/lu/.npm/highlight.js/9.12.0/package/package.json
+/home/lu/.npm/filename-regex/2.0.1/package/package.json
+/home/lu/.npm/parse-glob/3.0.4/package/package.json
+/home/lu/.npm/kind-of/6.0.2/package/package.json
+/home/lu/.npm/kind-of/3.2.2/package/package.json
+/home/lu/.npm/no-case/2.3.2/package/package.json
+/home/lu/.npm/normalize-path/2.1.1/package/package.json
+/home/lu/.npm/path-parse/1.0.5/package/package.json
+/home/lu/.npm/util-deprecate/1.0.2/package/package.json
+/home/lu/.npm/preserve/0.2.0/package/package.json
+/home/lu/.npm/object.omit/2.0.1/package/package.json
+/home/lu/.npm/is-extglob/1.0.0/package/package.json
+/home/lu/.npm/glob/6.0.4/package/package.json
+/home/lu/.npm/safe-buffer/5.1.2/package/package.json
+/home/lu/.npm/once/1.4.0/package/package.json
+/home/lu/.npm/micromatch/2.3.11/package/package.json
+/home/lu/.npm/brace-expansion/1.1.11/package/package.json
+/home/lu/.npm/rimraf/2.4.5/package/package.json
+/home/lu/.npm/tildify/1.2.0/package/package.json
+/home/lu/.npm/hexo-log/0.2.0/package/package.json
+/home/lu/.npm/hexo-bunyan/1.0.0/package/package.json
+/home/lu/.npm/hexo-util/0.6.3/package/package.json
+/home/lu/.npm/upper-case/1.1.3/package/package.json
+/home/lu/.npm/async-each/1.0.1/package/package.json
+/home/lu/.npm/os-homedir/1.0.2/package/package.json
+/home/lu/.npm/strip-ansi/3.0.1/package/package.json
+/home/lu/.npm/isobject/2.1.0/package/package.json
+/home/lu/.npm/pseudomap/1.0.2/package/package.json
+/home/lu/.npm/extglob/0.3.2/package/package.json
+/home/lu/.npm/is-number/4.0.0/package/package.json
+/home/lu/.npm/is-number/2.1.0/package/package.json
+/home/lu/.npm/abbrev/1.1.1/package/package.json
+/home/lu/.npm/repeat-element/1.1.2/package/package.json
+/home/lu/.npm/braces/1.8.5/package/package.json
+/home/lu/.npm/which/1.3.1/package/package.json
+/home/lu/.npm/resolve/1.7.1/package/package.json
+/home/lu/.npm/process-nextick-args/2.0.0/package/package.json
+/home/lu/.npm/array-unique/0.2.1/package/package.json
+/home/lu/.npm/is-posix-bracket/0.1.1/package/package.json
+/home/lu/.npm/glob-base/0.3.0/package/package.json
+/home/lu/.npm/hexo-fs/0.2.3/package/package.json
+/home/lu/.npm/readdirp/2.1.0/package/package.json
+/home/lu/.npm/wrappy/1.0.2/package/package.json
+/home/lu/.npm/graceful-fs/4.1.11/package/package.json
+/home/lu/.npm/object-assign/4.1.1/package/package.json
+/home/lu/.npm/anymatch/1.3.2/package/package.json
+/home/lu/.npm/escape-string-regexp/1.0.5/package/package.json
+/home/lu/.npm/chokidar/1.7.0/package/package.json
+/home/lu/.npm/for-own/0.1.5/package/package.json
+/home/lu/.npm/randomatic/3.0.0/package/package.json
+/home/lu/.npm/is-primitive/2.0.0/package/package.json
+/home/lu/.npm/minimatch/3.0.4/package/package.json
+/home/lu/.npm/balanced-match/1.0.0/package/package.json
+/home/lu/.npm/inflight/1.0.6/package/package.json
+/home/lu/.npm/binary-extensions/1.11.0/package/package.json
+/home/lu/.npm/repeat-string/1.6.1/package/package.json
+/home/lu/.npm/cross-spawn/4.0.2/package/package.json
+/home/lu/.npm/isarray/1.0.0/package/package.json
+/home/lu/.npm/is-glob/2.0.1/package/package.json
+/home/lu/.npm/is-binary-path/1.0.1/package/package.json
+/home/lu/.npm/is-buffer/1.1.6/package/package.json
+/home/lu/.npm/html-entities/1.2.1/package/package.json
+/home/lu/.npm/string_decoder/1.1.1/package/package.json
+/home/lu/.npm/bluebird/3.5.1/package/package.json
+/home/lu/.npm/regex-cache/0.4.4/package/package.json
+/home/lu/.npm/expand-range/1.8.2/package/package.json
+/home/lu/.npm/moment/2.22.1/package/package.json
+/home/lu/.npm/minimist/0.0.8/package/package.json
+/home/lu/.npm/minimist/1.2.0/package/package.json
+/home/lu/.npm/lru-cache/4.1.3/package/package.json
+/home/lu/.npm/striptags/2.2.1/package/package.json
+/home/lu/.npm/hexo-cli/1.1.0/package/package.json
+/home/lu/.npm/arr-diff/2.0.0/package/package.json
+/home/lu/.npm/expand-brackets/0.1.5/package/package.json
+/home/lu/.npm/core-util-is/1.0.2/package/package.json
+/home/lu/.npm/ncp/2.0.0/package/package.json
+/home/lu/.npm/fill-range/2.2.4/package/package.json
+/home/lu/.npm/readable-stream/2.3.6/package/package.json
+/home/lu/.npm/is-extendable/0.1.1/package/package.json
+/home/lu/.npm/lower-case/1.1.4/package/package.json
+/home/lu/.npm/has-ansi/2.0.0/package/package.json
+/home/lu/.npm/supports-color/2.0.0/package/package.json
+/home/lu/.npm/is-dotfile/1.0.3/package/package.json
+/home/lu/.npm/chalk/1.1.3/package/package.json
+/home/lu/.npm/ansi-regex/2.1.1/package/package.json
+/home/lu/.npm/math-random/1.0.1/package/package.json
+/home/lu/hexo_lustyle/package.json
+/home/lu/hexo_lustyle/themes/landscape/package.json
+/home/lu/hexo_lustyle/themes/next/package.json
+/home/lu/blogs/themes/next/package.json

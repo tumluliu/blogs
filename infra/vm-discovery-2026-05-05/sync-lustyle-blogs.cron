@@ -1,0 +1,2 @@
+#!/bin/sh
+su lu -c 'cd /home/lu/blogs/source/_posts && /usr/bin/git pull origin master'
