@@ -12,7 +12,7 @@ draft: false
 source: original
 ---
 
-本文由我和我的同事张彦峰博士共同完成。GPT 5.5和Claude Opus 4.7亦有贡献
+本文由我和我的同事张彦峰博士共同完成。Claude Opus 4.7, GPT 5.5和Gemini 3亦有贡献。
 
 ---
 
