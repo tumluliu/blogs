@@ -9,30 +9,30 @@ sourceUrl: https://www.cnblogs.com/rib06/archive/2005/10/06/249348.html
 draft: false
 ---
 
-<span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">    最近在做一个无聊的</span><span lang="EN-US" style="FONT-SIZE: 10.5pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 12.0pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体">MIS</span><span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">项目，扫雷便成了我休息大脑的一项优秀运动。这么扫着扫着居然就</span><span lang="EN-US" style="FONT-SIZE: 10.5pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 12.0pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体">PIU~</span><span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">的一下顿悟了一些人生道理。\
+    最近在做一个无聊的MIS项目，扫雷便成了我休息大脑的一项优秀运动。这么扫着扫着居然就PIU~的一下顿悟了一些人生道理。\
 \
-<span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">    **1、人这辈子的困难和不幸就那么多，早晚都得遇到**\
+    **1、人这辈子的困难和不幸就那么多，早晚都得遇到**\
 \
-<span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">    扫雷的时候如果一开始就点开一大片，先别高兴太早，因为这说明后面的推进难度可能会很大，速度就会慢下来，甚至很容易出现必须二选一，瞎蒙一个的情形。\
+    扫雷的时候如果一开始就点开一大片，先别高兴太早，因为这说明后面的推进难度可能会很大，速度就会慢下来，甚至很容易出现必须二选一，瞎蒙一个的情形。\
 \
-<span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">    人生也是如此，前面经历了太多顺境，没怎么品尝过挫折的滋味，那么后面再遇到困难可能就会不适应，难以接受，无法面对，甚至自暴自弃。\
+    人生也是如此，前面经历了太多顺境，没怎么品尝过挫折的滋味，那么后面再遇到困难可能就会不适应，难以接受，无法面对，甚至自暴自弃。\
 \
-    <span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">**2、要抓住机会，人生中绝好的机会也就那么几次**\
+    **2、要抓住机会，人生中绝好的机会也就那么几次**\
 \
-    <span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">扫雷总是以乱点一气开始，目的是为了找到一块突破口。一旦发现合适的，就不要错过。如果不满足于此，继续乱点寻找突破口，很可能就会挂掉。经常遇到的情况是：好不容易点开一大片，但由于乱点的速度太快而又让鼠标多点了一下，结果导致</span><span lang="EN-US" style="FONT-SIZE: 10.5pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 12.0pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体">game over</span><span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">。\
+    扫雷总是以乱点一气开始，目的是为了找到一块突破口。一旦发现合适的，就不要错过。如果不满足于此，继续乱点寻找突破口，很可能就会挂掉。经常遇到的情况是：好不容易点开一大片，但由于乱点的速度太快而又让鼠标多点了一下，结果导致game over。\
 \
-    <span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">人生也是如此，绝好的机会出现的概率很小，通常情况下一辈子也难得超过四五次，机会一旦出现就紧紧的抓住，先别奢望会有更好的机会出现，能把握好眼前的就不错了。\
+    人生也是如此，绝好的机会出现的概率很小，通常情况下一辈子也难得超过四五次，机会一旦出现就紧紧的抓住，先别奢望会有更好的机会出现，能把握好眼前的就不错了。\
 \
-    <span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">**3、在一个地方暂时找不到突破的时候可以尝试换一个方向**\
+    **3、在一个地方暂时找不到突破的时候可以尝试换一个方向**\
 \
-<span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">    在扫雷中遇到暂时推进不下去的情况是很正常的，这边不行就先换另外一边，当在新的方向上推进的差不多的时候再回头看原来那里，不知不觉的也许已经出现了新的突破口。\
+    在扫雷中遇到暂时推进不下去的情况是很正常的，这边不行就先换另外一边，当在新的方向上推进的差不多的时候再回头看原来那里，不知不觉的也许已经出现了新的突破口。\
 \
-<span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">    人生也是如此，不要一条道跑到黑，碰得满头是包，可以适度灵活改变一下思路和发展方向，很可能会有意想不到的好效果。\
+    人生也是如此，不要一条道跑到黑，碰得满头是包，可以适度灵活改变一下思路和发展方向，很可能会有意想不到的好效果。\
 \
-    <span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">**4、如果遇到了只有靠投硬币才能决定的情况，那么不要回避，尽早投**\
+    **4、如果遇到了只有靠投硬币才能决定的情况，那么不要回避，尽早投**\
 \
-    <span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">扫雷中很讨厌的情况就是二选一，概率准确的锁定为</span><span lang="EN-US" style="FONT-SIZE: 10.5pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 12.0pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体">50</span><span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">％。若出现这种需要瞎蒙的情况，我习惯于早蒙。如果先扫光其它地方，留到最后再闭上眼睛点一下的话，那么猜错所带来的遗憾和不爽要比前者来得更大。\
+    扫雷中很讨厌的情况就是二选一，概率准确的锁定为50％。若出现这种需要瞎蒙的情况，我习惯于早蒙。如果先扫光其它地方，留到最后再闭上眼睛点一下的话，那么猜错所带来的遗憾和不爽要比前者来得更大。\
 \
-    <span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">这在人生中是否也是如此呢？恐怕就见仁见智了吧。像我属于比较谨慎的那一种人，总是希望将不确定减到最少，风险降到最低，事情的结果尽可能的可以预知或可以被我控制，所以我倾向于“早投硬币”。\
+    这在人生中是否也是如此呢？恐怕就见仁见智了吧。像我属于比较谨慎的那一种人，总是希望将不确定减到最少，风险降到最低，事情的结果尽可能的可以预知或可以被我控制，所以我倾向于“早投硬币”。\
 \
-    <span style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">扫雷可以无数次的重来，但人生就只有一次，尽量走好每一步吧。</span></span></span></span></span></span></span></span></span></span></span></span></span></span>
+    扫雷可以无数次的重来，但人生就只有一次，尽量走好每一步吧。
