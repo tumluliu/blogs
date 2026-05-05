@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+function fmt(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+function postSlug(p: { data: { slug?: string }; id: string }): string {
+  return p.data.slug ?? p.id;
+}
+---
+<BaseLayout title="Posts — luliu.me">
+  <h1>Posts</h1>
+  <p>{posts.length} posts.</p>
+  <ul class="post-list">
+    {posts.map((p) => (
+      <li>
+        <span class="post-date">{fmt(p.data.date)}</span>
+        <h2><a href={`/posts/${postSlug(p)}/`}>{p.data.title}</a></h2>
+        {p.data.tags.length > 0 && (
+          <p class="post-meta">
+            {p.data.tags.map((t) => <span class="tag">{t}</span>)}
+          </p>
+        )}
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

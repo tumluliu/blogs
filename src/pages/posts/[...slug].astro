@@ -1,0 +1,37 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.data.slug ?? post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+function fmt(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+---
+<BaseLayout title={`${post.data.title} — luliu.me`}>
+  <article>
+    <h1>{post.data.title}</h1>
+    <p class="post-meta">
+      <span>{fmt(post.data.date)}</span>
+      {post.data.tags.length > 0 && <span> · </span>}
+      {post.data.tags.map((t) => <span class="tag">{t}</span>)}
+      {post.data.source === 'cnblogs' && post.data.sourceUrl && (
+        <span> · <a href={post.data.sourceUrl}>原文 (cnblogs)</a></span>
+      )}
+    </p>
+    <Content />
+  </article>
+</BaseLayout>

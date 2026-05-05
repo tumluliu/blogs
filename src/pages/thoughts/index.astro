@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const thoughts = (await getCollection('thoughts'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const rendered = await Promise.all(
+  thoughts.map(async (t) => ({ entry: t, Content: (await render(t)).Content }))
+);
+
+function fmtDate(d: Date): string {
+  return d.toISOString().slice(0, 16).replace('T', ' ');
+}
+---
+<BaseLayout title="Thoughts — luliu.me">
+  <h1>Thoughts</h1>
+  {thoughts.length === 0 && <p>(No thoughts yet — check back soon.)</p>}
+  <div class="thoughts-feed">
+    {rendered.map(({ entry, Content }) => {
+      const anchor = entry.id;
+      return (
+        <section id={anchor} class="thought">
+          <p class="post-meta">
+            <a href={`#${anchor}`}>{fmtDate(entry.data.date)}</a>
+            {entry.data.tags.map((t) => <span class="tag">{t}</span>)}
+          </p>
+          <Content />
+        </section>
+      );
+    })}
+  </div>
+</BaseLayout>

@@ -1,17 +1,54 @@
 ---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 5);
+
+const thoughts = (await getCollection('thoughts'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 5);
+
+function fmt(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+function postSlug(p: { data: { slug?: string }; id: string }): string {
+  return p.data.slug ?? p.id;
+}
 ---
+<BaseLayout title="luliu.me">
+  <section>
+    <h1>Lu Liu</h1>
+    <p>Personal blog, thoughts, and notes. Mostly in Chinese; sometimes in English.</p>
+  </section>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+  <section>
+    <h2>Recent posts</h2>
+    {posts.length === 0 && <p>(No posts yet.)</p>}
+    <ul class="post-list">
+      {posts.map((p) => (
+        <li>
+          <span class="post-date">{fmt(p.data.date)}</span>
+          <h2><a href={`/posts/${postSlug(p)}/`}>{p.data.title}</a></h2>
+        </li>
+      ))}
+    </ul>
+    <p><a href="/posts/">All posts →</a></p>
+  </section>
+
+  <section>
+    <h2>Recent thoughts</h2>
+    {thoughts.length === 0 && <p>(No thoughts yet.)</p>}
+    <ul class="post-list">
+      {thoughts.map((t) => (
+        <li>
+          <span class="post-date">{fmt(t.data.date)}</span>
+          <p>{t.body?.slice(0, 200)}{(t.body?.length ?? 0) > 200 ? '…' : ''}</p>
+        </li>
+      ))}
+    </ul>
+    <p><a href="/thoughts/">All thoughts →</a></p>
+  </section>
+</BaseLayout>

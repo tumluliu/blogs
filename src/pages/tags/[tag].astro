@@ -1,0 +1,51 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  const tagMap = new Map<string, CollectionEntry<'posts'>[]>();
+
+  for (const post of posts) {
+    for (const tag of post.data.tags) {
+      if (!tagMap.has(tag)) tagMap.set(tag, []);
+      tagMap.get(tag)!.push(post);
+    }
+  }
+
+  return Array.from(tagMap.entries()).map(([tag, postsForTag]) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: postsForTag.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
+    },
+  }));
+}
+
+interface Props {
+  tag: string;
+  posts: CollectionEntry<'posts'>[];
+}
+
+const { tag, posts } = Astro.props;
+
+function fmt(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+function postSlug(p: CollectionEntry<'posts'>): string {
+  return p.data.slug ?? p.id;
+}
+---
+<BaseLayout title={`Tag: ${tag} — luliu.me`}>
+  <h1>Tag: {tag}</h1>
+  <p>{posts.length} post{posts.length === 1 ? '' : 's'}</p>
+  <ul class="post-list">
+    {posts.map((p) => (
+      <li>
+        <span class="post-date">{fmt(p.data.date)}</span>
+        <h2><a href={`/posts/${postSlug(p)}/`}>{p.data.title}</a></h2>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

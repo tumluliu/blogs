@@ -1,0 +1,13 @@
+---
+const path = Astro.url.pathname;
+const isActive = (p: string) => path === p || path.startsWith(p);
+---
+<header class="site-header">
+  <a href="/" class="brand">luliu.me</a>
+  <nav>
+    <a href="/posts/" class:list={[{ active: isActive('/posts') }]}>Posts</a>
+    <a href="/thoughts/" class:list={[{ active: isActive('/thoughts') }]}>Thoughts</a>
+    <a href="/about/" class:list={[{ active: isActive('/about') }]}>About</a>
+    <a href="/rss.xml" aria-label="RSS feed">RSS</a>
+  </nav>
+</header>
