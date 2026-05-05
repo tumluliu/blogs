@@ -19,4 +19,4 @@ draft: false
 \
 p.s.发现自己今天废话很多，说明心态不大正常，这样比较危险，得好好调整一下\
 \
-<img src="/posts/wen-zhang-yu-gao-jin-qi-tui-dong-xin-xi-ji-shu-chan-ye-fa/img-1.gif" width="120" height="96" />\
+<img src="/posts/wen-zhang-yu-gao-jin-qi-tui-dong-xin-xi-ji-shu-chan-ye-fa/img-1.gif" />\

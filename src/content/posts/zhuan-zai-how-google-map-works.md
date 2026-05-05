@@ -60,7 +60,7 @@ To see the whole globe, just use 't=t'. This gives a single tile representing th
 
 <div id="premain1" class="smallText" style="WIDTH: 100%">
 
-<img src="http://www.codeproject.com/images/minus.gif" title="点击图片可在新窗口打开" id="preimg1" style="CURSOR: pointer" data-preid="1" width="9" height="9" /><span id="precollapse1" style="MARGIN-BOTTOM: 0pt" nd="10" preid="1"> Collapse</span>
+<img src="http://www.codeproject.com/images/minus.gif" title="点击图片可在新窗口打开" id="preimg1" data-preid="1" /><span id="precollapse1" style="MARGIN-BOTTOM: 0pt" nd="10" preid="1"> Collapse</span>
 
 </div>
 
@@ -147,7 +147,7 @@ To avoid being backlisted, developpers should to use a caching mecanism if possi
 
 see the whole globe at http://kh0.google.com/kh?n=404&v=8&t=t
 
-<img src="http://kh0.google.com/kh?n=404&amp;v=8&amp;t=t" title="点击图片可在新窗口打开" style="CURSOR: pointer" />
+<img src="http://kh0.google.com/kh?n=404&amp;v=8&amp;t=t" title="点击图片可在新窗口打开" />
 
 and the four corresponding quadrants : (note the 4 servers name to balance the load)
 
@@ -157,8 +157,8 @@ and the four corresponding quadrants : (note the 4 servers name to balance the l
 - http://kh3.google.com/kh?n=404&v=8&t=tt
   |  |  |
   |----|----|
-  | <img src="http://kh0.google.com/kh?n=404&amp;v=8&amp;t=tq" title="点击图片可在新窗口打开" style="CURSOR: pointer" /> | <img src="http://kh1.google.com/kh?n=404&amp;v=8&amp;t=tr" title="点击图片可在新窗口打开" style="CURSOR: pointer" /> |
-  | <img src="http://kh2.google.com/kh?n=404&amp;v=8&amp;t=tt" title="点击图片可在新窗口打开" style="CURSOR: pointer" /> | <img src="http://kh3.google.com/kh?n=404&amp;v=8&amp;t=ts" title="点击图片可在新窗口打开" style="CURSOR: pointer" /> |
+  | <img src="http://kh0.google.com/kh?n=404&amp;v=8&amp;t=tq" title="点击图片可在新窗口打开" /> | <img src="http://kh1.google.com/kh?n=404&amp;v=8&amp;t=tr" title="点击图片可在新窗口打开" /> |
+  | <img src="http://kh2.google.com/kh?n=404&amp;v=8&amp;t=tt" title="点击图片可在新窗口打开" /> | <img src="http://kh3.google.com/kh?n=404&amp;v=8&amp;t=ts" title="点击图片可在新窗口打开" /> |
 
 </div>
 
@@ -168,7 +168,7 @@ and the four corresponding quadrants : (note the 4 servers name to balance the l
 
 see the whole globe at http://mt1.google.com/mt?n=404&v=w2.37&x=0&y=0&zoom=17
 
-<img src="http://mt1.google.com/mt?n=404&amp;v=w2.37&amp;x=0&amp;y=0&amp;zoom=17" title="点击图片可在新窗口打开" style="CURSOR: pointer" />
+<img src="http://mt1.google.com/mt?n=404&amp;v=w2.37&amp;x=0&amp;y=0&amp;zoom=17" title="点击图片可在新窗口打开" />
 
 and the four corresponding quadrants :
 
@@ -178,8 +178,8 @@ and the four corresponding quadrants :
 - http://mt3.google.com/mt?n=404&v=w2.12&x=1&y=1&zoom=16
   |  |  |
   |----|----|
-  | <img src="http://mt0.google.com/mt?n=404&amp;v=w2.37&amp;x=0&amp;y=0&amp;zoom=16" title="点击图片可在新窗口打开" style="CURSOR: pointer" /> | <img src="http://mt1.google.com/mt?n=404&amp;v=w2.37&amp;x=1&amp;y=0&amp;zoom=16" title="点击图片可在新窗口打开" style="CURSOR: pointer" /> |
-  | <img src="http://mt2.google.com/mt?n=404&amp;v=w2.37&amp;x=0&amp;y=1&amp;zoom=16" title="点击图片可在新窗口打开" style="CURSOR: pointer" /> | <img src="http://mt3.google.com/mt?n=404&amp;v=w2.37&amp;x=1&amp;y=1&amp;zoom=16" title="点击图片可在新窗口打开" style="CURSOR: pointer" /> |
+  | <img src="http://mt0.google.com/mt?n=404&amp;v=w2.37&amp;x=0&amp;y=0&amp;zoom=16" title="点击图片可在新窗口打开" /> | <img src="http://mt1.google.com/mt?n=404&amp;v=w2.37&amp;x=1&amp;y=0&amp;zoom=16" title="点击图片可在新窗口打开" /> |
+  | <img src="http://mt2.google.com/mt?n=404&amp;v=w2.37&amp;x=0&amp;y=1&amp;zoom=16" title="点击图片可在新窗口打开" /> | <img src="http://mt3.google.com/mt?n=404&amp;v=w2.37&amp;x=1&amp;y=1&amp;zoom=16" title="点击图片可在新窗口打开" /> |
 
 </div>
 

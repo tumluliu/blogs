@@ -13,7 +13,7 @@ draft: false
 
 George Smoot是加州大学伯克利分校的物理教授，因发现了“宇宙微波背景辐射的黑体形式和各向异性”（blackbody form and anisotropy of the cosmic microwave background radiation，不知道是不是这么翻译）而获得了2006年的诺贝物理奖。虽然这次终于不再是德语报告，而且是更容易懂的美国英语，但还是听得我晕晕乎乎。也难怪，人家是搞天体物理的，我是搞……对呀，我是搞啥的？通信？软件？数据库？GIS？遥感？交通？制图？似乎都是，又似乎都不是……不过，我想说的是，隔行如隔山。
 
-[<img src="/posts/jin-tian-xia-wu-nuo-bei-er-jiang-huo-de-zhe-de-bao-gao/img-1.jpg" style="border-right: 0px; border-top: 0px; border-left: 0px; border-bottom: 0px" data-border="0" width="244" height="184" alt="IMG_1799" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/6c556fec83b1_FD8B/IMG_1799.jpg) [<img src="/posts/jin-tian-xia-wu-nuo-bei-er-jiang-huo-de-zhe-de-bao-gao/img-2.jpg" style="border-right: 0px; border-top: 0px; border-left: 0px; border-bottom: 0px" data-border="0" width="244" height="184" alt="IMG_1800" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/6c556fec83b1_FD8B/IMG_1800.jpg)
+[<img src="/posts/jin-tian-xia-wu-nuo-bei-er-jiang-huo-de-zhe-de-bao-gao/img-1.jpg" alt="IMG_1799" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/6c556fec83b1_FD8B/IMG_1799.jpg) [<img src="/posts/jin-tian-xia-wu-nuo-bei-er-jiang-huo-de-zhe-de-bao-gao/img-2.jpg" alt="IMG_1800" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/6c556fec83b1_FD8B/IMG_1800.jpg)
 
 现在能回忆起Smoot教授报告中的东西，好像也就是这么几个：
 

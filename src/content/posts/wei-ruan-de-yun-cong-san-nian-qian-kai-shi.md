@@ -17,7 +17,7 @@ draft: false
 
 *April 18, 2006: 5:42 PM EDT*
 
-[<img src="/posts/wei-ruan-de-yun-cong-san-nian-qian-kai-shi/img-1.png" style="border: 0px none ;" data-border="0" width="224" height="222" alt="image" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/c64f66122902_E21B/image_2.png)
+[<img src="/posts/wei-ruan-de-yun-cong-san-nian-qian-kai-shi/img-1.png" alt="image" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/c64f66122902_E21B/image_2.png)
 
 文章相对较长，记录了微软高层在2005年6月于Robinswood就已决策“转向Web”，并任命[Ray Ozzie](http://en.wikipedia.org/wiki/Ray_Ozzie)负责这项庞大计划前后的事，主要是以讲述Ozzie的故事为主。Ozzie是Lotus Notes的创造者，他在2005年进入微软，2006年6月15日接替Bill Gates成为微软的首席软件架构师。上图中精神矍铄的白发老者就是Ozzie，旁边那个长得像扬克尔他爸的就是Ballmer。Ozzie的任务很明确，就是“Webify everything”。按照Ozzie的想法，“Everything we do should have a presence on the Web”。那次会议由Ballmer主持，Bill Gates没有出席。
 

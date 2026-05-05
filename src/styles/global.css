@@ -85,6 +85,13 @@ img {
   margin: 1.5rem auto;
 }
 
+/* Post body images fill content width (cnblogs thumbs were small).
+ * Native dimensions of small icons preserved via max-width on container. */
+article img {
+  width: 100%;
+  max-width: 100%;
+}
+
 blockquote {
   border-left: 4px solid var(--border);
   margin: 1rem 0;
