@@ -13,7 +13,7 @@ draft: false
 
   OSM的蓬勃发展说明了wiki风格的制图有搞头。OSM的矢量数据主要靠来自全球各地的爱好者和热心人们在Yahoo Maps提供的影像数据基础上半自动数字化得来的（图1），再加上一些有GPS接收机的人上传的一些GPS轨迹图，再加上使用像[JOSM](http://wiki.openstreetmap.org/index.php/JOSM)这种稍微高级一点的地图编辑器的制图人员的绘制与修正。前面说了，OSM的优势在于翔实，地铁线、公交线、人行道以及越来越多的包括邮局、交通灯、教堂、停车场等POI信息都已经能在OSM的很多城市图里看到了，比如[这里](http://www.openstreetmap.org/?lat=48.14479&lon=11.58588&zoom=15&layers=B00FT)就是慕尼黑市中心和英国公园的一部分，能够看到在英国公园里详细的人行道，而这些在[Google的数据](http://maps.google.com/maps/mm?ie=UTF8&hl=zh-CN&ll=48.147649,11.587358&spn=0.020588,0.042744&z=15)里面是完全没有的。另外，OSM支持数据导出，除了标准的图像格式以外，以.osm为后缀的xml格式对我最有吸引力，因为我认为这是最有希望把GDF枪毙掉的格式的雏形，[我前面说过了，我很烦GDF](http://www.cnblogs.com/rib06/archive/2008/04/10/1145934.html)，而且在我参与写完Shapefile-GDF转换程序之后，越发的感觉GDF是一种不伦不类的格式，实在是应该被枪毙掉。
 
-[<img src="http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/OpenStreetMapOpenRouteService_FC4F/OSM01_thumb_1.png" style="border-width: 0px;" data-border="0" width="244" height="184" alt="OSM01" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/OpenStreetMapOpenRouteService_FC4F/OSM01_1.png)
+[<img src="./openstreetmap-he-openrouteservice/img-1.png" style="border-width: 0px;" data-border="0" width="244" height="184" alt="OSM01" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/OpenStreetMapOpenRouteService_FC4F/OSM01_1.png)
 
 图1 OSM的编辑界面
 

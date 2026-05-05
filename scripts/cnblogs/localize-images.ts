@@ -63,38 +63,44 @@ async function processPost(filename: string): Promise<Result> {
   const slug = basename(filename, '.md');
   const imgDir = join(POSTS_DIR, slug);
 
-  const urls = new Set<string>();
+  // Preserve the URL exactly as it appears in the markdown, so replacement
+  // matches. We may need a different URL for the actual HTTP fetch (e.g.
+  // upgrade http→https, promote relative /images/cnblogs_com/... → absolute);
+  // store both as { original, fetch } per entry.
+  const refs = new Map<string, string>(); // original → fetch
   let m: RegExpExecArray | null;
   MD_IMG_RE.lastIndex = 0;
-  while ((m = MD_IMG_RE.exec(content))) urls.add(m[2]);
+  while ((m = MD_IMG_RE.exec(content))) {
+    const original = m[2];
+    refs.set(original, original.replace(/^http:\/\//, 'https://'));
+  }
   HTML_IMG_RE.lastIndex = 0;
   while ((m = HTML_IMG_RE.exec(content))) {
-    let url = m[1];
-    // Promote relative /images/cnblogs_com/... → absolute
-    if (url.startsWith('/images/')) url = `https://www.cnblogs.com${url}`;
-    // Upgrade http: → https: for safety / mixed content avoidance
-    if (url.startsWith('http://')) url = 'https://' + url.slice(7);
-    urls.add(url);
+    const original = m[1];
+    let fetch = original;
+    if (fetch.startsWith('/images/')) fetch = `https://www.cnblogs.com${fetch}`;
+    if (fetch.startsWith('http://')) fetch = 'https://' + fetch.slice(7);
+    refs.set(original, fetch);
   }
 
-  if (urls.size === 0) return { post: filename, downloaded: 0, failed: 0 };
+  if (refs.size === 0) return { post: filename, downloaded: 0, failed: 0 };
 
   if (!existsSync(imgDir)) mkdirSync(imgDir, { recursive: true });
 
-  const seen = new Map<string, string>();
+  const seen = new Map<string, string>(); // original → relPath
   let downloaded = 0;
   let failed = 0;
   let n = 1;
 
-  for (const url of urls) {
-    const localName = `img-${n}.${extOf(url)}`;
+  for (const [original, fetchUrl] of refs) {
+    const localName = `img-${n}.${extOf(fetchUrl)}`;
     const localPath = join(imgDir, localName);
     const relPath = `./${slug}/${localName}`;
     n++;
-    process.stdout.write(`  ${url} → ${relPath} ... `);
-    const ok = await downloadImage(url, localPath);
+    process.stdout.write(`  ${fetchUrl} → ${relPath} ... `);
+    const ok = await downloadImage(fetchUrl, localPath);
     if (ok) {
-      seen.set(url, relPath);
+      seen.set(original, relPath);
       downloaded++;
       process.stdout.write('OK\n');
     } else {

@@ -17,7 +17,7 @@ Cyprus（塞浦路斯），Iceland（冰岛），Pakistan（巴基斯坦），Vi
 
 有兴趣的可以从上面这些国家中随便挑一个，然后找块旮旯试试。我就挑了巴基斯坦的[一个地方](http://www.google.com/mapmaker?gw=10&ll=33.601225,73.072278&spn=0.003306,0.005665&t=h&z=18&iwloc=2_0)试了一下，在其中增加了一条人行/自行车道，命名为Test street，增加之后就是下面这样的效果：
 
-[<img src="http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/Googlewikimap_12E67/google_wiki_test_thumb.png" style="border: 0px none ;" data-border="0" width="244" height="184" alt="google_wiki_test" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/Googlewikimap_12E67/google_wiki_test.png)
+[<img src="./google-de-wiki-map-ye-shang-xian-le/img-1.png" style="border: 0px none ;" data-border="0" width="244" height="184" alt="google_wiki_test" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/Googlewikimap_12E67/google_wiki_test.png)
 
 其实这条消息不是从Google Lat Long Blog看到的，而是从[OpenGeoData](http://www.opengeodata.org/)上摸过去的。OpenGeoData上的post名为[Google Want to be TeleAtlas](http://www.opengeodata.org/?p=307)。OpenGeoData是OpenStreetMap的blog，对Google的wiki-map自然非常敏感，并且称其为“a kind of faux OpenStreetMap”，faux是“人造的，假的”的意思，其实这么表达说明了SteveC至少在写这篇post的时候心态不是很好。他还提起了Google的knol项目与wikipedia的冲突，并谴责Google置现有的开放项目于不顾，自顾自的搞自己的wiki-map，这是一种对前人劳动的肆意践踏（trample on their hard work）。
 

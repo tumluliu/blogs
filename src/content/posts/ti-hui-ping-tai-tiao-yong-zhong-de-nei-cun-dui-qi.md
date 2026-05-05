@@ -117,7 +117,7 @@ BOOL ShowWindow(         \
       **真相**\
     平台调用里面最麻烦也是最重要的就是内存对齐，对不齐内存很多时候连异常也没有，直接就是错误结果。经常是查了很久也找不到问题，就算判断到了是哪个参数写的不对，也很难写出对的声明，我曾经试图用c#封装ArcSDE C API，但是现在还是有几个函数怎么也搞不定。\
     在这个程序中，窗体句柄是32位整型值，而在.net中，Long变长了，成了64位的。所以在第一种声明方式下，一个Process.GetProcessById(procid).MainWindowHandle得到的32位句柄被强行延拓成了64位的，也就是把全0值补给了它的高32位，然后传入ShowWindow，然而请注意，原始的ShowWindow函数需要的是两个32位的整型参数，现在传个窗体句柄就一下子塞进去64位，内存栈里面留给这两个参数的地方就全被这个句柄值占满了。而被强行伸长的64位句柄的低32位确是真实的句柄值，也歪打正着的填在了本来应该接受句柄参数的内存区域，但高32位，也就是0，同样没有任何理由的占到了nCmdShow参数的位置上。这样就导致了每次传入64位窗体句柄参数的同时，也给nCmdShow参数强制传入了0。这就是为什么在第一种声明方式下，无论给nCmdShow传入什么参数，ShowWindow的动作都是隐藏窗体的原因所在。\
-<img src="/images/cnblogs_com/rib06/skechmap.GIF" data-border="0" />\
+<img src="./ti-hui-ping-tai-tiao-yong-zhong-de-nei-cun-dui-qi/img-1.gif" data-border="0" />\
 \
 \
 \

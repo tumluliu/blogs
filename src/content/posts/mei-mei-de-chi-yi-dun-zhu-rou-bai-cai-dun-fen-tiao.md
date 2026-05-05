@@ -17,6 +17,6 @@ draft: false
 
 森林，草地，别墅，木屋，猪肉，白菜，粉条，米饭，还有不用熬夜的欧洲杯……
 
-[<img src="http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/ed72bd082494_9AA8/IMG_1758_thumb.jpg" style="border: 0px none ;" data-border="0" width="244" height="184" alt="IMG_1758" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/ed72bd082494_9AA8/IMG_1758.jpg)
+[<img src="./mei-mei-de-chi-yi-dun-zhu-rou-bai-cai-dun-fen-tiao/img-1.jpg" style="border: 0px none ;" data-border="0" width="244" height="184" alt="IMG_1758" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/ed72bd082494_9AA8/IMG_1758.jpg)
 
 最大的遗憾就是老婆不在，否则就完美了。
