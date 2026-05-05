@@ -182,3 +182,39 @@ blockquote {
   margin: 0 -1rem;
   padding: 1.5rem 1rem;
 }
+
+.hero {
+  text-align: center;
+  margin: 2.5rem 0 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  margin: 0 0 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+.hero-poem {
+  font-family: var(--serif);
+  background: transparent;
+  padding: 0;
+  margin: 0 auto 1.5rem;
+  font-size: 1.05rem;
+  line-height: 2;
+  color: var(--muted);
+  white-space: pre;
+  display: inline-block;
+  text-align: left;
+  letter-spacing: 0.1em;
+}
+
+.hero-tagline {
+  font-family: var(--serif);
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0;
+  letter-spacing: 0.1em;
+}

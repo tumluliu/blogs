@@ -9,7 +9,7 @@ interface Props {
   ogImage?: string;
 }
 
-const { title, description = 'Lu Liu — personal blog and thoughts', ogImage } = Astro.props;
+const { title, description = '少刷微信多读书', ogImage } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 <!doctype html>
@@ -20,6 +20,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content="刘露 / Lu Liu / 合金枪头" />
     <link rel="canonical" href={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

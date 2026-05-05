@@ -18,10 +18,14 @@ function postSlug(p: { data: { slug?: string }; id: string }): string {
   return p.data.slug ?? p.id;
 }
 ---
-<BaseLayout title="luliu.me">
-  <section>
-    <h1>Lu Liu</h1>
-    <p>Personal blog, thoughts, and notes. Mostly in Chinese; sometimes in English.</p>
+<BaseLayout title="主题没有,内容瞎写 — luliu.me">
+  <section class="hero">
+    <h1>主题没有,内容瞎写</h1>
+    <pre class="hero-poem">芳草伴青山，
+雲影入湖心，
+松梢鶴嘯長，
+蘆屋酣夢沉。</pre>
+    <p class="hero-tagline">少刷微信多读书</p>
   </section>
 
   <section>
