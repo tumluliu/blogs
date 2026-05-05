@@ -15,7 +15,12 @@
     "rename-to-slug": "tsx scripts/rename-to-slug.ts",
     "rename-to-slug:apply": "tsx scripts/rename-to-slug.ts --apply",
     "new-post": "tsx scripts/new-post.ts",
-    "new-thought": "tsx scripts/new-thought.ts"
+    "new-thought": "tsx scripts/new-thought.ts",
+    "cnblogs:fetch": "tsx scripts/cnblogs/fetch.ts",
+    "cnblogs:fetch:force": "tsx scripts/cnblogs/fetch.ts --force",
+    "cnblogs:convert": "tsx scripts/cnblogs/convert.ts",
+    "cnblogs:convert:overwrite": "tsx scripts/cnblogs/convert.ts --overwrite",
+    "cnblogs:images": "tsx scripts/cnblogs/localize-images.ts"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
