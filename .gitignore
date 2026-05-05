@@ -28,3 +28,9 @@ pnpm-debug.log*
 
 # Local VM backups (may contain secrets)
 vm-backup-*/
+.env.local
+
+# Local cache for cnblogs import
+scripts/cnblogs-cache/*.json
+scripts/cnblogs-cache/*.xml
+scripts/cnblogs-cache/*.log
