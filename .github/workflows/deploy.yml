@@ -1,0 +1,64 @@
+name: deploy
+on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - '.obsidian/**'
+      - 'infra/**'
+      - 'scripts/cnblogs/**'
+      - 'scripts/cnblogs-cache/**'
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - name: Smoke check dist
+        run: |
+          test -f dist/index.html
+          test -f dist/posts/index.html
+          test -f dist/rss.xml
+          [ "$(find dist -name '*.html' | wc -l)" -gt 100 ]
+
+      - name: Setup SSH
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.VM_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Rsync to VM
+        run: |
+          rsync -az --delete \
+            --exclude='.well-known' \
+            ./dist/ \
+            "deploy@${{ secrets.VM_HOST }}:/var/www/luliu.me/"
+
+      - name: Reload Caddy
+        run: |
+          ssh "deploy@${{ secrets.VM_HOST }}" 'sudo systemctl reload caddy'
