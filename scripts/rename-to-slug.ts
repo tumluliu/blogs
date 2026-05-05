@@ -45,9 +45,12 @@ function normalizeTags(tags: unknown): string[] {
     .filter((t, i, a) => a.indexOf(t) === i);
 }
 
+const SKIP_FILES = new Set(['README.md', 'readme.md', 'CHANGELOG.md', 'LICENSE.md']);
+
 function listRootMarkdown(): string[] {
   return readdirSync(REPO_ROOT)
     .filter((f) => f.endsWith('.md'))
+    .filter((f) => !SKIP_FILES.has(f))
     .filter((f) => statSync(join(REPO_ROOT, f)).isFile());
 }
 

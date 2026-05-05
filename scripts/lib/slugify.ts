@@ -1,4 +1,4 @@
-import pinyin from 'pinyin';
+import { pinyin } from 'pinyin';
 
 const MAX_LEN = 60;
 
@@ -11,10 +11,10 @@ export function slugify(input: string): string {
 
   // Convert any Chinese characters to pinyin (no tones)
   const transliterated = pinyin(cleaned, {
-    style: pinyin.STYLE_NORMAL,
+    style: 'normal',
     heteronym: false,
   })
-    .map((arr) => arr[0])
+    .map((arr: string[]) => arr[0])
     .join(' ');
 
   // Lowercase, replace non-alphanumerics with hyphen, collapse hyphens, trim
