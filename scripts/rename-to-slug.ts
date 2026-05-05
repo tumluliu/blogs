@@ -12,7 +12,7 @@
 //
 // Performs git mv. Refuses to run on master/main.
 
-import { readFileSync, writeFileSync, readdirSync, statSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, statSync, mkdirSync, renameSync } from 'node:fs';
 import { join, basename } from 'node:path';
 import { execSync } from 'node:child_process';
 import matter from 'gray-matter';
@@ -128,7 +128,14 @@ function main() {
   for (const p of plan) {
     const newContent = rewriteFrontmatter(p);
     writeFileSync(p.oldPath, newContent);
-    execSync(`git mv "${p.oldPath}" "${p.newPath}"`, { cwd: REPO_ROOT });
+    // git mv works for tracked files. For untracked files it errors —
+    // fall back to plain rename + git add.
+    try {
+      execSync(`git mv "${p.oldPath}" "${p.newPath}"`, { cwd: REPO_ROOT, stdio: 'pipe' });
+    } catch {
+      renameSync(p.oldPath, p.newPath);
+      execSync(`git add "${p.newPath}"`, { cwd: REPO_ROOT, stdio: 'pipe' });
+    }
   }
 
   console.log(`\nApplied ${plan.length} renames to src/content/posts/.`);

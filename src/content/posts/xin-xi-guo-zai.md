@@ -1,0 +1,13 @@
+---
+title: 信息过载
+slug: xin-xi-guo-zai
+date: "2015-01-27T09:07:44+01:00"
+updated: "2015-01-27T09:07:44+01:00"
+tags: []
+draft: false
+source: original
+---
+
+没几天功夫，就又是10+Chrome标签页，10+Pocket未读文章，5000+Reeder未读文章了。还有Coursera的两门课、至少4本同时在看的纸书、至少2期没看的CCF通讯。。。OTL
+
+这种感觉好像之前是在读博士的时候有过，现在又来了，是好事吗？这不熬夜怎么可能看得完啊。。。
