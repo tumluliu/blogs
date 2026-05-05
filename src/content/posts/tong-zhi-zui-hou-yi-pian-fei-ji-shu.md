@@ -29,7 +29,7 @@ draft: false
 
  
 
-在结束这最后一篇非技术随笔之前，请允许我祝我亲爱的老婆生日快乐![](http://www.cnblogs.com/Emoticons/qface/055243803.gif)，以后老婆也用Google Reader订阅吧，我还共享给你好多我订阅的东东呢。
+在结束这最后一篇非技术随笔之前，请允许我祝我亲爱的老婆生日快乐![](./tong-zhi-zui-hou-yi-pian-fei-ji-shu/img-1.gif)，以后老婆也用Google Reader订阅吧，我还共享给你好多我订阅的东东呢。
 
 \
 

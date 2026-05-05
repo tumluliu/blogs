@@ -13,7 +13,7 @@ draft: false
 
 *——《地球人类信息技术编年史》 ，2xxx年*
 
-![](http://images.cnblogs.com/cnblogs_com/rib06/ms_blackscreen.PNG)\
+![](./wei-ruan-qi-dong-le-zi-bao-cheng-xu-rang-wo-men-yi-qi-bang/img-1.png)\
 
 如果说铲除“番茄花园”只是微软自爆程序CTP版的话，那么这一次应该至少算是一个beta版了。我在[“微软的基因和未来”](http://www.cnblogs.com/rib06/archive/2008/04/11/1149242.html)中已经预测过微软的未来了，然而不幸的是看来鲍尔默并没有彻底改变微软基因的计划，或者是能力，他只能眼睁睁的看着这个帝国积重难返，走向崩溃。其实，看到这次微软打击盗版后果的人已经有很多了，这是一种典型的杀鸡取卵的行为。但我还是想说说自己的看法。
 

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />            
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    <title>木蚂蚁 - 博客园</title>
+    
+        
+    
+        
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=9xvyan1yGH1Ggi8nKJ01Xc2nqMWMqJCy_-EYS2m06xA" />
+    
+
+    <link id="MainCss" rel="stylesheet" href="/skins/simpleblue/bundle-simpleblue.min.css?v=loTNLvkb89a6fIjcMO18yopX7e1nYgZyClwW73_ywYg" />
+        
+    
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/simpleblue/bundle-simpleblue-mobile.min.css?v=NPsHiqWhUqSMRIbhcM6-CDq8a4LVOL1s2EPVE5p3SsU" />
+    
+    <link id="favicon" rel="icon" type="image/x-icon" sizes="32x32" href="https://assets.cnblogs.com/favicon_v3_3.ico" />
+    <link id="favicon_svg" rel="icon" type="image/svg+xml" href="https://assets.cnblogs.com/favicon_v3_3.svg" />
+    <link rel="apple-touch-icon" href="https://assets.cnblogs.com/apple-touch-icon.png?v=2" />
+    <link rel="canonical" href="https://www.cnblogs.com/ali" />
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/ali/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/ali/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/ali/wlwmanifest.xml" />
+    
+
+    <script>
+        var currentBlogId = 29409;
+        var currentBlogApp = 'ali';
+        var isLogined = false;
+        var isBlogOwner = false;
+        window.isCorp = false;
+        window.skinName = 'SimpleBlue';
+        var visitorUserId = '';
+        window.hasCustomScript = false;
+        window.cb_enable_mathjax = false;
+        window.mathEngine = 0;
+        window.codeHighlightEngine = 1;
+        window.enableCodeLineNumber = false;
+        window.codeHighlightTheme = 'cnblogs';
+        window.darkModeCodeHighlightTheme = 'vs2015';
+        window.isDarkCodeHighlightTheme = false;
+        window.isDarkModeCodeHighlightThemeDark = true;
+        window.isDisableCodeHighlighter = false;
+        window.enableCodeThemeTypeFollowSystem = false;
+        window.enableMacStyleCodeBlock = false;        
+    </script>
+    <script src="https://assets.cnblogs.com/scripts/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn-www.cnblogs.com/js/blog-common.min.js?v=FwnIdzeYfDo281O8EGYSQv8PVSIaL2l9cB9M4kEu8LI"></script>
+    
+</head>
+<body class="skin-simpleblue has-navbar">
+    <a name="top"></a>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding">
+                    <a href="https://www.cnblogs.com/" title="开发者的网上家园" role="banner">
+                        <img src="//assets.cnblogs.com/logo.svg" alt="博客园logo" />
+                    </a>
+                </li>
+                <li><a href="https://cnblogs.vip/">会员</a></li>
+                <li><a href="https://cnblogs.vip/store">周边</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-q')">博问</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-ing')">闪存</a></li>                
+                <li><a href="https://www.cnblogs.com/cmt/p/19316348">赞助商</a></li>
+                <li><a href="https://youclaw.dev/" target="_blank" onclick="countClicks('nav', 'skin-navbar-youclaw')">YouClaw</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search dropdown" action="https://zzk.cnblogs.com/s" method="get" role="search">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="search" tabindex="3" autocomplete="off" />
+                        <button id="zzk_search_button" onclick="window.navbarSearchManager.triggerActiveOption()">
+                            <img id="search_icon" class="focus-hidden" src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                            <img class="hidden focus-visible" src="//assets.cnblogs.com/icons/enter.svg" alt="搜索" />
+                        </button>
+                        <ul id="navbar_search_options" class="dropdown-menu quick-search-menu">
+                            <li tabindex="0" class="active" onclick="zzkSearch(event, document.getElementById('zzk_search_input').value)">
+                                <div class="keyword-wrapper">
+                                    <img src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                                    <div class="keyword"></div>
+                                </div>
+                                <span class="search-area">所有博客</span>
+                            </li>
+                                    <li tabindex="1" onclick="zzkBlogSearch(event, 'ali', document.getElementById('zzk_search_input').value)">
+                                        <div class="keyword-wrapper">
+                                            <img src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                                            <div class="keyword"></div>
+                                        </div>
+                                        <span class="search-area">当前博客</span>
+                                    </li>
+                        </ul>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://www.cnblogs.com/my" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/message.svg" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <a id="navbar_lite_mode_indicator" data-current-page="blog" style="display: none" href="javascript:void(0)" alt="简洁模式" title="简洁模式启用，您在访问他人博客时会使用简洁款皮肤展示">
+                        <img class="navbar-icon" src="//assets.cnblogs.com/icons/lite-mode-on.svg" alt="简洁模式" />
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="//assets.cnblogs.com/icons/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://www.cnblogs.com/my">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="https://vip.cnblogs.com/my">会员中心</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+
+    <div id="home">
+    <div id="header">
+        <div id="blogTitle">
+            <div class="title"><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/ali">半只烟</a>
+</div>
+<div class="subtitle"></div>
+
+        </div>
+        <div id="navigator">
+            
+<ul id="navList">
+    <li id="nav_sitehome"><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+    <li id="nav_myhome">
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/ali/">
+首页</a>
+</li>
+    <li id="nav_newpost">
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+    <li id="nav_contact">
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E6%9C%A8%E8%9A%82%E8%9A%81">
+联系</a></li>
+    <li id="nav_rss">
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/ali/rss/">
+订阅</a></li>
+    <li id="nav_admin">
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+            <div class="blogStats">
+                <div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+            </div>
+        </div>
+    </div>
+    <div id="main">
+        <div id="mainContent">
+            <div class="forFlow">
+                
+
+
+
+
+
+
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_1755355">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/ali/p/archive/2010/06/10">2010年6月10日
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/ali/archive/2010/06/10/1755355.html">
+    <span>
+        Ext JS 学习笔记(1)
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1755355">
+摘要：        
+&#160;&#160;&#160;&#160;&#160; 一直在使用Ext JS框架做应用系统，但是每次只是在应用他的层面上转悠。随着接触的系统业务越来越复杂，界面的显示要求也越来越高了。现在感到自己的Ext JS和JavaScrpit的水平明显有了不足。下定决心，在最近的一段时间内，坚持学习Ext JS的源码，构建出一套自己的组件库。  &#160;&#160;&#160;&#160; 本节...    <a href="https://www.cnblogs.com/ali/archive/2010/06/10/1755355.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2010-06-10 10:19
+木蚂蚁
+<span data-post-id="1755355" class="post-view-count">阅读(789)</span>
+<span data-post-id="1755355" class="post-comment-count">评论(0)</span>
+<span data-post-id="1755355" class="post-digg-count">推荐(0)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_1579229">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/ali/p/archive/2009/10/08">2009年10月8日
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/ali/archive/2009/10/08/1579229.html">
+    <span>
+        动态加载JS
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1579229">
+摘要：        
+最近，使用Ext将一个原有项目升级为Ajax的项目。将原有的Ifarem框架全部的抛弃了，使用了Ext中的TabPanel将原本比较单调的页面变的生动起来。Ext中的TabPanel加载方式有两种，Ifarem方式和直接加载JS的autoload模式。Ifarem方式：优点：简单，方便，快捷缺点：一个很大的弊端就是每次在加载一个新的iframe时都要将Ext的核心js，css文件都需要重新加载。由...    <a href="https://www.cnblogs.com/ali/archive/2009/10/08/1579229.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2009-10-08 19:00
+木蚂蚁
+<span data-post-id="1579229" class="post-view-count">阅读(1032)</span>
+<span data-post-id="1579229" class="post-comment-count">评论(0)</span>
+<span data-post-id="1579229" class="post-digg-count">推荐(0)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_1530967">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/ali/p/archive/2009/07/25">2009年7月25日
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/ali/archive/2009/07/25/1530967.html">
+    <span>
+        最近的计划
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1530967">
+摘要：        
+很久没有写博客了，主要是最近忙的要死。在过去的一年中，通过工作学习了很多东西。wcf，多线程，Ext等等。很久没有在动sharpmap了，不过还是计划在最近时间将sharpmap的渲染速度加快，而且还想将它迁移到手机上。希望大家多和我交流交流。还想把过去一段时间内的经验和心得拿出来和大家一起分享    <a href="https://www.cnblogs.com/ali/archive/2009/07/25/1530967.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2009-07-25 17:45
+木蚂蚁
+<span data-post-id="1530967" class="post-view-count">阅读(450)</span>
+<span data-post-id="1530967" class="post-comment-count">评论(1)</span>
+<span data-post-id="1530967" class="post-digg-count">推荐(0)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_1277051">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/ali/p/archive/2008/08/26">2008年8月26日
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/ali/archive/2008/08/26/1277051.html">
+    <span>
+        SharpMap数据使用WCF传输
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1277051">
+摘要：        
+这几天想把SharpMap的数据源改为服务器向客户端提供数据,看到园子里很多朋友在研究WCF.故而心痒难耐,也想赶一把时髦!WCF的构架图:应用到项目中的层次模型:相信各位看官通过名字就可以了解他的层次了 .Contract就是WCF中最重要的数据契约层了.其代码如下:[代码]作为Service，在Contract上签字的方式就是实现这样的一个Interface。下面的Service得到code[...    <a href="https://www.cnblogs.com/ali/archive/2008/08/26/1277051.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2008-08-26 22:34
+木蚂蚁
+<span data-post-id="1277051" class="post-view-count">阅读(1054)</span>
+<span data-post-id="1277051" class="post-comment-count">评论(0)</span>
+<span data-post-id="1277051" class="post-digg-count">推荐(0)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_1266670">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/ali/p/archive/2008/08/13">2008年8月13日
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/ali/archive/2008/08/13/1266670.html">
+    <span>
+        SharpMap 总结2
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1266670">
+摘要：        
+通过一段时间的努力，终于把地图的基本功能在扩展控件中做好了！先上图展示一下！详细信息图对所有的图层都可以进行运行时的开关功能：测距功能：测量结果：划定区域：现在的渲染是比较麻烦的！下一步的工作是把渲染做的更加通用，并且实现地图的无缝切换！这里再共享一下经过我改写的SharpMap中winform的用户控件的类图：    <a href="https://www.cnblogs.com/ali/archive/2008/08/13/1266670.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2008-08-13 11:44
+木蚂蚁
+<span data-post-id="1266670" class="post-view-count">阅读(1715)</span>
+<span data-post-id="1266670" class="post-comment-count">评论(15)</span>
+<span data-post-id="1266670" class="post-digg-count">推荐(2)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_1233540">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/ali/p/archive/2008/07/01">2008年7月1日
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/ali/archive/2008/07/01/1233540.html">
+    <span>
+        sharpmap学习总结
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1233540">
+摘要：        
+研究了一段时间,sharpmap了!发现了一些问题,首先是他的图层显示问题.虽然它能够将图层依据配置显示出来.但是显示不能批量的显示.经过反复试验,我终于写好了一个批量生成图层的类.但是因为水平有限,考虑的不是很周全!还有就是铁路线的显示,总是达不到好的效果.希望老手指点!先展示一下类图吧!1.获取数据源的类图!GetVDataSource表示获取VectorLayer的数据!这个类可以通过数据库...    <a href="https://www.cnblogs.com/ali/archive/2008/07/01/1233540.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2008-07-01 21:00
+木蚂蚁
+<span data-post-id="1233540" class="post-view-count">阅读(1596)</span>
+<span data-post-id="1233540" class="post-comment-count">评论(6)</span>
+<span data-post-id="1233540" class="post-digg-count">推荐(0)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+    
+
+
+<div class="day" role="article" aria-describedby="postlist_description_1135306">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/ali/p/archive/2008/04/02">2008年4月2日
+</a>
+    </div>
+        <div class="postTitle" role="heading" aria-level="2">
+            <a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/ali/archive/2008/04/02/1135306.html">
+    <span>
+        sharpmap初体验
+    </span>
+    
+
+</a>
+        </div>
+        <div class="postCon">
+            
+
+<div class="c_b_p_desc" id="postlist_description_1135306">
+摘要：        
+最近,因为工作对GIS产生了兴趣.起先我们用的super map它的价格让我们望而却步.所以,四处寻找开源的GIS.终于让我发现了它--sharpmap。它真的很好很强大。故我准备在最近的一段时间内，将学习他的过程记录下来！！    <a href="https://www.cnblogs.com/ali/archive/2008/04/02/1135306.html" class="c_b_p_desc_readmore">阅读全文</a>
+</div>
+
+
+        </div>
+        <div class="clear"></div>
+        <div class="postDesc">
+            posted @ 2008-04-02 22:54
+木蚂蚁
+<span data-post-id="1135306" class="post-view-count">阅读(649)</span>
+<span data-post-id="1135306" class="post-comment-count">评论(0)</span>
+<span data-post-id="1135306" class="post-digg-count">推荐(0)</span>
+
+
+        </div>
+        <div class="clear"></div>
+</div>
+
+<div class="topicListFooter">
+    <div id="nav_next_page">
+        
+    
+
+    </div>    
+</div>
+
+
+
+
+<script>
+    updatePostStats(
+        $(".post-view-count").map(function () { return this.dataset.postId }).get(),
+        function(id, count) { $(".post-view-count[data-post-id=" + id + "]").text("阅读(" + count + ")") },
+        function(id, count) { $(".post-comment-count[data-post-id=" + id + "]").text("评论(" + count + ")") },
+        function(id, count) { $(".post-digg-count[data-post-id=" + id + "]").text("推荐(" + count + ")") });
+</script>
+            </div>
+        </div>
+
+        <div id="sideBar">
+            <div id="sideBarMain">
+                <div id="sidebar_news" class="newsItem">
+    
+<h3 class="catListTitle">公告</h3>
+<div id="blog-news" class="sidebar-news">
+    <div id="sidebar_news_container">
+    </div>
+</div>
+<script>loadBlogNews();</script>
+</div>
+                <div id="calendar"><div id="blog-calendar" style="display:none"></div></div>                
+                <script>loadBlogDefaultCalendar();</script>
+                <div id="leftcontentcontainer">
+                    <!-- begin:SingleColumn -->
+                    <div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+                    <!-- end:  SingleColumn -->
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+    <div id="footer">
+        
+<a href="https://www.cnblogs.com/" id="footer_site_link" class="footer-brand">博客园</a>
+<span class="footer-copyright"> &nbsp;&copy;&nbsp; 2004-2026</span>
+<br /><span class="footer-icp">
+    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602011771"><img src="//assets.cnblogs.com/images/ghs.png" />浙公网安备 33010602011771号</a>
+    <a href="https://beian.miit.gov.cn" target="_blank">浙ICP备2021040463号-3</a>
+</span>
+
+    </div>
+</div>
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8OBZrxGJLy5MvghieKIKXCx2G33usYaBtOxNSV25qffN_mZHHMDrPlz1UXiW1Xde2Z1rlQ3jfeRFuhb2LjPG8S8BSnlQaZCWc7qreoR8XmU2CZVW6IgIwa5u58ghgxTcBE9R-JHCrpaKKkfjtxlZBWo" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M95P3TTWJZ"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-M95P3TTWJZ');
+</script>
+<script defer src="https://hm.baidu.com/hm.js?866c9be12d4a814454792b1fd0fed295"></script>
+</body>
+</html>
