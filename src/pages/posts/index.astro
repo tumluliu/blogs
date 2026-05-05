@@ -5,28 +5,38 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-function fmt(d: Date): string {
-  return d.toISOString().slice(0, 10);
+function fmtMonthDay(d: Date): string {
+  return d.toISOString().slice(5, 10);
 }
 
 function postSlug(p: { data: { slug?: string }; id: string }): string {
   return p.data.slug ?? p.id;
 }
+
+// Group posts by year (descending year, newest first within each year).
+const byYear = new Map<number, typeof posts>();
+for (const p of posts) {
+  const y = p.data.date.getUTCFullYear();
+  if (!byYear.has(y)) byYear.set(y, []);
+  byYear.get(y)!.push(p);
+}
+const years = Array.from(byYear.keys()).sort((a, b) => b - a);
 ---
 <BaseLayout title="Posts — luliu.me">
   <h1>Posts</h1>
-  <p>{posts.length} posts.</p>
-  <ul class="post-list">
-    {posts.map((p) => (
-      <li>
-        <span class="post-date">{fmt(p.data.date)}</span>
-        <h2><a href={`/posts/${postSlug(p)}/`}>{p.data.title}</a></h2>
-        {p.data.tags.length > 0 && (
-          <p class="post-meta">
-            {p.data.tags.map((t) => <span class="tag">{t}</span>)}
-          </p>
-        )}
-      </li>
-    ))}
-  </ul>
+  <p class="post-meta">{posts.length} posts since 2005.</p>
+
+  {years.map((year) => (
+    <section>
+      <h2 class="year-heading">{year}</h2>
+      <ul class="post-list">
+        {byYear.get(year)!.map((p) => (
+          <li>
+            <span class="post-date">{fmtMonthDay(p.data.date)}</span>
+            <h3><a href={`/posts/${postSlug(p)}/`}>{p.data.title}</a></h3>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
 </BaseLayout>

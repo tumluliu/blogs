@@ -3,11 +3,35 @@ const path = Astro.url.pathname;
 const isActive = (p: string) => path === p || path.startsWith(p);
 ---
 <header class="site-header">
-  <a href="/" class="brand">luliu.me</a>
+  <a href="/" class="brand">主题没有,内容瞎写</a>
   <nav>
-    <a href="/posts/" class:list={[{ active: isActive('/posts') }]}>Posts</a>
-    <a href="/thoughts/" class:list={[{ active: isActive('/thoughts') }]}>Thoughts</a>
-    <a href="/about/" class:list={[{ active: isActive('/about') }]}>About</a>
-    <a href="/rss.xml" aria-label="RSS feed">RSS</a>
+    <a href="/posts/" class:list={[{ active: isActive('/posts') }]}>posts</a>
+    <a href="/thoughts/" class:list={[{ active: isActive('/thoughts') }]}>thoughts</a>
+    <a href="/tags/" class:list={[{ active: isActive('/tags') }]}>tags</a>
+    <a href="/about/" class:list={[{ active: isActive('/about') }]}>about</a>
+    <a href="/rss.xml" aria-label="RSS feed">rss</a>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark mode" type="button">
+      <span class="t-light">☀</span>
+      <span class="t-dark">☾</span>
+    </button>
   </nav>
 </header>
+
+<script is:inline>
+  (function () {
+    const btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    const apply = (t) => document.documentElement.setAttribute('data-theme', t);
+    btn.addEventListener('click', () => {
+      const cur = document.documentElement.getAttribute('data-theme') || 'auto';
+      const next = cur === 'dark' ? 'light' : (cur === 'light' ? 'auto' : 'dark');
+      if (next === 'auto') {
+        document.documentElement.removeAttribute('data-theme');
+        try { localStorage.removeItem('theme'); } catch {}
+      } else {
+        apply(next);
+        try { localStorage.setItem('theme', next); } catch {}
+      }
+    });
+  })();
+</script>

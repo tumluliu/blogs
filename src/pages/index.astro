@@ -20,39 +20,37 @@ function postSlug(p: { data: { slug?: string }; id: string }): string {
 ---
 <BaseLayout title="主题没有,内容瞎写 — luliu.me">
   <section class="hero">
-    <h1>主题没有,内容瞎写</h1>
-    <pre class="hero-poem">芳草伴青山，
-雲影入湖心，
-松梢鶴嘯長，
-蘆屋酣夢沉。</pre>
-    <p class="hero-tagline">少刷微信多读书</p>
+    <img class="hero-avatar" src="/images/avatar.png" alt="刘露" width="160" height="160" />
+    <p class="hero-poem">芳草伴青山，雲影入湖心，松梢鶴嘯長，蘆屋酣夢沉。</p>
   </section>
 
   <section>
-    <h2>Recent posts</h2>
+    <div class="section-head">
+      <h2>Recent posts</h2>
+      <a href="/posts/">All posts →</a>
+    </div>
     {posts.length === 0 && <p>(No posts yet.)</p>}
     <ul class="post-list">
       {posts.map((p) => (
         <li>
           <span class="post-date">{fmt(p.data.date)}</span>
-          <h2><a href={`/posts/${postSlug(p)}/`}>{p.data.title}</a></h2>
+          <h3><a href={`/posts/${postSlug(p)}/`}>{p.data.title}</a></h3>
         </li>
       ))}
     </ul>
-    <p><a href="/posts/">All posts →</a></p>
   </section>
 
   <section>
-    <h2>Recent thoughts</h2>
+    <div class="section-head">
+      <h2>Recent thoughts</h2>
+      <a href="/thoughts/">All thoughts →</a>
+    </div>
     {thoughts.length === 0 && <p>(No thoughts yet.)</p>}
-    <ul class="post-list">
-      {thoughts.map((t) => (
-        <li>
-          <span class="post-date">{fmt(t.data.date)}</span>
-          <p>{t.body?.slice(0, 200)}{(t.body?.length ?? 0) > 200 ? '…' : ''}</p>
-        </li>
-      ))}
-    </ul>
-    <p><a href="/thoughts/">All thoughts →</a></p>
+    {thoughts.map((t) => (
+      <article class="thought-card">
+        <span class="thought-date">{fmt(t.data.date)}</span>
+        <p>{t.body?.slice(0, 240)}{(t.body?.length ?? 0) > 240 ? '…' : ''}</p>
+      </article>
+    ))}
   </section>
 </BaseLayout>

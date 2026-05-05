@@ -18,6 +18,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
+    <script is:inline>
+      // Pre-paint: apply persisted theme before CSS to avoid flash.
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') {
+          document.documentElement.setAttribute('data-theme', t);
+        }
+      } catch {}
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="刘露 / Lu Liu / 合金枪头" />
