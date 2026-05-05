@@ -1,13 +1,28 @@
 #!/bin/bash
-# Run as root on a fresh Ubuntu 24.04 cx21 after Hetzner rebuild.
+# Run as root on a fresh Ubuntu 24.04 cx22 after Hetzner build.
 # Idempotent: re-running is safe.
 
 set -euo pipefail
 
+echo "==> Hostname"
+hostnamectl set-hostname luliu-me
+
 echo "==> apt update + upgrade"
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confnew" upgrade
-DEBIAN_FRONTEND=noninteractive apt-get -y install rsync ufw curl debian-keyring debian-archive-keyring apt-transport-https
+DEBIAN_FRONTEND=noninteractive apt-get -y install \
+  rsync ufw curl debian-keyring debian-archive-keyring apt-transport-https \
+  fail2ban unattended-upgrades
+
+echo "==> Unattended security upgrades"
+cat > /etc/apt/apt.conf.d/20auto-upgrades <<'APT'
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::AutocleanInterval "7";
+APT::Periodic::Unattended-Upgrade "1";
+APT
+# Default 50unattended-upgrades.conf already restricts to security pocket on Ubuntu.
+systemctl enable --now unattended-upgrades
 
 echo "==> Install Caddy"
 if ! command -v caddy >/dev/null; then
@@ -31,12 +46,43 @@ echo "==> Web root"
 mkdir -p /var/www/luliu.me
 chown -R deploy:deploy /var/www/luliu.me
 
-echo "==> Sudo for Caddy reload only"
+echo "==> Sudo for Caddy reload only (deploy user)"
 cat > /etc/sudoers.d/deploy-caddy <<'SUDO'
 deploy ALL=(ALL) NOPASSWD: /bin/systemctl reload caddy
 SUDO
 chmod 440 /etc/sudoers.d/deploy-caddy
 visudo -c -f /etc/sudoers.d/deploy-caddy
+
+echo "==> SSH hardening"
+cat > /etc/ssh/sshd_config.d/00-hardening.conf <<'SSH'
+PermitRootLogin prohibit-password
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+ChallengeResponseAuthentication no
+PubkeyAuthentication yes
+PermitEmptyPasswords no
+MaxAuthTries 3
+LoginGraceTime 30
+ClientAliveInterval 300
+ClientAliveCountMax 2
+AllowUsers root deploy
+X11Forwarding no
+SSH
+sshd -t  # validate before reload — exits non-zero on syntax error
+systemctl reload ssh
+
+echo "==> fail2ban (sshd jail)"
+cat > /etc/fail2ban/jail.d/sshd.conf <<'F2B'
+[sshd]
+enabled = true
+port    = ssh
+backend = systemd
+maxretry = 5
+findtime = 10m
+bantime  = 1h
+F2B
+systemctl enable --now fail2ban
+systemctl restart fail2ban
 
 echo "==> Firewall"
 ufw default deny incoming
@@ -46,7 +92,13 @@ ufw allow 80/tcp
 ufw allow 443/tcp
 ufw --force enable
 
-echo "==> Caddy config (placeholder until Caddyfile rsynced)"
+echo "==> Disable noisy/unused defaults"
+# motd-news (telemetry-ish ad in MOTD)
+sed -i 's/^ENABLED=1/ENABLED=0/' /etc/default/motd-news 2>/dev/null || true
+# Disable snapd if not needed (Caddy is via apt, no snap deps here)
+systemctl disable --now snapd.service snapd.socket snapd.seeded.service 2>/dev/null || true
+
+echo "==> Caddy placeholder (until real Caddyfile rsynced)"
 test -f /etc/caddy/Caddyfile.bootstrapped || cat > /etc/caddy/Caddyfile <<'CADDY'
 luliu.me, www.luliu.me {
     respond "site bootstrap pending" 503
@@ -57,4 +109,9 @@ touch /etc/caddy/Caddyfile.bootstrapped
 systemctl enable --now caddy
 systemctl status caddy --no-pager | head -10
 
-echo "==> Done. Next: copy real Caddyfile + add deploy public key, then run first deploy."
+echo
+echo "==> Bootstrap done."
+echo "    SSH: PermitRootLogin prohibit-password (key-only); password auth off."
+echo "    fail2ban: sshd jail enabled (5 fails / 10min → 1h ban)."
+echo "    unattended-upgrades: enabled (security pocket)."
+echo "    Next: copy real Caddyfile + add deploy public key, then run first deploy."
