@@ -21,17 +21,13 @@ const isActive = (p: string) => path === p || path.startsWith(p);
   (function () {
     const btn = document.getElementById('theme-toggle');
     if (!btn) return;
-    const apply = (t) => document.documentElement.setAttribute('data-theme', t);
     btn.addEventListener('click', () => {
-      const cur = document.documentElement.getAttribute('data-theme') || 'auto';
-      const next = cur === 'dark' ? 'light' : (cur === 'light' ? 'auto' : 'dark');
-      if (next === 'auto') {
-        document.documentElement.removeAttribute('data-theme');
-        try { localStorage.removeItem('theme'); } catch {}
-      } else {
-        apply(next);
-        try { localStorage.setItem('theme', next); } catch {}
-      }
+      const cur = document.documentElement.getAttribute('data-theme');
+      const sysDark = matchMedia('(prefers-color-scheme: dark)').matches;
+      const effective = cur || (sysDark ? 'dark' : 'light');
+      const next = effective === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch {}
     });
   })();
 </script>
