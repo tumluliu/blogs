@@ -10,6 +10,7 @@ import { join, basename } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 const POSTS_DIR = join('src', 'content', 'posts');
+const PUBLIC_POSTS_DIR = join('public', 'posts');
 const FAILURES_LOG = join('scripts', 'cnblogs-cache', 'image-failures.log');
 
 // cnblogs hosts images on multiple paths:
@@ -61,7 +62,7 @@ async function processPost(filename: string): Promise<Result> {
   }
 
   const slug = basename(filename, '.md');
-  const imgDir = join(POSTS_DIR, slug);
+  const imgDir = join(PUBLIC_POSTS_DIR, slug);
 
   // Preserve the URL exactly as it appears in the markdown, so replacement
   // matches. We may need a different URL for the actual HTTP fetch (e.g.
@@ -95,7 +96,8 @@ async function processPost(filename: string): Promise<Result> {
   for (const [original, fetchUrl] of refs) {
     const localName = `img-${n}.${extOf(fetchUrl)}`;
     const localPath = join(imgDir, localName);
-    const relPath = `./${slug}/${localName}`;
+    // Public path served from /public/posts/<slug>/img-N.ext at /posts/<slug>/img-N.ext
+    const relPath = `/posts/${slug}/${localName}`;
     n++;
     process.stdout.write(`  ${fetchUrl} → ${relPath} ... `);
     const ok = await downloadImage(fetchUrl, localPath);

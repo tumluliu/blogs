@@ -15,6 +15,6 @@ draft: false
 
 对比：
 
-[<img src="./2010-nian-4-yue-3-ri-cctv-xin-wen-tiao-cha-reng-zai-shi/img-2.png" title="google_maps" style="border-bottom: 0px; border-left: 0px; display: block; float: none; margin-left: auto; border-top: 0px; margin-right: auto; border-right: 0px" data-border="0" width="644" height="424" alt="google_maps" />](http://images.cnblogs.com/cnblogs_com/rib06/WindowsLiveWriter/201043CCTVGoogleMaps_1403E/google_maps.png) 
+[<img src="/posts/2010-nian-4-yue-3-ri-cctv-xin-wen-tiao-cha-reng-zai-shi/img-2.png" title="google_maps" style="border-bottom: 0px; border-left: 0px; display: block; float: none; margin-left: auto; border-top: 0px; margin-right: auto; border-right: 0px" data-border="0" width="644" height="424" alt="google_maps" />](http://images.cnblogs.com/cnblogs_com/rib06/WindowsLiveWriter/201043CCTVGoogleMaps_1403E/google_maps.png) 
 
 别告诉我上面那个用的是“中国的Google Earth”-武大做的那个什么什么想不起来名字的东西。我们除了忽悠和耍流氓以外，能不能踏踏实实干点对人民，对子孙，对人类社会进步有益的事情？
