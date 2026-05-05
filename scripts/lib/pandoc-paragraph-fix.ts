@@ -86,6 +86,53 @@ export function splitBlocks(input: string): Block[] {
   return blocks;
 }
 
+const TERMINATORS = new Set([
+  '。', '.', '！', '!', '？', '?', '…', ';', '；', ':', '：',
+  '」', '』', '"', "'", ')', '）', ']', '】', '>',
+]);
+
+function lastVisibleChar(s: string): string {
+  const trimmed = s.replace(/\s+$/, '');
+  return trimmed.charAt(trimmed.length - 1);
+}
+
+function isWordChar(c: string): boolean {
+  return /[A-Za-z0-9]/.test(c);
+}
+
+function joinText(a: string, b: string): string {
+  const aLast = lastVisibleChar(a);
+  const bFirst = b.trimStart().charAt(0);
+  if (isWordChar(aLast) && isWordChar(bFirst)) return a + ' ' + b;
+  return a + b;
+}
+
+export function mergeParagraphs(blocks: Block[]): Block[] {
+  const out: Block[] = [];
+  let i = 0;
+  while (i < blocks.length) {
+    const cur = blocks[i];
+    if (cur.kind !== 'prose') {
+      out.push(cur);
+      i++;
+      continue;
+    }
+    let merged = cur.text;
+    let j = i + 1;
+    while (j < blocks.length) {
+      const last = lastVisibleChar(merged);
+      if (TERMINATORS.has(last)) break;
+      const next = blocks[j];
+      if (next.kind !== 'prose') break;
+      merged = joinText(merged, next.text);
+      j++;
+    }
+    out.push({ kind: 'prose', text: merged });
+    i = j;
+  }
+  return out;
+}
+
 export function fixContent(input: string): string {
   return input;
 }

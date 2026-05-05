@@ -114,3 +114,89 @@ describe('splitBlocks', () => {
     ]);
   });
 });
+
+import { mergeParagraphs } from './pandoc-paragraph-fix.js';
+
+describe('mergeParagraphs', () => {
+  it('merges three CJK / ASCII / CJK blocks into one when sentence is mid-flow', () => {
+    const blocks: Block[] = [
+      { kind: 'prose', text: '本来拉开架势准备继续做我的遥感影像库，然而世事难料，就在我实验正做得起劲的时候，一纸命令把我抽调到北京支援一个MIS' },
+      { kind: 'prose', text: '项目。' },
+      { kind: 'prose', text: '下一段从这里开始。' },
+    ];
+    const out = mergeParagraphs(blocks);
+    expect(out).toHaveLength(2);
+    expect(out[0].text).toBe('本来拉开架势准备继续做我的遥感影像库，然而世事难料，就在我实验正做得起劲的时候，一纸命令把我抽调到北京支援一个MIS项目。');
+    expect(out[1].text).toBe('下一段从这里开始。');
+  });
+
+  it('inserts a space when merging English to English at word boundary', () => {
+    const blocks: Block[] = [
+      { kind: 'prose', text: 'continued from the' },
+      { kind: 'prose', text: 'previous line.' },
+    ];
+    const out = mergeParagraphs(blocks);
+    expect(out).toHaveLength(1);
+    expect(out[0].text).toBe('continued from the previous line.');
+  });
+
+  it('does NOT merge when first paragraph ends with terminator', () => {
+    const blocks: Block[] = [
+      { kind: 'prose', text: '完整的句子。' },
+      { kind: 'prose', text: '另一段。' },
+    ];
+    const out = mergeParagraphs(blocks);
+    expect(out).toHaveLength(2);
+  });
+
+  it('does NOT merge across heading', () => {
+    const blocks: Block[] = [
+      { kind: 'prose', text: '未完句子' },
+      { kind: 'heading', text: '## 新章节' },
+      { kind: 'prose', text: '继续。' },
+    ];
+    const out = mergeParagraphs(blocks);
+    expect(out).toHaveLength(3);
+  });
+
+  it('does NOT merge across image-only paragraph', () => {
+    const blocks: Block[] = [
+      { kind: 'prose', text: '看下图' },
+      { kind: 'image', text: '![](/x.png)' },
+      { kind: 'prose', text: '说明文字。' },
+    ];
+    const out = mergeParagraphs(blocks);
+    expect(out).toHaveLength(3);
+  });
+
+  it('treats colon as terminator (often introduces list/quote)', () => {
+    const blocks: Block[] = [
+      { kind: 'prose', text: '有以下几点：' },
+      { kind: 'prose', text: '第一点。' },
+    ];
+    const out = mergeParagraphs(blocks);
+    expect(out).toHaveLength(2);
+  });
+
+  it('treats Chinese closing 」 as terminator', () => {
+    const blocks: Block[] = [
+      { kind: 'prose', text: '他说「这是好事」' },
+      { kind: 'prose', text: '然后离开了。' },
+    ];
+    const out = mergeParagraphs(blocks);
+    expect(out).toHaveLength(2);
+  });
+
+  it('chain-merges multiple short paragraphs until terminator', () => {
+    const blocks: Block[] = [
+      { kind: 'prose', text: 'foo' },
+      { kind: 'prose', text: 'bar' },
+      { kind: 'prose', text: 'baz.' },
+      { kind: 'prose', text: 'next.' },
+    ];
+    const out = mergeParagraphs(blocks);
+    expect(out).toHaveLength(2);
+    expect(out[0].text).toBe('foo bar baz.');
+    expect(out[1].text).toBe('next.');
+  });
+});
