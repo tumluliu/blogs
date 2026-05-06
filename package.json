@@ -20,7 +20,9 @@
     "cnblogs:fetch:force": "tsx scripts/cnblogs/fetch.ts --force",
     "cnblogs:convert": "tsx scripts/cnblogs/convert.ts",
     "cnblogs:convert:overwrite": "tsx scripts/cnblogs/convert.ts --overwrite",
-    "cnblogs:images": "tsx scripts/cnblogs/localize-images.ts"
+    "cnblogs:images": "tsx scripts/cnblogs/localize-images.ts",
+    "cnblogs:fix-paragraphs": "tsx scripts/cnblogs/fix-pandoc-paragraphs.ts",
+    "cnblogs:fix-paragraphs:apply": "tsx scripts/cnblogs/fix-pandoc-paragraphs.ts --apply"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
