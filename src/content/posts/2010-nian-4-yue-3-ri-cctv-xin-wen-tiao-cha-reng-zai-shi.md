@@ -11,7 +11,7 @@ draft: false
 
 不是一直作为抹黑的急先锋么？怎么在把人家轰走之后，还在使用这世界上最邪恶的，抱有冷战思维的，始终在进行意识形态输出，名为技术公司而实为帝国主义对我进行和平演变工具的古鸽的产品呢？是不是有点猥琐？
 
-[<img src="http://images.cnblogs.com/cnblogs_com/rib06/WindowsLiveWriter/201043CCTVGoogleMaps_1403E/CCTV_GoogleEarth_thumb.png" title="CCTV_GoogleEarth" alt="CCTV_GoogleEarth" />](http://images.cnblogs.com/cnblogs_com/rib06/WindowsLiveWriter/201043CCTVGoogleMaps_1403E/CCTV_GoogleEarth.png)
+[<img src="/posts/2010-nian-4-yue-3-ri-cctv-xin-wen-tiao-cha-reng-zai-shi/img-1.png" title="CCTV_GoogleEarth" alt="CCTV_GoogleEarth" />](http://images.cnblogs.com/cnblogs_com/rib06/WindowsLiveWriter/201043CCTVGoogleMaps_1403E/CCTV_GoogleEarth.png)
 
 对比：
 
