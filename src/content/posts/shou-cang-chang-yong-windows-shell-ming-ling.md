@@ -128,6 +128,4 @@ draft: false
 | 漫游Windows XP | tourstart |
 | 写字板 | write |
 
-\
-\
 转自新浪，原址<http://tech.sina.com.cn/s/2006-04-27/0909920026.shtml>

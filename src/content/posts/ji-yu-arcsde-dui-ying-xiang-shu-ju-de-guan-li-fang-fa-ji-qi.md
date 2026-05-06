@@ -9,7 +9,5 @@ sourceUrl: https://www.cnblogs.com/rib06/archive/2005/08/17/217000.html
 draft: false
 ---
 
-基于ArcSDE的影像数据管理又写了第二篇文章，连同原来的本文一起以Article的形式发布了，以下为新的文章位置，枪头为给大家带来的不便深表歉意\
-\
-[基于ArcSDE的影像管理－疑惑篇](/articles/221311.html "基于ArcSDE的影像管理－疑惑篇")\
+基于ArcSDE的影像数据管理又写了第二篇文章，连同原来的本文一起以Article的形式发布了，以下为新的文章位置，枪头为给大家带来的不便深表歉意[基于ArcSDE的影像管理－疑惑篇](/articles/221311.html "基于ArcSDE的影像管理－疑惑篇")
 [基于ArcSDE的影像管理－解决篇](/articles/221308.html "基于ArcSDE的影像管理－解决篇")

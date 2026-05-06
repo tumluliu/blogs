@@ -12,9 +12,7 @@ draft: false
 
 消息来源：[Directions Magazine](http://www.directionsmag.com/) - [Google Signs Five Year Map Agreement with Tele Atlas](http://www.directionsmag.com/press.releases/?duty=Show&id=23476)
 
-*"Gives Google Access to Tele Atlas Maps Worldwide for Mobile, Online and Desktop Applications, Tele Atlas Access To User Input for Map Changes"*
-
-昨天，Google与TeleAtlas（TA）签署了一项新的数据供应协议，TA将为Google Maps，Google Earth和Google Maps for Mobile提供矢量数据。新的协议还允许TA能够访问Google用户提交的地图修改，我猜Google可能会把来自[Google MapMaker](http://www.cnblogs.com/rib06/archive/2008/06/29/1231858.html)的数据与TA的数据集成，至于是不是能直接提供给TA用于其他用途，恐怕协议会有规定，但是这篇报道并没有谈到这个。
+*"Gives Google Access to Tele Atlas Maps Worldwide for Mobile, Online and Desktop Applications, Tele Atlas Access To User Input for Map Changes"*昨天，Google与TeleAtlas（TA）签署了一项新的数据供应协议，TA将为Google Maps，Google Earth和Google Maps for Mobile提供矢量数据。新的协议还允许TA能够访问Google用户提交的地图修改，我猜Google可能会把来自[Google MapMaker](http://www.cnblogs.com/rib06/archive/2008/06/29/1231858.html)的数据与TA的数据集成，至于是不是能直接提供给TA用于其他用途，恐怕协议会有规定，但是这篇报道并没有谈到这个。
 
 另外，也不太清楚新的协议是否会对Google在采用其它数据源方面作出约束，至少现在Google的矢量数据里面是既有TA，又有Navteq（NA），在我们中国，这俩都不是，而是Mapabc。如果做出约束的话，那么这对于NA无疑是一个噩耗，但我估计不会。
 
@@ -24,4 +22,4 @@ draft: false
 
 1.这份协议并不排外，也就是说Google还可以签其它的数据源；
 
-2.Google Map Maker的数据不能提供给TA直接用\
+2.Google Map Maker的数据不能提供给TA直接用

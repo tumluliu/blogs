@@ -33,9 +33,7 @@ draft: false
 
 <div>
 
-      utf8: Invalidor incomplete multibyte or wide character
-
-</div>
+      utf8: Invalidor incomplete multibyte or wide character</div>
 
 <div>
 
@@ -45,15 +43,11 @@ draft: false
 
 <div>
 
-解决这个问题其实就只需告诉导入程序源文件到底使用的是什么编码字符集就可以了。对于shp2pgsql来说，用一条命令的话就是
-
-</div>
+解决这个问题其实就只需告诉导入程序源文件到底使用的是什么编码字符集就可以了。对于shp2pgsql来说，用一条命令的话就是</div>
 
 <div>
 
-      shp2pgsql shapefilename_without_extension tablename dbname ***-W LATIN1*** \| psql -d dbname      
-
-</div>
+      shp2pgsql shapefilename_without_extension tablename dbname ***-W LATIN1*** \| psql -d dbname      </div>
 
 <div>
 
@@ -75,19 +69,13 @@ draft: false
 
 <div>
 
-\
-
 </div>
 
 <div>
 
-本文基于Ubuntu 9.04, Postgresql 8.3.8, PostGIS 1.3.3, Ruby 1.8, GeoRuby 1.3.4
-
-</div>
+本文基于Ubuntu 9.04, Postgresql 8.3.8, PostGIS 1.3.3, Ruby 1.8, GeoRuby 1.3.4</div>
 
 <div>
-
-\
 
 </div>
 

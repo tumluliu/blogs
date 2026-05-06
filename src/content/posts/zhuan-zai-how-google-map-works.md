@@ -155,6 +155,7 @@ and the four corresponding quadrants : (note the 4 servers name to balance the l
 - http://kh1.google.com/kh?n=404&v=8&t=tr
 - http://kh2.google.com/kh?n=404&v=8&t=ts
 - http://kh3.google.com/kh?n=404&v=8&t=tt
+
   |  |  |
   |----|----|
   | <img src="http://kh0.google.com/kh?n=404&amp;v=8&amp;t=tq" title="点击图片可在新窗口打开" /> | <img src="http://kh1.google.com/kh?n=404&amp;v=8&amp;t=tr" title="点击图片可在新窗口打开" /> |
@@ -176,6 +177,7 @@ and the four corresponding quadrants :
 - http://mt1.google.com/mt?n=404&v=w2.37&x=1&y=0&zoom=16
 - http://mt2.google.com/mt?n=404&v=w2.37&x=0&y=1&zoom=16
 - http://mt3.google.com/mt?n=404&v=w2.12&x=1&y=1&zoom=16
+
   |  |  |
   |----|----|
   | <img src="http://mt0.google.com/mt?n=404&amp;v=w2.37&amp;x=0&amp;y=0&amp;zoom=16" title="点击图片可在新窗口打开" /> | <img src="http://mt1.google.com/mt?n=404&amp;v=w2.37&amp;x=1&amp;y=0&amp;zoom=16" title="点击图片可在新窗口打开" /> |

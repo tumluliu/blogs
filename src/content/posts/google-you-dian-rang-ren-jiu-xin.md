@@ -15,11 +15,7 @@ draft: false
 
 对于未来，我们可以尽情的展开想象的翅膀进行展望：我出去买东西，但钱包不见了，没关系，随手拿出一个设备，对着它说：“我的钱包现在在哪？”马上一个闪闪的红点就会出现在地图上；早晨我要找一件印有TUM的T恤，但又不记得放在哪里了，只要问一下家里的某个设备：“我那件蓝色TUM的T恤在哪里？”，马上它就能告诉你它在哪个柜子里的哪个衣架上。这些都完全可以实现，只是不知道那个在设备中完成这些搜索任务的引擎是不是Google。最近Google高管Amit Singhal最近在谈到未来Google跟生活的整合时，提到“[未来Google会提醒你什么时候该去哪里买什么东西了](http://www.google.org.cn/posts/google-may-soon-start-telling-you-when-to-go-shopping-and-what-to-buy.html)”也并不是什么特别令人惊奇的事情。只是，在那一天到来之前，Google先得想办法让自己能活到那个时候。看现在的形势，还真挺让人揪心的。
 
- 
-
-附：近期一些关于Google的负面新闻
-
-[Google未按时将洛杉矶政府顺利带入云端，不得不做出赔偿](http://www.google.org.cn/posts/google-misses-deadline-for-high-profile-la-contract.html)
+附：近期一些关于Google的负面新闻[Google未按时将洛杉矶政府顺利带入云端，不得不做出赔偿](http://www.google.org.cn/posts/google-misses-deadline-for-high-profile-la-contract.html)
 
 [Google TV到底是什么？](http://www.google.org.cn/posts/google-releases-google-tv-video.html)
 

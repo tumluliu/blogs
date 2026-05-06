@@ -25,10 +25,10 @@ draft: false
 
 关于全球影像的数据量，OGC的Abstract Specifications里面有描述：
 
-In terms of volume, imagery is the dominant form of geographic information.\
-• Stored geographic imagery volume will grow to the order of an exabyte\
-• National imagery archives are multiple petabytes in size; ingesting a terabyte per day\
-• Individual application data centers are archiving 100’s of terabytes of imagery\
+In terms of volume, imagery is the dominant form of geographic information.
+• Stored geographic imagery volume will grow to the order of an exabyte
+• National imagery archives are multiple petabytes in size; ingesting a terabyte per day
+• Individual application data centers are archiving 100’s of terabytes of imagery
 • Tens of thousands of datasets have been catalogued but are not yet on-line.
 
 注意，这还仅仅是04年的说法。

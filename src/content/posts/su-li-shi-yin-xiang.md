@@ -21,6 +21,4 @@ draft: false
 
 6\. 这里的两所大学——Universitaet Zurich（苏黎世大学）和ETH Zurich（苏黎世瑞士联邦高工，欧洲大陆上排名最高的大学）——依山傍湖而建，校区很美。古老的建筑加上极其现代化的内部设施，这也是大部分欧洲大学的风格。在这里没有见到“创建宇宙一流大学”的横幅，很是遗憾…
 
- 
-
 Now I’m here: <http://goo.gl/maps/CMUa>, in the session of map generalization.

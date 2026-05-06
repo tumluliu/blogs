@@ -9,16 +9,14 @@ sourceUrl: https://www.cnblogs.com/rib06/archive/2007/02/08/644425.html
 draft: false
 ---
 
-**\[最新更新\]** **推出0.6.6.070215无视错误版，用比较猥琐的办法部分解决了封IP的问题，而且对操作超时等其它错误也采用重新拨号的办法解决，请下载后<span style="FONT-SIZE: 18pt; COLOR: #ff0000; BACKGROUND-COLOR: #ffff99">详细阅读更新说明</span>。建议配置：在网络比较空闲的时候，分组基数5000，组间时间间隔10（这样设置纯粹是为了让程序工作一段时间休息一下<img src="http://www.cnblogs.com/CuteSoft_Client/CuteEditor/images/face1.gif" data-align="absMiddle" data-border="0" />），任务间隔0.1，这样基本实现了无人值守，尽情下载。（今晚我就打算让它通宵）**
+**\[最新更新\]** **推出0.6.6.070215无视错误版，用比较猥琐的办法部分解决了封IP的问题，而且对操作超时等其它错误也采用重新拨号的办法解决，请下载后<span style="FONT-SIZE: 18pt; COLOR: #ff0000; BACKGROUND-COLOR: #ffff99">详细阅读更新说明</span>。建议配置：在网络比较空闲的时候，分组基数5000，组间时间间隔10（这样设置纯粹是为了让程序工作一段时间休息一下<img src="http://www.cnblogs.com/CuteSoft_Client/CuteEditor/images/face1.gif" data-align="absMiddle" data-border="0" />），任务间隔0.1，这样基本实现了无人值守，尽情下载。（今晚我就打算让它通宵）**这个post以后就是程序的更新帖，有最新更新我会短信通知大家，详细的更新信息在压缩包内。
 
-这个post以后就是程序的更新帖，有最新更新我会短信通知大家，详细的更新信息在压缩包内。\
-\
-2月15日更新，v0.6.6.070215无视错误版<img src="http://www.cnblogs.com/CuteSoft_Client/CuteEditor/images/face4.gif" data-align="absMiddle" data-border="0" />\
-\
-源代码[下载](http://www.cnblogs.com/Files/rib06/GMGv0.6.6.070215_src.rar)\
-\
-安装包[下载](http://www.cnblogs.com/Files/rib06/GMGv0.6.6.070215_bin.rar)\
-\
-如果彻底解决了封IP问题，我就出0.7版，不过可能性不大。大家发现什么其它问题也及时向我反馈，或者自己修改，然后告诉我也行。\
-\
+2月15日更新，v0.6.6.070215无视错误版<img src="http://www.cnblogs.com/CuteSoft_Client/CuteEditor/images/face4.gif" data-align="absMiddle" data-border="0" />
+
+源代码[下载](http://www.cnblogs.com/Files/rib06/GMGv0.6.6.070215_src.rar)
+
+安装包[下载](http://www.cnblogs.com/Files/rib06/GMGv0.6.6.070215_bin.rar)
+
+如果彻底解决了封IP问题，我就出0.7版，不过可能性不大。大家发现什么其它问题也及时向我反馈，或者自己修改，然后告诉我也行。
+
 **\[说明\]：**程序仅供内部参考

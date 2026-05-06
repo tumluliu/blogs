@@ -9,8 +9,4 @@ sourceUrl: https://www.cnblogs.com/rib06/archive/2011/01/27/1945907.html
 draft: false
 ---
 
-连接线格式-\>行为-\>连接线-\>跨线-\>添加-\>从不
-
-format-\>behavior…-\>Connector-\>Line jumps-\>Add: Never
-
-来源：<http://goo.gl/Emnlu>
+连接线格式-\>行为-\>连接线-\>跨线-\>添加-\>从不format-\>behavior…-\>Connector-\>Line jumps-\>Add: Never来源：<http://goo.gl/Emnlu>

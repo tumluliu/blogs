@@ -15,8 +15,4 @@ draft: false
 
 [<img src="/posts/openstreetmap-he-openrouteservice/img-1.png" alt="OSM01" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/OpenStreetMapOpenRouteService_FC4F/OSM01_1.png)
 
-图1 OSM的编辑界面
-
- 
-
-p.s. OpenRouteService还在不断的完善，这两天又新增加了Accessibility Analyse功能，它可以帮你算出从一个点出发，在xx分钟之内你能到达的地区范围。
+图1 OSM的编辑界面p.s. OpenRouteService还在不断的完善，这两天又新增加了Accessibility Analyse功能，它可以帮你算出从一个点出发，在xx分钟之内你能到达的地区范围。
