@@ -10,6 +10,6 @@ draft: false
 
 This is my first blog written by Live Writer. It seems wonderful. These days I am so busy. And my mainboard was broken one month ago. It was just been repaired last Saturday, which cost me 30.
 
-I will continue to update my blogs. 
+I will continue to update my blogs.
 
 Can you see this post? If you can, I am successful:-)

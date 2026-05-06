@@ -8,7 +8,7 @@ sourceUrl: https://www.cnblogs.com/rib06/archive/2009/03/24/1420796.html
 draft: false
 ---
 
-## 
+##
 
 [Eclipse CDT and shared libraries](http://janmagnet.wordpress.com/2007/09/30/eclipse-cdt-and-shared-libraries/)
 

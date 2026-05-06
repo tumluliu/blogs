@@ -9,7 +9,7 @@ sourceUrl: https://www.cnblogs.com/rib06/archive/2007/02/11/647561.html
 draft: false
 ---
 
-一篇介绍Google Map工作原理的文章，很不错，从[老马](http://www.3snews.net/?mars)的blog上翻出来的，特此致谢！<span id="intelliTXT">  </span>
+一篇介绍Google Map工作原理的文章，很不错，从[老马](http://www.3snews.net/?mars)的blog上翻出来的，特此致谢！
 
 ### Introduction
 
@@ -58,11 +58,7 @@ To see the whole globe, just use 't=t'. This gives a single tile representing th
 
 #### algorithm : to find a tile from a latitude, a longitude and a zoom factor :
 
-<div id="premain1" class="smallText" style="WIDTH: 100%">
-
-<img src="http://www.codeproject.com/images/minus.gif" title="点击图片可在新窗口打开" id="preimg1" data-preid="1" /><span id="precollapse1" style="MARGIN-BOTTOM: 0pt" nd="10" preid="1"> Collapse</span>
-
-</div>
+<img src="http://www.codeproject.com/images/minus.gif" title="点击图片可在新窗口打开" id="preimg1" data-preid="1" /> Collapse
 
 ```
 //initialise the variables;
@@ -141,8 +137,6 @@ We're sorry... ... but your query looks similar to automated requests from a com
 
 To avoid being backlisted, developpers should to use a caching mecanism if possible...
 
-<div>
-
 ### Sat Examples :
 
 see the whole globe at http://kh0.google.com/kh?n=404&v=8&t=t
@@ -161,10 +155,6 @@ and the four corresponding quadrants : (note the 4 servers name to balance the l
   | <img src="http://kh0.google.com/kh?n=404&amp;v=8&amp;t=tq" title="点击图片可在新窗口打开" /> | <img src="http://kh1.google.com/kh?n=404&amp;v=8&amp;t=tr" title="点击图片可在新窗口打开" /> |
   | <img src="http://kh2.google.com/kh?n=404&amp;v=8&amp;t=tt" title="点击图片可在新窗口打开" /> | <img src="http://kh3.google.com/kh?n=404&amp;v=8&amp;t=ts" title="点击图片可在新窗口打开" /> |
 
-</div>
-
-<div>
-
 ### Map Examples :
 
 see the whole globe at http://mt1.google.com/mt?n=404&v=w2.37&x=0&y=0&zoom=17
@@ -182,8 +172,6 @@ and the four corresponding quadrants :
   |----|----|
   | <img src="http://mt0.google.com/mt?n=404&amp;v=w2.37&amp;x=0&amp;y=0&amp;zoom=16" title="点击图片可在新窗口打开" /> | <img src="http://mt1.google.com/mt?n=404&amp;v=w2.37&amp;x=1&amp;y=0&amp;zoom=16" title="点击图片可在新窗口打开" /> |
   | <img src="http://mt2.google.com/mt?n=404&amp;v=w2.37&amp;x=0&amp;y=1&amp;zoom=16" title="点击图片可在新窗口打开" /> | <img src="http://mt3.google.com/mt?n=404&amp;v=w2.37&amp;x=1&amp;y=1&amp;zoom=16" title="点击图片可在新窗口打开" /> |
-
-</div>
 
 nice isn't it ?
 

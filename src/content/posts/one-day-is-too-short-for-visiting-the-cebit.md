@@ -17,7 +17,7 @@ draft: false
 
 导航馆里有不少韩国公司，但没有看到什么杀手级应用，几乎都是在车载导航仪的界面、功能（指集成Mp3、Video Play这些）和计算速度上面做文章，所以感觉比较乏味。软件那边有几组大鳄展台，其中IBM的声势非常浩大，但由于时间有限，我也没有办法详细询问一些技术细节，只是不停的走啊走。
 
-[<img src="/posts/one-day-is-too-short-for-visiting-the-cebit/img-2.jpg" alt="IMG_1347" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/OnedayistooshortfortheCeBIT_CEA9/IMG_1347.jpg) 
+[<img src="/posts/one-day-is-too-short-for-visiting-the-cebit/img-2.jpg" alt="IMG_1347" />](http://www.cnblogs.com/images/cnblogs_com/rib06/WindowsLiveWriter/OnedayistooshortfortheCeBIT_CEA9/IMG_1347.jpg)
 
 当天晚上回到沃尔夫斯堡，找了家意大利小店吃了顿应该算是正宗的Pizza，喝了杯白啤，就回Holiday Inn酒店休息了。转天也没有再去汉诺威，就在沃尔夫斯堡到[大众汽车总部](http://maps.google.com/maps?f=q&hl=zh-CN&geocode=&q=wolfsburg,+Germany&ie=UTF8&ll=52.432781,10.793574&spn=0.00904,0.022659&t=h&z=16)看了看大众博物馆，不由得暗暗感叹：我们国家的工业制造技术和重工业污染控制能力什么时候才能达到这个水平？
 

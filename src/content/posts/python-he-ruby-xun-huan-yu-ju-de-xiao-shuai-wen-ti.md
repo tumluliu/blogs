@@ -18,53 +18,47 @@ draft: false
 
 1\. C#
 
-<div class="cnblogs_code">
+```
+1using System;
 
-<span style="color: #008080;"> 1</span><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" /><span style="color: #0000ff;">using</span><span style="color: #000000;"> System;
-
-</span><span style="color: #008080;"> 2</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" />
-</span><span style="color: #008080;"> 3</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" /></span><span style="color: #0000ff;">public</span><span style="color: #000000;"> </span><span style="color: #0000ff;">class</span><span style="color: #000000;"> App
-</span><span style="color: #008080;"> 4</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-2.gif" id="Codehighlighter1_32_220_Open_Image" onclick="this.style.display=&#39;none&#39;; document.getElementById(&#39;Codehighlighter1_32_220_Open_Text&#39;).style.display=&#39;none&#39;; document.getElementById(&#39;Codehighlighter1_32_220_Closed_Image&#39;).style.display=&#39;inline&#39;; document.getElementById(&#39;Codehighlighter1_32_220_Closed_Text&#39;).style.display=&#39;inline&#39;;" data-align="top" /><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-3.gif" id="Codehighlighter1_32_220_Closed_Image" onclick="this.style.display=&#39;none&#39;; document.getElementById(&#39;Codehighlighter1_32_220_Closed_Text&#39;).style.display=&#39;none&#39;; document.getElementById(&#39;Codehighlighter1_32_220_Open_Image&#39;).style.display=&#39;inline&#39;; document.getElementById(&#39;Codehighlighter1_32_220_Open_Text&#39;).style.display=&#39;inline&#39;;" data-align="top" /></span><span id="Codehighlighter1_32_220_Closed_Text" style="border: 1px solid #808080; background-color: #ffffff; display: none;">![](/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif)</span><span id="Codehighlighter1_32_220_Open_Text"><span style="color: #000000;">{
-</span><span style="color: #008080;"> 5</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-4.gif" data-align="top" />    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> </span><span style="color: #0000ff;">static</span><span style="color: #000000;"> </span><span style="color: #0000ff;">void</span><span style="color: #000000;"> Main()
-</span><span style="color: #008080;"> 6</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-5.gif" id="Codehighlighter1_62_218_Open_Image" onclick="this.style.display=&#39;none&#39;; document.getElementById(&#39;Codehighlighter1_62_218_Open_Text&#39;).style.display=&#39;none&#39;; document.getElementById(&#39;Codehighlighter1_62_218_Closed_Image&#39;).style.display=&#39;inline&#39;; document.getElementById(&#39;Codehighlighter1_62_218_Closed_Text&#39;).style.display=&#39;inline&#39;;" data-align="top" /><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-6.gif" id="Codehighlighter1_62_218_Closed_Image" onclick="this.style.display=&#39;none&#39;; document.getElementById(&#39;Codehighlighter1_62_218_Closed_Text&#39;).style.display=&#39;none&#39;; document.getElementById(&#39;Codehighlighter1_62_218_Open_Image&#39;).style.display=&#39;inline&#39;; document.getElementById(&#39;Codehighlighter1_62_218_Open_Text&#39;).style.display=&#39;inline&#39;;" data-align="top" />    </span><span id="Codehighlighter1_62_218_Closed_Text" style="border: 1px solid #808080; background-color: #ffffff; display: none;">![](/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif)</span><span id="Codehighlighter1_62_218_Open_Text"><span style="color: #000000;">{
-</span><span style="color: #008080;"> 7</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-4.gif" data-align="top" />        </span><span style="color: #0000ff;">int</span><span style="color: #000000;"> counter </span><span style="color: #000000;">=</span><span style="color: #000000;"> </span><span style="color: #800080;">0</span><span style="color: #000000;">;
-</span><span style="color: #008080;"> 8</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-4.gif" data-align="top" />        </span><span style="color: #0000ff;">for</span><span style="color: #000000;"> (</span><span style="color: #0000ff;">int</span><span style="color: #000000;"> i </span><span style="color: #000000;">=</span><span style="color: #000000;"> </span><span style="color: #800080;">0</span><span style="color: #000000;">; i </span><span style="color: #000000;">\<</span><span style="color: #000000;"> </span><span style="color: #800080;">16108</span><span style="color: #000000;">; i</span><span style="color: #000000;">++</span><span style="color: #000000;">)
-</span><span style="color: #008080;"> 9</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-4.gif" data-align="top" />            </span><span style="color: #0000ff;">for</span><span style="color: #000000;"> (</span><span style="color: #0000ff;">int</span><span style="color: #000000;"> j </span><span style="color: #000000;">=</span><span style="color: #000000;"> </span><span style="color: #800080;">0</span><span style="color: #000000;">; j </span><span style="color: #000000;">\<</span><span style="color: #000000;"> </span><span style="color: #800080;">10310</span><span style="color: #000000;">; j</span><span style="color: #000000;">++</span><span style="color: #000000;">)
-</span><span style="color: #008080;">10</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-4.gif" data-align="top" />                counter</span><span style="color: #000000;">++</span><span style="color: #000000;">;
-</span><span style="color: #008080;">11</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-4.gif" data-align="top" />        Console.WriteLine(</span><span style="color: #800000;">"</span><span style="color: #800000;">Counter is: {0}</span><span style="color: #800000;">"</span><span style="color: #000000;">, counter);
-</span><span style="color: #008080;">12</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-7.gif" data-align="top" />    }</span></span><span style="color: #000000;">
-</span><span style="color: #008080;">13</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-8.gif" data-align="top" />}</span></span>
-
-</div>
+ 2
+ 3public class App
+ 4
+ 5    public static void Main()
+ 6
+ 7        int counter = 0;
+ 8        for (int i = 0; i < 16108; i++)
+ 9            for (int j = 0; j < 10310; j++)
+10                counter++;
+11        Console.WriteLine("Counter is: {0}", counter);
+12    }
+13}
+```
 
 2.  Python
 
-<div class="cnblogs_code">
+```
+1counter = 0
 
-<span style="color: #008080;">1</span><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" /><span style="color: #000000;">counter </span><span style="color: #000000;">=</span><span style="color: #000000;"> 0
-
-</span><span style="color: #008080;">2</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" /></span><span style="color: #0000ff;">for</span><span style="color: #000000;"> i </span><span style="color: #0000ff;">in</span><span style="color: #000000;"> range(</span><span style="color: #000000;">16108</span><span style="color: #000000;">):
-</span><span style="color: #008080;">3</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" />    </span><span style="color: #0000ff;">for</span><span style="color: #000000;"> j </span><span style="color: #0000ff;">in</span><span style="color: #000000;"> range(</span><span style="color: #000000;">10310</span><span style="color: #000000;">):
-</span><span style="color: #008080;">4</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" />        counter </span><span style="color: #000000;">=</span><span style="color: #000000;"> counter </span><span style="color: #000000;">+</span><span style="color: #000000;"> </span><span style="color: #000000;">1</span><span style="color: #000000;">
-</span><span style="color: #008080;">5</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" />
-</span><span style="color: #008080;">6</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" /></span><span style="color: #0000ff;">print</span><span style="color: #000000;"> </span><span style="color: #800000;">"</span><span style="color: #800000;">Counter is: </span><span style="color: #800000;">"</span><span style="color: #000000;"> </span><span style="color: #000000;">+</span><span style="color: #000000;"> str(counter)</span>
-
-</div>
+2for i in range(16108):
+3    for j in range(10310):
+4        counter = counter + 1
+5
+6print "Counter is: " + str(counter)
+```
 
 3\. Ruby (没有Ruby的代码模板，用Python的凑合了)
 
-<div class="cnblogs_code">
+```
+1counter = 0
 
-<span style="color: #008080;">1</span><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" /><span style="color: #000000;">counter </span><span style="color: #000000;">=</span><span style="color: #000000;"> 0
-
-</span><span style="color: #008080;">2</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" /></span><span style="color: #0000ff;">for</span><span style="color: #000000;"> i </span><span style="color: #0000ff;">in</span><span style="color: #000000;"> 0..</span><span style="color: #000000;">16107</span><span style="color: #000000;">
-</span><span style="color: #008080;">3</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" />  </span><span style="color: #0000ff;">for</span><span style="color: #000000;"> j </span><span style="color: #0000ff;">in</span><span style="color: #000000;"> 0..</span><span style="color: #000000;">10309</span><span style="color: #000000;">
-</span><span style="color: #008080;">4</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" />    counter </span><span style="color: #000000;">+=</span><span style="color: #000000;"> </span><span style="color: #000000;">1</span><span style="color: #000000;">
-</span><span style="color: #008080;">5</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" />  end
-</span><span style="color: #008080;">6</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" />end
-</span><span style="color: #008080;">7</span><span style="color: #000000;"><img src="/posts/python-he-ruby-xun-huan-yu-ju-de-xiao-shuai-wen-ti/img-1.gif" data-align="top" />puts counter</span>
-
-</div>
+2for i in 0..16107
+3  for j in 0..10309
+4    counter += 1
+5  end
+6end
+7puts counter
+```
 
 粗略测试运行时间结果为：
 

@@ -12,9 +12,9 @@ draft: false
 
 Pay special attention to this project: [QuickGraph](http://www.codeplex.com/quickgraph) on codeplex.
 
-![](http://i3.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=quickgraph&DownloadId=10930) 
+![](http://i3.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=quickgraph&DownloadId=10930)
 
-<span id="ctl00_ctl00_MasterContent_Content_wikiSourceLabel"> </span>
+
 
 ##### QuickGraph 3.0: Generic Graph Data Structures and Algorithms for .Net.
 

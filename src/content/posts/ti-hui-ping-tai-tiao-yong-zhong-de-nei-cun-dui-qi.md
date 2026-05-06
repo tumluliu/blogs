@@ -18,7 +18,7 @@ draft: false
     判断好办，获取进程列表，判断一下是否存在servant进程就可以。第一件事也好办，用Shell函数直接执行servant.exe就可以，并且还可以得到servant的进程ID。但是第二个就麻烦一点了，翻腾了一下MSDN，没找到如果进程已经运行，怎么让它还原到前台的.net方法。所以决定借用Win32API，里面有个ShowWindow好像很符合我的需求。
     ShowWindow的原型说明如下：
 
-<span style="FONT-SIZE: 10pt">The ShowWindow function sets the specified window's show state.
+The ShowWindow function sets the specified window's show state.
 
 BOOL ShowWindow(
     HWND hWnd,
@@ -30,9 +30,9 @@ BOOL ShowWindow(
     第一个窗体句柄参数在.net里面可以通过Process.GetProcessById(id).MainWindowHandle得到，里面的进程id用前面说的Shell方法可以得到，MainWindowHandle属性是一个IntPtr类型，也没什么问题。
     第二个参数各个常量的定义在WinUser.h里面，对应的具体数值为：
 
-<span style="FONT-SIZE: 10pt">
 
-<span style="FONT-SIZE: 10pt">/\*
+
+/\*
 
  \* ShowWindow() Commands
  \*/
