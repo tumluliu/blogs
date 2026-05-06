@@ -133,6 +133,22 @@ export function mergeParagraphs(blocks: Block[]): Block[] {
   return out;
 }
 
+function splitFrontmatter(input: string): { frontmatter: string; body: string } {
+  const m = input.match(/^---\n[\s\S]*?\n---\n+/);
+  if (!m) return { frontmatter: '', body: input };
+  return { frontmatter: m[0], body: input.slice(m[0].length) };
+}
+
+function renderBlocks(blocks: Block[]): string {
+  return blocks.map((b) => b.text).join('\n\n');
+}
+
 export function fixContent(input: string): string {
-  return input;
+  const { frontmatter, body } = splitFrontmatter(input);
+  const stripped = stripBackslashes(body);
+  const blocks = splitBlocks(stripped);
+  const merged = mergeParagraphs(blocks);
+  const rendered = renderBlocks(merged);
+  const trailing = input.endsWith('\n') ? '\n' : '';
+  return frontmatter + (rendered ? rendered + trailing : trailing);
 }

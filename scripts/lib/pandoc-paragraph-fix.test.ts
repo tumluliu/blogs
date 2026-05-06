@@ -200,3 +200,50 @@ describe('mergeParagraphs', () => {
     expect(out[1].text).toBe('next.');
   });
 });
+
+describe('fixContent (integration)', () => {
+  it('fixes the dao-tui-style mid-sentence break', () => {
+    const input = [
+      '---',
+      'title: x',
+      '---',
+      '',
+      '本来拉开架势准备继续做我的遥感影像库，然而世事难料，就在我实验正做得起劲的时候，一纸命令把我抽调到北京支援一个MIS\\',
+      '\\',
+      '项目。\\',
+      '\\',
+      '下一段从这里开始。',
+      '',
+    ].join('\n');
+    const expected = [
+      '---',
+      'title: x',
+      '---',
+      '',
+      '本来拉开架势准备继续做我的遥感影像库，然而世事难料，就在我实验正做得起劲的时候，一纸命令把我抽调到北京支援一个MIS项目。',
+      '',
+      '下一段从这里开始。',
+      '',
+    ].join('\n');
+    expect(fixContent(input)).toBe(expected);
+  });
+
+  it('preserves frontmatter verbatim', () => {
+    const fm = '---\ntitle: x\nslug: y\ndate: "2025-01-01"\ntags:\n  - a\n  - b\n---\n\n';
+    const body = '一段。\n';
+    expect(fixContent(fm + body)).toBe(fm + body);
+  });
+
+  it('preserves fenced code verbatim', () => {
+    const input = '前文\\\n\\\n```js\nconst x = 1;\n\nconst y = 2;\n```\n\n后文。\n';
+    const out = fixContent(input);
+    expect(out).toContain('```js\nconst x = 1;\n\nconst y = 2;\n```');
+  });
+
+  it('is idempotent: running twice = running once', () => {
+    const input = '一段中文MIS\\\n\\\n项目。\\\n\\\n下一段。\n';
+    const once = fixContent(input);
+    const twice = fixContent(once);
+    expect(twice).toBe(once);
+  });
+});
