@@ -27,6 +27,7 @@ export interface Block {
 }
 
 const HEADING_RE = /^#{1,6}\s/;
+const BOLD_ONLY_RE = /^\*\*[^*\n]+\*\*\s*$/;
 const LIST_RE = /^(\s*)([-*+]|\d+\.)\s/;
 const QUOTE_RE = /^>\s?/;
 const HR_SIMPLE = /^(?:-{3,}|\*{3,}|_{3,})\s*$/;
@@ -36,6 +37,7 @@ const TABLE_RE = /^\s*\|/;
 
 function detectKind(line: string): BlockKind {
   if (HEADING_RE.test(line)) return 'heading';
+  if (BOLD_ONLY_RE.test(line)) return 'heading';
   if (HR_SIMPLE.test(line)) return 'hr';
   if (LIST_RE.test(line)) return 'list';
   if (QUOTE_RE.test(line)) return 'quote';

@@ -113,6 +113,14 @@ describe('splitBlocks', () => {
       { kind: 'prose', text: 'next' },
     ]);
   });
+
+  it('bold-only line is treated as heading (not merged into body)', () => {
+    const blocks = splitBlocks('**引言**\n\nbody');
+    expect(blocks).toEqual<Block[]>([
+      { kind: 'heading', text: '**引言**' },
+      { kind: 'prose', text: 'body' },
+    ]);
+  });
 });
 
 import { mergeParagraphs } from './pandoc-paragraph-fix.js';
