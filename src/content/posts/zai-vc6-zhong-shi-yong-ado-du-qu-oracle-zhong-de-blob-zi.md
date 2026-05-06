@@ -11,117 +11,113 @@ draft: false
 
 今天尝试将存储于Oracle（版本：9.0.1.1.1）中BLOB字段里的图像文件读出来，文件量很小，不到10K。使用vc6+ADO，使用控制台程序初步尝试如下：
 
-<div style="BORDER-RIGHT: #cccccc 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: #cccccc 1px solid; PADDING-LEFT: 4px; FONT-SIZE: 13px; PADDING-BOTTOM: 4px; BORDER-LEFT: #cccccc 1px solid; WIDTH: 98%; WORD-BREAK: break-all; PADDING-TOP: 4px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #eeeeee">
+::CoInitialize(NULL); //初始化OLE/COM库环境
+\_ConnectionPtr m_pConn;
+try
+![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+    HRESULT hr = m_pConn.CreateInstance("ADODB.Connection");
+    if(FAILED(hr))
+    ![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+        cout\<\<"Create ADO Connection failed"\<\<endl;
+        exit(0);
+    }
 
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" /><span style="COLOR: #000000">::CoInitialize(NULL); </span><span style="COLOR: #008000">//</span><span style="COLOR: #008000">初始化OLE/COM库环境</span><span style="COLOR: #008000">
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" /></span><span style="COLOR: #000000">\_ConnectionPtr m_pConn;
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" /></span><span style="COLOR: #0000ff">try</span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/ExpandedBlockStart.gif" id="Codehighlighter1_66_654_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_66_654_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_66_654_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_66_654_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedBlock.gif" id="Codehighlighter1_66_654_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_66_654_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_66_654_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_66_654_Open_Text.style.display=&#39;inline&#39;;" data-align="top" /></span><span id="Codehighlighter1_66_654_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_66_654_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    HRESULT hr </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> m_pConn.CreateInstance(</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">ADODB.Connection</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">);
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    </span><span style="COLOR: #0000ff">if</span><span style="COLOR: #000000">(FAILED(hr))
-<img src="/Images/OutliningIndicators/ExpandedSubBlockStart.gif" id="Codehighlighter1_143_203_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_143_203_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_143_203_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_143_203_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedSubBlock.gif" id="Codehighlighter1_143_203_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_143_203_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_143_203_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_143_203_Open_Text.style.display=&#39;inline&#39;;" data-align="top" />    </span><span id="Codehighlighter1_143_203_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_143_203_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        cout</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">Create ADO Connection failed</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">endl;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        exit(</span><span style="COLOR: #000000">0</span><span style="COLOR: #000000">);
-<img src="/Images/OutliningIndicators/ExpandedSubBlockEnd.gif" data-align="top" />    }</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    CString oracleConnectionString, oracleUserID, oraclePassword;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    oracleConnectionString </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> </span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">Provider=MSDAORA;Data Source=STUDENT;</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    oracleUserID </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> </span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">stuinfo</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    oraclePassword </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> </span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">stuinfo</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    hr </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> m_pConn</span><span style="COLOR: #000000">-\></span><span style="COLOR: #000000">Open((\_bstr_t)oracleConnectionString, (\_bstr_t)oracleUserID, (\_bstr_t)oraclePassword, adModeUnknown);
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    </span><span style="COLOR: #0000ff">if</span><span style="COLOR: #000000"> (FAILED(hr))
-<img src="/Images/OutliningIndicators/ExpandedSubBlockStart.gif" id="Codehighlighter1_530_589_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_530_589_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_530_589_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_530_589_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedSubBlock.gif" id="Codehighlighter1_530_589_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_530_589_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_530_589_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_530_589_Open_Text.style.display=&#39;inline&#39;;" data-align="top" />    </span><span id="Codehighlighter1_530_589_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_530_589_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        cout</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">Can not connect to database</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">endl;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        exit(</span><span style="COLOR: #000000">0</span><span style="COLOR: #000000">);
-<img src="/Images/OutliningIndicators/ExpandedSubBlockEnd.gif" data-align="top" />    }</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    </span><span style="COLOR: #0000ff">else</span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/ExpandedSubBlockStart.gif" id="Codehighlighter1_598_652_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_598_652_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_598_652_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_598_652_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedSubBlock.gif" id="Codehighlighter1_598_652_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_598_652_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_598_652_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_598_652_Open_Text.style.display=&#39;inline&#39;;" data-align="top" />    </span><span id="Codehighlighter1_598_652_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_598_652_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        cout</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">Connect to database successfully!</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">endl;
-<img src="/Images/OutliningIndicators/ExpandedSubBlockEnd.gif" data-align="top" />    }</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/ExpandedBlockEnd.gif" data-align="top" />}</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" /></span><span style="COLOR: #0000ff">catch</span><span style="COLOR: #000000">(\_com_error e)
-<img src="/Images/OutliningIndicators/ExpandedBlockStart.gif" id="Codehighlighter1_676_745_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_676_745_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_676_745_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_676_745_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedBlock.gif" id="Codehighlighter1_676_745_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_676_745_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_676_745_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_676_745_Open_Text.style.display=&#39;inline&#39;;" data-align="top" /></span><span id="Codehighlighter1_676_745_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_676_745_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    CString errMsg </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> e.ErrorMessage();
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    cout</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">errMsg</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">endl;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    exit(</span><span style="COLOR: #000000">0</span><span style="COLOR: #000000">);
-<img src="/Images/OutliningIndicators/ExpandedBlockEnd.gif" data-align="top" />}</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" />
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" />\_RecordsetPtr m_pRecordset;
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" /></span><span style="COLOR: #0000ff">try</span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/ExpandedBlockStart.gif" id="Codehighlighter1_780_1248_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_780_1248_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_780_1248_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_780_1248_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedBlock.gif" id="Codehighlighter1_780_1248_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_780_1248_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_780_1248_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_780_1248_Open_Text.style.display=&#39;inline&#39;;" data-align="top" /></span><span id="Codehighlighter1_780_1248_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_780_1248_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    HRESULT hr </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> m_pRecordset.CreateInstance(</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">ADODB.Recordset</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">);
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    </span><span style="COLOR: #0000ff">if</span><span style="COLOR: #000000"> (FAILED(hr))
-<img src="/Images/OutliningIndicators/ExpandedSubBlockStart.gif" id="Codehighlighter1_864_923_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_864_923_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_864_923_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_864_923_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedSubBlock.gif" id="Codehighlighter1_864_923_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_864_923_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_864_923_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_864_923_Open_Text.style.display=&#39;inline&#39;;" data-align="top" />    </span><span id="Codehighlighter1_864_923_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_864_923_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        cout</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">Create ADO Recordset failed</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">endl;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        exit(</span><span style="COLOR: #000000">0</span><span style="COLOR: #000000">);
-<img src="/Images/OutliningIndicators/ExpandedSubBlockEnd.gif" data-align="top" />    }</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    CString strSQL </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> </span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">select \* from stuinfotable where stuid=1</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    </span><span style="COLOR: #008000">//</span><span style="COLOR: #008000"> stuinfotable表中有一个blob类型字段stupic存储照片</span><span style="COLOR: #008000">
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" /></span><span style="COLOR: #000000">    BSTR bstrSQL </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> strSQL.AllocSysString();
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    hr </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> m_pRecordset</span><span style="COLOR: #000000">-\></span><span style="COLOR: #000000">Open(bstrSQL, (IDispatch</span><span style="COLOR: #000000">\*</span><span style="COLOR: #000000">)m_pConn, adOpenDynamic, adLockOptimistic, adCmdText);
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    </span><span style="COLOR: #0000ff">if</span><span style="COLOR: #000000"> (FAILED(hr))
-<img src="/Images/OutliningIndicators/ExpandedSubBlockStart.gif" id="Codehighlighter1_1189_1246_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_1189_1246_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_1189_1246_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_1189_1246_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedSubBlock.gif" id="Codehighlighter1_1189_1246_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_1189_1246_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_1189_1246_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_1189_1246_Open_Text.style.display=&#39;inline&#39;;" data-align="top" />    </span><span id="Codehighlighter1_1189_1246_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_1189_1246_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        cout</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">Open ADO Recordset failed</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">endl;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        exit(</span><span style="COLOR: #000000">0</span><span style="COLOR: #000000">);
-<img src="/Images/OutliningIndicators/ExpandedSubBlockEnd.gif" data-align="top" />    }</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/ExpandedBlockEnd.gif" data-align="top" />}</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" /></span><span style="COLOR: #0000ff">catch</span><span style="COLOR: #000000">(\_com_error e)
-<img src="/Images/OutliningIndicators/ExpandedBlockStart.gif" id="Codehighlighter1_1270_1339_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_1270_1339_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_1270_1339_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_1270_1339_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedBlock.gif" id="Codehighlighter1_1270_1339_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_1270_1339_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_1270_1339_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_1270_1339_Open_Text.style.display=&#39;inline&#39;;" data-align="top" /></span><span id="Codehighlighter1_1270_1339_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_1270_1339_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    CString errMsg </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> e.ErrorMessage();
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    cout</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">errMsg</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">endl;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    exit(</span><span style="COLOR: #000000">0</span><span style="COLOR: #000000">);
-<img src="/Images/OutliningIndicators/ExpandedBlockEnd.gif" data-align="top" />}</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" />
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" /></span><span style="COLOR: #0000ff">long</span><span style="COLOR: #000000"> lDataSize </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> m_pRecordset</span><span style="COLOR: #000000">-\></span><span style="COLOR: #000000">GetFields()</span><span style="COLOR: #000000">-\></span><span style="COLOR: #000000">GetItem(</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">stupic</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">)</span><span style="COLOR: #000000">-\></span><span style="COLOR: #000000">ActualSize;
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" />cout</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">BLOB length is </span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">lDataSize</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">endl;
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" />
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" /></span><span style="COLOR: #0000ff">if</span><span style="COLOR: #000000">(lDataSize </span><span style="COLOR: #000000">\></span><span style="COLOR: #000000"> </span><span style="COLOR: #000000">0</span><span style="COLOR: #000000">)
-<img src="/Images/OutliningIndicators/ExpandedBlockStart.gif" id="Codehighlighter1_1478_2219_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_1478_2219_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_1478_2219_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_1478_2219_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedBlock.gif" id="Codehighlighter1_1478_2219_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_1478_2219_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_1478_2219_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_1478_2219_Open_Text.style.display=&#39;inline&#39;;" data-align="top" /></span><span id="Codehighlighter1_1478_2219_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_1478_2219_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    \_variant_t varBLOB;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    varBLOB </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> m_pRecordset</span><span style="COLOR: #000000">-\></span><span style="COLOR: #000000">GetFields()</span><span style="COLOR: #000000">-\></span><span style="COLOR: #000000">GetItem(</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">stupic</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">)</span><span style="COLOR: #000000">-\></span><span style="COLOR: #000000">GetChunk(lDataSize);
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    </span><span style="COLOR: #008000">//</span><span style="COLOR: #008000">判断数据类型是否正确</span><span style="COLOR: #008000">
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" /></span><span style="COLOR: #000000">    </span><span style="COLOR: #0000ff">if</span><span style="COLOR: #000000">(varBLOB.vt </span><span style="COLOR: #000000">==</span><span style="COLOR: #000000"> (VT_ARRAY </span><span style="COLOR: #000000">\|</span><span style="COLOR: #000000"> VT_UI1))
-<img src="/Images/OutliningIndicators/ExpandedSubBlockStart.gif" id="Codehighlighter1_1635_2217_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_1635_2217_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_1635_2217_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_1635_2217_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedSubBlock.gif" id="Codehighlighter1_1635_2217_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_1635_2217_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_1635_2217_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_1635_2217_Open_Text.style.display=&#39;inline&#39;;" data-align="top" />    </span><span id="Codehighlighter1_1635_2217_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_1635_2217_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        BYTE </span><span style="COLOR: #000000">\*</span><span style="COLOR: #000000">pBuf </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> NULL;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        </span><span style="COLOR: #008000">//</span><span style="COLOR: #008000">得到指向数据的指针</span><span style="COLOR: #008000">
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" /></span><span style="COLOR: #000000">        SafeArrayAccessData(varBLOB.parray, (</span><span style="COLOR: #0000ff">void</span><span style="COLOR: #000000"> </span><span style="COLOR: #000000">\*\*</span><span style="COLOR: #000000">)</span><span style="COLOR: #000000">&</span><span style="COLOR: #000000">pBuf);
-<img src="/Images/OutliningIndicators/ExpandedSubBlockStart.gif" id="Codehighlighter1_1729_1749_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_1729_1749_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_1729_1749_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_1729_1749_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedSubBlock.gif" id="Codehighlighter1_1729_1749_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_1729_1749_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_1729_1749_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_1729_1749_Open_Text.style.display=&#39;inline&#39;;" data-align="top" />        </span><span id="Codehighlighter1_1729_1749_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">/\*\*/</span><span id="Codehighlighter1_1729_1749_Open_Text"><span style="COLOR: #008000">/\*</span><span style="COLOR: #008000">\*\*这里是对pBuf数据的处理\*\*</span><span style="COLOR: #008000">\*/</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        CFile targetImageFile;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        CFileException eTargetImageFile;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        CString targetImageFileName </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> </span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">C:\\stupicture.bmp</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        </span><span style="COLOR: #0000ff">if</span><span style="COLOR: #000000"> (</span><span style="COLOR: #000000">!</span><span style="COLOR: #000000">targetImageFile.Open(targetImageFileName, CFile::modeCreate </span><span style="COLOR: #000000">\|</span><span style="COLOR: #000000"> CFile::modeWrite, </span><span style="COLOR: #000000">&</span><span style="COLOR: #000000">eTargetImageFile))
-<img src="/Images/OutliningIndicators/ExpandedSubBlockStart.gif" id="Codehighlighter1_1977_2030_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_1977_2030_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_1977_2030_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_1977_2030_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedSubBlock.gif" id="Codehighlighter1_1977_2030_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_1977_2030_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_1977_2030_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_1977_2030_Open_Text.style.display=&#39;inline&#39;;" data-align="top" />        </span><span id="Codehighlighter1_1977_2030_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_1977_2030_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />            cout</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">Create file failed</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">endl;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />            exit(</span><span style="COLOR: #000000">0</span><span style="COLOR: #000000">);
-<img src="/Images/OutliningIndicators/ExpandedSubBlockEnd.gif" data-align="top" />        }</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        </span><span style="COLOR: #0000ff">else</span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/ExpandedSubBlockStart.gif" id="Codehighlighter1_2041_2172_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_2041_2172_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_2041_2172_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_2041_2172_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedSubBlock.gif" id="Codehighlighter1_2041_2172_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_2041_2172_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_2041_2172_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_2041_2172_Open_Text.style.display=&#39;inline&#39;;" data-align="top" />        </span><span id="Codehighlighter1_2041_2172_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_2041_2172_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />            </span><span style="COLOR: #008000">//</span><span style="COLOR: #008000"> 打开文件成功，准备写入</span><span style="COLOR: #008000">
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" /></span><span style="COLOR: #000000">            targetImageFile.Write((BYTE </span><span style="COLOR: #000000">\*</span><span style="COLOR: #000000">)pBuf, lDataSize);
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />            cout</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">Write stupicture.bmp file successfully!</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">endl;
-<img src="/Images/OutliningIndicators/ExpandedSubBlockEnd.gif" data-align="top" />        }</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />        SafeArrayUnaccessData (varBLOB.parray);
-<img src="/Images/OutliningIndicators/ExpandedSubBlockEnd.gif" data-align="top" />    }</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/ExpandedBlockEnd.gif" data-align="top" />}</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" />
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" /></span><span style="COLOR: #008000">//</span><span style="COLOR: #008000"> 断开ADO连接</span><span style="COLOR: #008000">
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" /></span><span style="COLOR: #0000ff">if</span><span style="COLOR: #000000"> (m_pConn </span><span style="COLOR: #000000">!=</span><span style="COLOR: #000000"> NULL)
-<img src="/Images/OutliningIndicators/ExpandedBlockStart.gif" id="Codehighlighter1_2254_2343_Open_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_2254_2343_Open_Text.style.display=&#39;none&#39;; Codehighlighter1_2254_2343_Closed_Image.style.display=&#39;inline&#39;; Codehighlighter1_2254_2343_Closed_Text.style.display=&#39;inline&#39;;" data-align="top" /><img src="/Images/OutliningIndicators/ContractedBlock.gif" id="Codehighlighter1_2254_2343_Closed_Image" onclick="this.style.display=&#39;none&#39;; Codehighlighter1_2254_2343_Closed_Text.style.display=&#39;none&#39;; Codehighlighter1_2254_2343_Open_Image.style.display=&#39;inline&#39;; Codehighlighter1_2254_2343_Open_Text.style.display=&#39;inline&#39;;" data-align="top" /></span><span id="Codehighlighter1_2254_2343_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif)</span><span id="Codehighlighter1_2254_2343_Open_Text"><span style="COLOR: #000000">{
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    m_pConn</span><span style="COLOR: #000000">-\></span><span style="COLOR: #000000">Close();
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    m_pConn </span><span style="COLOR: #000000">=</span><span style="COLOR: #000000"> NULL;
-<img src="/Images/OutliningIndicators/InBlock.gif" data-align="top" />    cout</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">ADO connection closed successfully</span><span style="COLOR: #000000">"</span><span style="COLOR: #000000">\<\<</span><span style="COLOR: #000000">endl;
-<img src="/Images/OutliningIndicators/ExpandedBlockEnd.gif" data-align="top" />}</span></span><span style="COLOR: #000000">
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" />
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" />::CoUninitialize();</span><span style="COLOR: #008000">//</span><span style="COLOR: #008000">释放程序占用的COM 资源</span>
+    CString oracleConnectionString, oracleUserID, oraclePassword;
+    oracleConnectionString = "Provider=MSDAORA;Data Source=STUDENT;";
+    oracleUserID = "stuinfo";
+    oraclePassword = "stuinfo";
 
-</div>
+    hr = m_pConn-\>Open((\_bstr_t)oracleConnectionString, (\_bstr_t)oracleUserID, (\_bstr_t)oraclePassword, adModeUnknown);
+    if (FAILED(hr))
+    ![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+        cout\<\<"Can not connect to database"\<\<endl;
+        exit(0);
+    }
+    else
+    ![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+        cout\<\<"Connect to database successfully!"\<\<endl;
+    }
+}
+catch(\_com_error e)
+![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+    CString errMsg = e.ErrorMessage();
+    cout\<\<errMsg\<\<endl;
+    exit(0);
+}
 
-    我认为上面的代码不应该有任何问题，但就像往常一样，它在第二个try块的Open recordset语句处抛出了一个00C9132C异常，内容为“未指定的错误”。
+\_RecordsetPtr m_pRecordset;
+try
+![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+
+    HRESULT hr = m_pRecordset.CreateInstance("ADODB.Recordset");
+    if (FAILED(hr))
+    ![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+        cout\<\<"Create ADO Recordset failed"\<\<endl;
+        exit(0);
+    }
+
+    CString strSQL = "select \* from stuinfotable where stuid=1";
+    // stuinfotable表中有一个blob类型字段stupic存储照片
+    BSTR bstrSQL = strSQL.AllocSysString();
+    hr = m_pRecordset-\>Open(bstrSQL, (IDispatch\*)m_pConn, adOpenDynamic, adLockOptimistic, adCmdText);
+    if (FAILED(hr))
+    ![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+        cout\<\<"Open ADO Recordset failed"\<\<endl;
+        exit(0);
+    }
+}
+catch(\_com_error e)
+![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+    CString errMsg = e.ErrorMessage();
+    cout\<\<errMsg\<\<endl;
+    exit(0);
+}
+
+long lDataSize = m_pRecordset-\>GetFields()-\>GetItem("stupic")-\>ActualSize;
+cout\<\<"BLOB length is "\<\<lDataSize\<\<endl;
+
+if(lDataSize \> 0)
+![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+    \_variant_t varBLOB;
+    varBLOB = m_pRecordset-\>GetFields()-\>GetItem("stupic")-\>GetChunk(lDataSize);
+
+    //判断数据类型是否正确
+    if(varBLOB.vt == (VT_ARRAY \| VT_UI1))
+    ![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+        BYTE \*pBuf = NULL;
+        //得到指向数据的指针
+        SafeArrayAccessData(varBLOB.parray, (void \*\*)&pBuf);
+        /\*\*//\*\*\*这里是对pBuf数据的处理\*\*\*/
+        CFile targetImageFile;
+        CFileException eTargetImageFile;
+        CString targetImageFileName = "C:\\stupicture.bmp";
+
+        if (!targetImageFile.Open(targetImageFileName, CFile::modeCreate \| CFile::modeWrite, &eTargetImageFile))
+        ![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+            cout\<\<"Create file failed"\<\<endl;
+            exit(0);
+        }
+        else
+        ![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+            // 打开文件成功，准备写入
+            targetImageFile.Write((BYTE \*)pBuf, lDataSize);
+            cout\<\<"Write stupicture.bmp file successfully!"\<\<endl;
+        }
+        SafeArrayUnaccessData (varBLOB.parray);
+    }
+}
+
+// 断开ADO连接
+if (m_pConn != NULL)
+![](/posts/zai-vc6-zhong-shi-yong-ado-du-qu-oracle-zhong-de-blob-zi/img-1.gif){
+    m_pConn-\>Close();
+    m_pConn = NULL;
+    cout\<\<"ADO connection closed successfully"\<\<endl;
+}
+
+::CoUninitialize();//释放程序占用的COM 资源
+
+我认为上面的代码不应该有任何问题，但就像往常一样，它在第二个try块的Open recordset语句处抛出了一个00C9132C异常，内容为“未指定的错误”。
 
     并且经实验发现，只要SQL语句中包含对BLOB字段的查询请求，那么这里就一定会抛出这个异常。
 
@@ -141,8 +137,8 @@ Top
 在ado中select的blob只是起定位的作用
 而且Provider=SQLOLEDB.1要改为OraOLEDB.Oracle.1,否则getchunk命令可能不能执行
 
-<span style="COLOR: #000000">    而且楼主最后自己回了一帖:</span>
-<span style="COLOR: #3366ff">**回复人： cnwhsg(sun) ( ) 信誉：89  2003-05-29 14:42:18Z  得分:0**   </span>
+    而且楼主最后自己回了一帖:
+**回复人： cnwhsg(sun) ( ) 信誉：89  2003-05-29 14:42:18Z  得分:0**
 
 我这样修改了一下就没有问题了，
    我把连接字符串的Provider=MSDAORA，改为Provider=OraOLEDB.Oracle.1，就可以了。现在我点晕了，这个Provider到底怎么写了，好象写法十分多了，有地方详细说明的吗？
@@ -150,10 +146,6 @@ Top
     我刚开始看到这个回复的时候还没当回事，因为Connection是正常的，而且过去连接数据库也没有因为Provider写的不对出过问题，所以我把注意力都放在了Recordset的Open方法上面，但是却怎么改也不行。
     折腾到晚饭前，已经是黔驴技穷，随手改了一下Provider为OraOLEDB.Oracle.1，单步到
 
-<div style="BORDER-RIGHT: #cccccc 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: #cccccc 1px solid; PADDING-LEFT: 4px; FONT-SIZE: 13px; PADDING-BOTTOM: 4px; BORDER-LEFT: #cccccc 1px solid; WIDTH: 98%; WORD-BREAK: break-all; PADDING-TOP: 4px; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #eeeeee">
+m_pRecordset-\>Open(bstrSQL, (IDispatch\*)m_pConn, adOpenDynamic, adLockOptimistic, adCmdText);
 
-<img src="/Images/OutliningIndicators/None.gif" data-align="top" /><span style="COLOR: #000000">m_pRecordset</span><span style="COLOR: #000000">-\></span><span style="COLOR: #000000">Open(bstrSQL, (IDispatch</span><span style="COLOR: #000000">\*</span><span style="COLOR: #000000">)m_pConn, adOpenDynamic, adLockOptimistic, adCmdText);</span>
-
-</div>
-
-    PIU~的一下就过去了，而且也正常生成了图片文件    现在问题就很清楚了，我必须弄明白这个过去从没有给予充分重视的Provider的真正含义。
+PIU~的一下就过去了，而且也正常生成了图片文件    现在问题就很清楚了，我必须弄明白这个过去从没有给予充分重视的Provider的真正含义。
