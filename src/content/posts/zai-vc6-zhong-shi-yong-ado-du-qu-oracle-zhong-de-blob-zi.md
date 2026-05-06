@@ -135,8 +135,7 @@ draft: false
 
 Top
 
-** 回复人： bysen() ( ) 信誉：98  2003-05-29 13:37:50Z  得分:0**
-
+### 回复人： bysen() ( ) 信誉：98  2003-05-29 13:37:50Z  得分:0
 但是你要得到blob中的值还是要用GetChunk()命令
 在ado中select的blob只是起定位的作用
 而且Provider=SQLOLEDB.1要改为OraOLEDB.Oracle.1,否则getchunk命令可能不能执行
