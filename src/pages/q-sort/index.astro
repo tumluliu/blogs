@@ -104,10 +104,10 @@
       </form>
     </dialog>
 
-    <script type="module">
-      import { buildFilename, buildMarkdown, utf8Base64 } from '/src/lib/q-sort/builders.ts';
-      import { publishThought } from '/src/lib/q-sort/api.ts';
-      import { loadConfig, saveConfig, clearConfig } from '/src/lib/q-sort/storage.ts';
+    <script>
+      import { buildFilename, buildMarkdown, utf8Base64 } from '../../lib/q-sort/builders';
+      import { publishThought } from '../../lib/q-sort/api';
+      import { loadConfig, saveConfig, clearConfig } from '../../lib/q-sort/storage';
 
       const $ = (id) => document.getElementById(id);
       const status = $('status');
@@ -203,7 +203,7 @@
 
       // Service worker registration
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').catch((err) => {
+        navigator.serviceWorker.register('/sw.js', { scope: '/q-sort/' }).catch((err) => {
           console.warn('SW registration failed', err);
         });
       }
