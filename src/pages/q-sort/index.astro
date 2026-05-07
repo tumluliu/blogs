@@ -89,17 +89,19 @@
       <button id="publish-btn" disabled>Publish</button>
     </footer>
 
-    <dialog id="settings">
-      <h3 style="margin: 0 0 0.5rem 0;">Settings</h3>
-      <label for="pat-input">PAT (fine-grained, Contents: Write)</label>
-      <input id="pat-input" type="password" autocomplete="off" />
-      <label for="repo-input">Repo (owner/name)</label>
-      <input id="repo-input" type="text" autocomplete="off" />
-      <div class="row">
-        <button id="settings-clear" class="ghost">Clear</button>
-        <button id="settings-cancel" class="ghost">Cancel</button>
-        <button id="settings-save">Save</button>
-      </div>
+    <dialog id="settings" aria-labelledby="settings-title">
+      <h3 id="settings-title" style="margin: 0 0 0.5rem 0;">Settings</h3>
+      <form method="dialog">
+        <label for="pat-input">PAT (fine-grained, Contents: Write)</label>
+        <input id="pat-input" type="password" autocomplete="off" required />
+        <label for="repo-input">Repo (owner/name)</label>
+        <input id="repo-input" type="text" autocomplete="off" required />
+        <div class="row">
+          <button id="settings-clear" type="button" class="ghost">Clear</button>
+          <button id="settings-cancel" type="button" class="ghost">Cancel</button>
+          <button id="settings-save" type="submit">Save</button>
+        </div>
+      </form>
     </dialog>
 
     <script type="module">
@@ -141,15 +143,14 @@
         settingsDialog.showModal();
       });
       $('settings-cancel').addEventListener('click', () => settingsDialog.close());
-      $('settings-save').addEventListener('click', () => {
+      document.querySelector('#settings form').addEventListener('submit', (event) => {
+        event.preventDefault();
         const pat = patInput.value.trim();
         const repo = repoInput.value.trim();
-        if (pat && repo) {
-          saveConfig(pat, repo);
-          settingsDialog.close();
-          refreshPublishEnabled();
-          setStatus('idle');
-        }
+        saveConfig(pat, repo);
+        settingsDialog.close();
+        refreshPublishEnabled();
+        setStatus('idle');
       });
       $('settings-clear').addEventListener('click', () => {
         clearConfig();
