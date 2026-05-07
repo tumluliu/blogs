@@ -32,3 +32,17 @@ export function buildMarkdown(now: Date, body: string): string {
   const trimmed = body.replace(/\s+$/u, '');
   return `${buildFrontmatter(now)}\n${trimmed}\n`;
 }
+
+export function utf8Base64(s: string): string {
+  // Encode string as UTF-8 bytes, then base64 those bytes.
+  // Browser btoa() expects "binary string" (one byte per code unit), so we
+  // must convert UTF-8 bytes into that form.
+  const bytes = new TextEncoder().encode(s);
+  let binary = '';
+  const CHUNK = 0x8000;
+  for (let i = 0; i < bytes.length; i += CHUNK) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK));
+  }
+  // In Node (test env) and in browsers, btoa exists on globalThis.
+  return (globalThis as { btoa: (s: string) => string }).btoa(binary);
+}
