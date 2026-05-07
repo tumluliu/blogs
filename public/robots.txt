@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /q-sort/
+Sitemap: https://luliu.me/sitemap-index.xml

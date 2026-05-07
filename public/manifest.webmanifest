@@ -1,0 +1,16 @@
+{
+  "name": "q-sort",
+  "short_name": "q-sort",
+  "description": "Quick thought capture for luliu.me",
+  "start_url": "/q-sort/",
+  "scope": "/q-sort/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#111827",
+  "theme_color": "#1f2937",
+  "icons": [
+    { "src": "/icons/q-sort-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/q-sort-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/q-sort-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
