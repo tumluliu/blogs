@@ -1,43 +1,46 @@
-# Astro Starter Kit: Minimal
+# luliu.me
+
+Source for [luliu.me](https://luliu.me/) — long-form posts and a
+stream of shorter thoughts. Built with Astro and deployed via GitHub
+Actions to a self-hosted VM.
+
+## Authoring
+
+A post is just a markdown file under `src/content/posts/`. Frontmatter
+is optional — `title`, `slug`, `date`, `tags`, etc. are all derived if
+you omit them. See [`docs/obsidian-workflow.md`](docs/obsidian-workflow.md)
+for the full authoring guide.
+
+Mobile thought capture is handled by a tiny PWA at
+[/q-sort/](https://luliu.me/q-sort/) — installable to the Android home
+screen.
+
+## Local development
+
+Requires Node 22+ and pnpm.
 
 ```sh
-pnpm create astro@latest -- --template minimal
+pnpm install   # also installs the pre-push build-check hook
+pnpm dev       # localhost:4321
+pnpm build     # full static build into ./dist
+pnpm test      # vitest
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Repo layout
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```
+src/content/         markdown posts and thoughts
+src/content/diagrams/ shared images, optimised by Astro
+src/pages/q-sort/    Quick-Thought capture PWA
+public/              static assets (icons, manifest, sw.js, legacy images)
+scripts/             one-shot tools (cnblogs import, icon generator, etc.)
+docs/                authoring guide and design specs
+.githooks/           pre-push build check
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Deploy
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+A push to `master` triggers `.github/workflows/deploy.yml`, which
+builds, smoke-checks, and rsyncs `dist/` to the VM. The pre-push hook
+(`.githooks/pre-push`) runs `pnpm build` locally first to catch
+breakage before it reaches CI. Skip with `git push --no-verify`.

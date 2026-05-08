@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+# Block pushes that don't build cleanly. Runs `pnpm build` (~1.5s here).
+# Catches frontmatter loss, broken image refs that Astro validates,
+# schema drift, and stray TS errors in pages/components.
+#
+# Bypass with `git push --no-verify` if you absolutely must.
+
+set -e
+
+# Run from the repo root no matter where the hook fires from.
+cd "$(git rev-parse --show-toplevel)"
+
+# Quietly fall back if pnpm is missing (e.g., obsidian-git on Android, which
+# can't run shell hooks at all and won't reach this branch).
+if ! command -v pnpm >/dev/null 2>&1; then
+  echo "pnpm not found; skipping pre-push build check" >&2
+  exit 0
+fi
+
+echo "pre-push: running pnpm build..." >&2
+if ! pnpm build >/tmp/blogs-prepush.log 2>&1; then
+  echo "" >&2
+  echo "pre-push: build FAILED. Push aborted." >&2
+  echo "Last 30 lines of build output:" >&2
+  tail -30 /tmp/blogs-prepush.log >&2
+  echo "" >&2
+  echo "Full log: /tmp/blogs-prepush.log" >&2
+  echo "Bypass (use sparingly): git push --no-verify" >&2
+  exit 1
+fi
+
+echo "pre-push: build ok" >&2

@@ -1,92 +1,146 @@
-# Obsidian Workflow After Astro Migration
+# Authoring workflow
 
-## One-time Obsidian Settings
+This site is built with Astro, but the content layer is intentionally
+loose so you can write posts as **plain markdown files** in any editor —
+Obsidian, vim, GitHub web, the `/q-sort/` PWA — without learning Astro.
 
-Open `Settings` (gear icon, bottom-left) and configure:
+## Minimum viable post
 
-### Files & Links
+Drop a file at `src/content/posts/<slug>.md` containing nothing but markdown:
 
-| Setting | Value | Why |
-|---|---|---|
-| Default location for new notes | `In the folder specified below` → `src/content/blog` | "New note" lands in right folder automatically |
-| Default location for new attachments | `In subfolder under current folder` | Pasted images go to per-post subfolder, matches Astro convention |
-| Subfolder name | `{{filename}}` (or leave default — Obsidian uses note name) | Folder name = post slug |
-| Detect all file extensions | `On` | `.ts`, `.astro`, `.mjs` show as attachments, not editable noise |
-| Use [[Wikilinks]] | `Off` (recommended) | Keep links as standard markdown so Astro renders them; wikilinks are Obsidian-only |
+```markdown
+# 我的新文章
 
-### Editor
+正文…
+```
 
-| Setting | Value | Why |
-|---|---|---|
-| Strict line breaks | `On` | Matches markdown spec, predictable rendering on the site |
+That's it. The build derives the missing pieces:
 
-### Core Plugins
+| Field | Source if frontmatter omits it |
+|------|--------------------------------|
+| `title` | First `# H1` in the body, else the filename |
+| `slug` | Filename (without `.md`) |
+| `date` | Filename like `2026-05-08…` if present, else file mtime |
+| `tags` | Empty list |
+| `draft` | `false` |
+| `source` | `'original'` |
 
-- Enable **Templates** (built-in) — for `Templater` see below.
+## When to add frontmatter
 
-### Recommended Community Plugins
-
-| Plugin | Purpose |
-|---|---|
-| **Templater** | Auto-fills frontmatter (`title`, `date`, `slug`) on new note. Replaces `scripts/new-post.ts` for Obsidian-only authoring. |
-| **Obsidian Git** | One-click commit & push from inside Obsidian. Replaces terminal git. |
-| **Paste image rename** (optional) | Renames pasted image from `Pasted image 20260101120000.png` to `cover.png` etc. |
-
-## Templater Frontmatter Template
-
-Save to `src/content/blog/_templates/blog-post.md` (or wherever Templater is configured):
+Only when you want a value other than the derived default. Examples:
 
 ```markdown
 ---
-title: <% tp.file.title %>
-slug: <% tp.file.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') %>
-date: <% tp.date.now("YYYY-MM-DDTHH:mm:ssZ") %>
-updated: <% tp.date.now("YYYY-MM-DDTHH:mm:ssZ") %>
-tags: []
+tags: [react, performance]
+date: "2026-05-05T00:00:00.000Z"
 draft: true
 ---
 
+# Title
+
+Body…
 ```
 
-`draft: true` blocks publishing until you flip it to `false` — safety net for half-written posts.
+Anything you put in YAML wins over the derived defaults. Anything you
+omit gets filled in.
 
-## Daily Authoring Flow
+## Images
 
-1. **`Cmd+N`** — new note. Lands in `src/content/blog/`.
-2. Type title. Templater auto-fills frontmatter.
-3. Write body in markdown.
-4. **`Cmd+V`** an image — auto-saved to `src/content/blog/<slug>/`.
-5. Set `draft: false` when ready.
-6. Commit & push:
-   - Via Obsidian Git plugin: `Cmd+P` → `Git: Commit and push`.
-   - Or terminal: `git add -A && git commit -m "new post: <title>" && git push`.
-7. GitHub Actions builds and rsyncs to VM. Live in ~1 min.
+Drop image files anywhere under `src/content/` and reference them
+**relatively** from your markdown:
 
-## File Explorer Tidiness
+```markdown
+![Caption](../diagrams/article/03-foo.png)
+```
 
-Astro project files clutter the repo root. Collapse them in Obsidian's file explorer (Obsidian remembers):
+Astro's image pipeline picks them up, optimises (PNG → webp, ~10×
+smaller), and serves hashed asset URLs. Folder layout is up to you —
+typical patterns:
 
-- `node_modules/`
-- `dist/`
-- `.github/`
-- `infra/`
-- `scripts/`
+- `src/content/posts/foo/cover.png` (per-post folder)
+- `src/content/diagrams/<topic>/01-name.png` (shared diagrams)
 
-Real writing happens under `src/content/blog/` and `src/content/thoughts/` — keep those expanded.
+Avoid putting new content images under `public/`. Files there bypass
+the optimiser and ship at full size.
 
-## Microblog ("Thoughts") Flow
+## Daily flow
 
-1. **`Cmd+N`** in `src/content/thoughts/` (set as alternate folder, or use Quick Switcher).
-2. Filename: ISO timestamp (Templater handles): `2026-05-05-1023.md`.
-3. No title required — just date + body.
-4. Push.
+### Desktop, Obsidian or any editor
 
-Optional: bind a hotkey to "New thought" via Templater's "Insert template" command pointing to a thoughts template.
+1. Edit a `.md` under `src/content/posts/` or `src/content/thoughts/`.
+2. `git add -A && git commit -m "..." && git push`.
+3. The pre-push hook runs `pnpm build` (~1.5s). If the build breaks
+   (missing image, schema drift, TypeScript error in a page), the push
+   is rejected with the failing log. Bypass with `git push --no-verify`
+   only when you are sure.
+4. CI deploys → live on https://luliu.me/ in ~2 min.
 
-## Migration-day Reminders
+### Mobile, Obsidian Android
 
-When migration script renames `大数据的陷阱.md` → `da-shu-ju-de-xian-jing.md`:
+1. Create or edit a `.md` in the right folder via Obsidian. Templater
+   stamps a thought template if you use the `Templater: Create new
+   note from template` command (see `templates/thought.md`).
+2. obsidian-git auto-commits + pushes. **No pre-push hook runs on
+   Android** — isomorphic-git can't run shell hooks. Your safety net
+   is CI: a broken push fails the deploy workflow, you'll see it red
+   on GitHub. Fix from desktop afterwards.
 
-- Obsidian re-indexes — no manual action needed.
-- Internal `[[wikilinks]]` (if any exist) need rewriting; the rename script should report them.
-- Original Chinese title is preserved in frontmatter `title:` field — display on site is unchanged.
+### Mobile, fast thought capture
+
+Use the PWA at https://luliu.me/q-sort/. Tap home-screen icon, type,
+Publish. Goes through the GitHub Contents API and triggers the same
+deploy.
+
+## Recommended Obsidian settings
+
+| Setting | Value | Why |
+|---------|-------|-----|
+| Files & links → Default location for new notes | `In the folder specified below` → `src/content/posts` | New note lands in the right place |
+| Files & links → Default location for new attachments | `In subfolder under current folder` | Pastes images alongside the post |
+| Editor → Strict line breaks | `On` | Matches CommonMark, predictable rendering |
+| Files & links → Use [[Wikilinks]] | `Off` | Keep links portable across Astro / GitHub web / cnblogs export |
+
+Excluded files (Settings → Files & links → Excluded files), to keep
+search/graph/quick-switcher focused on prose:
+
+```
+node_modules
+dist
+.astro
+scripts
+infra
+public
+.github
+.vscode
+docs
+src/components
+src/layouts
+src/pages
+src/styles
+src/data
+```
+
+## Recommended community plugins
+
+| Plugin | Purpose |
+|--------|---------|
+| **Templater** | Lets `templates/thought.md` self-locate to `src/content/thoughts/` and self-name as `YYYY-MM-DD-HHmm.md`. |
+| **Obsidian Git** | Commit + push from inside Obsidian (desktop or Android). |
+
+## Pre-push hook
+
+Installed automatically on `pnpm install` via the `prepare` script,
+which sets `git config core.hooksPath .githooks`.
+
+If `git config --get core.hooksPath` does not return `.githooks`, run
+`pnpm install` once. The hook is `.githooks/pre-push` — read it, edit
+it, or skip it via `git push --no-verify`.
+
+## Cheatsheet
+
+- "I want to write a post." → create a `.md` file with a `# H1`. Nothing else needed.
+- "I want a specific date." → add `date:` in frontmatter.
+- "I want to publish later." → add `draft: true`.
+- "I want an image." → put it under `src/content/`, reference relatively.
+- "I broke the build." → pre-push hook tells you. Fix and re-push.
+- "Mobile push is broken." → check CI; fix from desktop.
