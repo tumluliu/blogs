@@ -24,6 +24,7 @@ interface LoaderContext {
   store: { set(entry: Record<string, unknown>): void };
   parseData<T>(opts: { id: string; data: Record<string, unknown> }): Promise<T>;
   generateDigest(data: string): string;
+  renderMarkdown(content: string): Promise<{ html: string; metadata: unknown }>;
 }
 
 function buildLoader(name: string, baseDir: string, kind: 'post' | 'thought') {
@@ -62,12 +63,14 @@ function buildLoader(name: string, baseDir: string, kind: 'post' | 'thought') {
         }
 
         const data = await ctx.parseData({ id, data: enriched });
+        const rendered = await ctx.renderMarkdown(content);
         ctx.store.set({
           id,
           data,
           body: content,
           filePath: full,
           digest: ctx.generateDigest(raw),
+          rendered,
         });
       }
     },
