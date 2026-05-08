@@ -36,7 +36,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
     {ogImage && <meta property="og:image" content={ogImage} />}
-    <link rel="icon" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="alternate" type="application/rss+xml" title="luliu.me — posts" href="/rss.xml" />
     <link rel="alternate" type="application/rss+xml" title="luliu.me — thoughts" href="/thoughts/rss.xml" />
   </head>
