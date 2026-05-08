@@ -12,8 +12,6 @@ draft: false
 source: original
 ---
 
-# 空间记忆：智能系统缺失的认知底座
-
 Lu Liu/刘露，张彦峰
 
 ---
