@@ -8,8 +8,6 @@ draft: false
 source: original
 ---
 
-# 数据准备
-
 ```bash
 $ dropdb yourdatabase
 $ createdb -O youruser yourdatabase

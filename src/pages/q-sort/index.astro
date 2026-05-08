@@ -12,14 +12,55 @@
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icons/q-sort-192.png" type="image/png" />
     <link rel="apple-touch-icon" href="/icons/q-sort-192.png" />
+    <script is:inline>
+      // Pre-paint: apply persisted theme before CSS to avoid flash.
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') {
+          document.documentElement.setAttribute('data-theme', t);
+        }
+      } catch {}
+    </script>
     <title>q-sort</title>
     <style>
+      /* Dark theme (default). */
+      :root {
+        font-size: 18px;
+        --bg: #111827;
+        --bg-input: #0b1220;
+        --fg: #f9fafb;
+        --fg-muted: #9ca3af;
+        --border: #1f2937;
+        --primary: #2563eb;
+        --primary-fg: #ffffff;
+        --primary-disabled: #374151;
+        --danger: #f87171;
+        --success: #34d399;
+        --bg-dialog: #1f2937;
+        --bg-dialog-border: #374151;
+        --backdrop: rgba(0, 0, 0, 0.6);
+      }
+      :root[data-theme="light"] {
+        --bg: #fafaf7;
+        --bg-input: #ffffff;
+        --fg: #111827;
+        --fg-muted: #6b7280;
+        --border: #e5e7eb;
+        --primary-disabled: #d1d5db;
+        --danger: #dc2626;
+        --success: #059669;
+        --bg-dialog: #ffffff;
+        --bg-dialog-border: #d1d5db;
+        --backdrop: rgba(0, 0, 0, 0.35);
+      }
+      @media (min-width: 768px) { :root { font-size: 16px; } }
+
       * { box-sizing: border-box; }
       html, body { margin: 0; height: 100%; }
       body {
         font-family: system-ui, -apple-system, sans-serif;
-        background: #111827;
-        color: #f9fafb;
+        background: var(--bg);
+        color: var(--fg);
         display: flex;
         flex-direction: column;
         padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
@@ -28,51 +69,73 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.5rem 0.75rem;
-        font-size: 0.85rem;
-        color: #9ca3af;
-        border-bottom: 1px solid #1f2937;
+        gap: 0.25rem;
+        padding: 0.6rem 0.9rem;
+        font-size: 0.95rem;
+        color: var(--fg-muted);
+        border-bottom: 1px solid var(--border);
       }
       #status { flex: 1; }
-      #status.error { color: #f87171; }
-      #status.ok { color: #34d399; }
+      #status.error { color: var(--danger); }
+      #status.ok { color: var(--success); }
       button {
-        background: #2563eb;
-        color: #fff;
+        background: var(--primary);
+        color: var(--primary-fg);
         border: 0;
-        padding: 0.6rem 1rem;
-        font-size: 1rem;
-        border-radius: 0.4rem;
+        padding: 0.85rem 1.2rem;
+        font-size: 1.05rem;
+        border-radius: 0.5rem;
         cursor: pointer;
+        min-height: 44px;
       }
-      button:disabled { background: #374151; cursor: not-allowed; }
-      button.ghost { background: transparent; color: #9ca3af; padding: 0.3rem 0.6rem; }
+      button:disabled { background: var(--primary-disabled); cursor: not-allowed; }
+      button.ghost {
+        background: transparent;
+        color: var(--fg-muted);
+        padding: 0.5rem 0.8rem;
+        font-size: 1.4rem;
+        min-height: 44px;
+        line-height: 1;
+      }
       main { flex: 1; display: flex; flex-direction: column; }
       textarea {
         flex: 1;
         width: 100%;
-        background: #0b1220;
-        color: #f9fafb;
+        background: var(--bg-input);
+        color: var(--fg);
         border: 0;
-        padding: 1rem;
-        font-size: 1rem;
+        padding: 1.1rem;
+        /* >=16px CSS prevents iOS Safari from auto-zooming on focus. */
+        font-size: 1.1rem;
+        line-height: 1.55;
         font-family: inherit;
         resize: none;
         outline: none;
       }
-      footer { padding: 0.75rem; }
+      footer { padding: 0.9rem; }
       footer button { width: 100%; }
       dialog {
-        background: #1f2937;
-        color: #f9fafb;
+        background: var(--bg-dialog);
+        color: var(--fg);
         border: 0;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        max-width: 90vw;
+        border-radius: 0.6rem;
+        padding: 1.1rem;
+        max-width: min(420px, 92vw);
+        font-size: 1rem;
       }
-      dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
-      dialog label { display: block; font-size: 0.85rem; margin-top: 0.5rem; color: #9ca3af; }
-      dialog input { width: 100%; padding: 0.5rem; margin-top: 0.25rem; background: #0b1220; color: #f9fafb; border: 1px solid #374151; border-radius: 0.3rem; font-family: inherit; }
+      dialog::backdrop { background: var(--backdrop); }
+      dialog label { display: block; font-size: 0.95rem; margin-top: 0.6rem; color: var(--fg-muted); }
+      dialog input {
+        width: 100%;
+        padding: 0.65rem 0.7rem;
+        margin-top: 0.3rem;
+        background: var(--bg-input);
+        color: var(--fg);
+        border: 1px solid var(--bg-dialog-border);
+        border-radius: 0.4rem;
+        font-family: inherit;
+        font-size: 1.05rem;
+      }
       dialog .row { display: flex; gap: 0.5rem; margin-top: 1rem; }
       dialog .row button { flex: 1; }
     </style>
@@ -80,6 +143,7 @@
   <body>
     <header>
       <span id="status">idle</span>
+      <button id="theme-btn" class="ghost" aria-label="Toggle theme">☀</button>
       <button id="settings-btn" class="ghost" aria-label="Settings">⚙</button>
     </header>
     <main>
@@ -117,6 +181,21 @@
       const settingsDialog = $('settings');
       const patInput = $('pat-input');
       const repoInput = $('repo-input');
+      const themeBtn = $('theme-btn');
+
+      function refreshThemeIcon() {
+        // Sun glyph in dark mode (clicking switches to light); moon in light mode.
+        const cur = document.documentElement.getAttribute('data-theme');
+        themeBtn.textContent = cur === 'light' ? '☾' : '☀';
+      }
+      themeBtn.addEventListener('click', () => {
+        const cur = document.documentElement.getAttribute('data-theme');
+        const next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch {}
+        refreshThemeIcon();
+      });
+      refreshThemeIcon();
 
       let inFlight = false;
 

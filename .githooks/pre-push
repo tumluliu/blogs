@@ -30,3 +30,23 @@ if ! pnpm build >/tmp/blogs-prepush.log 2>&1; then
 fi
 
 echo "pre-push: build ok" >&2
+
+# Smoke check: build success != output correct. A broken content loader
+# (e.g., one that stores raw markdown but skips renderMarkdown) emits
+# pages with an empty <article> body and ~3KB total HTML. If even the
+# largest post in dist is suspiciously small, fail the push.
+SMOKE_THRESHOLD=20000
+LARGEST=$(find dist/posts -name 'index.html' \
+  -not -path 'dist/posts/index.html' \
+  -exec wc -c {} \; 2>/dev/null \
+  | awk '{print $1}' | sort -n | tail -1)
+if [ -z "$LARGEST" ] || [ "$LARGEST" -lt "$SMOKE_THRESHOLD" ]; then
+  echo "" >&2
+  echo "pre-push: post-output smoke check FAILED." >&2
+  echo "  Largest dist/posts/<slug>/index.html: ${LARGEST:-0} bytes" >&2
+  echo "  Expected at least ${SMOKE_THRESHOLD} bytes." >&2
+  echo "  Likely a content-loader regression: pages built but bodies are empty." >&2
+  echo "  Bypass (use sparingly): git push --no-verify" >&2
+  exit 1
+fi
+echo "pre-push: smoke check ok (largest post = $LARGEST bytes)" >&2
