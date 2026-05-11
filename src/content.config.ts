@@ -82,7 +82,7 @@ const posts = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string().min(1),
-      slug: z.string().regex(/^[a-z0-9-]+$/, 'slug must be lowercase ASCII with hyphens').optional(),
+      slug: z.string().min(1).optional(),
       date: z.coerce.date(),
       updated: z.coerce.date().optional(),
       tags: z.array(z.string()).default([]),
