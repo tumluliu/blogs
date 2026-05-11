@@ -40,9 +40,9 @@ draft: false
 
 相关文章：
 应用系统架构设计
-[http://www.cnblogs.com/simonw/archive/2005/10/27/263145.html](/simonw/archive/2005/10/27/263145.html)
+<http://www.cnblogs.com/simonw/archive/2005/10/27/263145.html>
 分享:Enterprise Library与ORM应用可以如此快捷
-[http://www.cnblogs.com/xingbing/archive/2005/08/27/223976.html](/xingbing/archive/2005/08/27/223976.html)
+<http://www.cnblogs.com/xingbing/archive/2005/08/27/223976.html>
 Web Application Architectures: Simple 2 Layer, Standard 3 Layer and Distributed 3 Layer
 
 <http://teddyma.cnblogs.com/archive/2006/07/19/WebApplicationArchitectures.html>
@@ -68,4 +68,4 @@ goody9807的blog
 <http://developer.ccidnet.com/art/323/20030416/43788_8.html>
 
 孙亚民的blog（刚才在csdn泡了一会才知道原来他的blog也在这里……世界真小）
-[http://www.cnblogs.com/sunnyym/](/sunnyym/)
+<http://www.cnblogs.com/sunnyym/>

@@ -12,4 +12,4 @@ draft: false
 
 今天贴出第一篇：
 
-<a href="/posts/qian-ru-qian-chu-oracle-spatial-georaster-10g-1-shu-ju-mo-xing/" id="viewpost1_TitleUrl" class="postTitle2">浅入浅出Oracle Spatial GeoRaster 10g影像数据管理(1)——数据模型</a>
+[浅入浅出Oracle Spatial GeoRaster 10g影像数据管理(1)——数据模型](/posts/qian-ru-qian-chu-oracle-spatial-georaster-10g-ying-xiang/)

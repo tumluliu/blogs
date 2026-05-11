@@ -50,3 +50,26 @@ if [ -z "$LARGEST" ] || [ "$LARGEST" -lt "$SMOKE_THRESHOLD" ]; then
   exit 1
 fi
 echo "pre-push: smoke check ok (largest post = $LARGEST bytes)" >&2
+
+# Lint markdown for `../` image escapes — those resolve at the URL layer
+# (`/posts/<slug>/`) and silently 404 once the post is served.
+if ! pnpm -s check:content-paths >>/tmp/blogs-prepush.log 2>&1; then
+  echo "" >&2
+  echo "pre-push: content image-path lint FAILED. Push aborted." >&2
+  tail -30 /tmp/blogs-prepush.log >&2
+  echo "Bypass (use sparingly): git push --no-verify" >&2
+  exit 1
+fi
+echo "pre-push: content image-paths ok" >&2
+
+# Walk dist HTML for dead <img>/<script>/<link>/<a> targets. Catches the
+# class of bug where a build "succeeds" but emits references to files that
+# don't exist under dist/.
+if ! pnpm -s check:assets >>/tmp/blogs-prepush.log 2>&1; then
+  echo "" >&2
+  echo "pre-push: dead-asset check FAILED. Push aborted." >&2
+  tail -40 /tmp/blogs-prepush.log >&2
+  echo "Bypass (use sparingly): git push --no-verify" >&2
+  exit 1
+fi
+echo "pre-push: dead-asset check ok" >&2

@@ -34,6 +34,9 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - name: Lint content image paths
+        run: pnpm check:content-paths
+
       - run: pnpm build
 
       - name: Smoke check dist
@@ -42,6 +45,9 @@ jobs:
           test -f dist/posts/index.html
           test -f dist/rss.xml
           [ "$(find dist -name '*.html' | wc -l)" -gt 100 ]
+
+      - name: Check for dead assets / links
+        run: pnpm check:assets
 
       - name: Setup SSH
         env:

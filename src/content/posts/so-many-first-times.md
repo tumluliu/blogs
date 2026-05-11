@@ -38,8 +38,6 @@ draft: false
 
 <span style="color: #000000;">整个飞行路线其实是一个弧形，但在这个时候有一次比较明显的转弯，开始了在茫茫西伯利亚平原上的飞行，或者说在西伯利亚云海上的飞行。
 
-![](/images/cnblogs_com/rib06/flight_route.JPG)
-
 
 北京时间：20:45
 柏林时间：13:45
