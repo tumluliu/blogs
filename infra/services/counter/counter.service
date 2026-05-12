@@ -1,0 +1,23 @@
+[Unit]
+Description=luliu.me engagement counter service
+After=network.target
+
+[Service]
+Type=simple
+User=counter
+Group=counter
+ExecStart=/opt/counter/counter
+Restart=on-failure
+RestartSec=2s
+Environment=COUNTER_DB=/var/lib/counter/counter.db
+Environment=COUNTER_ADDR=127.0.0.1:8787
+
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/counter
+
+[Install]
+WantedBy=multi-user.target
