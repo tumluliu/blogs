@@ -5,7 +5,9 @@ luliu.me {
     # Counter API (reverse-proxied to local Go service).
     handle /api/* {
         reverse_proxy localhost:8787
-        request_body { max_size 1KB }
+        request_body {
+            max_size 1KB
+        }
     }
 
     # Legacy /blog and /blog/* (Hexo prefix) → root
