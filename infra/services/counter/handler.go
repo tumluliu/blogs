@@ -12,7 +12,11 @@ import (
 )
 
 var (
-	slugRe        = regexp.MustCompile(`^[\p{L}\p{N}_-]{1,200}$`)
+	// Reject only path separators (/, \) and NUL/control chars; otherwise
+	// accept any printable Unicode codepoint up to 200 chars. Slugs are
+	// SQLite text keys, never used as filesystem paths, so `..` is harmless.
+	// The blog's own loader allows CJK punctuation in slugs (e.g. `，` `？`).
+	slugRe        = regexp.MustCompile(`^[^/\\\x00-\x1f]{1,200}$`)
 	botUARe       = regexp.MustCompile(`(?i)(bot|crawler|spider|preview|wget|curl)`)
 	allowedOrigin = "https://luliu.me"
 )

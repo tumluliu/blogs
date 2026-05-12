@@ -144,6 +144,18 @@ func TestHandler_CJKSlugAccepted(t *testing.T) {
 	}
 }
 
+func TestHandler_CJKPunctuationSlugAccepted(t *testing.T) {
+	srv, _ := newTestServer(t)
+	// /api/view/Meta，我？  — fullwidth comma + fullwidth question mark.
+	// Real post slugs derived from Chinese filenames can include these.
+	resp, _ := do(t, "POST", srv.URL+"/api/view/Meta%EF%BC%8C%E6%88%91%EF%BC%9F", map[string]string{
+		"X-Forwarded-For": "4.4.4.5",
+	})
+	if resp.StatusCode != 200 {
+		t.Fatalf("CJK-punctuation slug status %d want 200", resp.StatusCode)
+	}
+}
+
 func TestHandler_CORSHeadersOnOptions(t *testing.T) {
 	srv, _ := newTestServer(t)
 	req, _ := http.NewRequest("OPTIONS", srv.URL+"/api/view/x", nil)
