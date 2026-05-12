@@ -1,0 +1,83 @@
+name: counter-deploy
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'infra/services/counter/**'
+      - 'infra/Caddyfile'
+      - '.github/workflows/counter-deploy.yml'
+
+concurrency:
+  group: counter-deploy-prod
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: infra/services/counter/go.sum
+
+      - name: Test counter service
+        working-directory: infra/services/counter
+        run: go test -race ./...
+
+      - name: Build counter binary (linux/amd64)
+        working-directory: infra/services/counter
+        env:
+          GOOS: linux
+          GOARCH: amd64
+          CGO_ENABLED: '0'
+        run: go build -trimpath -ldflags='-s -w' -o counter .
+
+      - name: Setup SSH
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.VM_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Rsync binary + unit + Caddyfile
+        run: |
+          rsync -az infra/services/counter/counter \
+            "deploy@${{ secrets.VM_HOST }}:/tmp/counter"
+          rsync -az infra/services/counter/counter.service \
+            "deploy@${{ secrets.VM_HOST }}:/tmp/counter.service"
+          rsync -az infra/Caddyfile \
+            "deploy@${{ secrets.VM_HOST }}:/tmp/Caddyfile"
+
+      - name: Install + restart counter, reload Caddy
+        env:
+          VM_HOST: ${{ secrets.VM_HOST }}
+        run: |
+          ssh "deploy@$VM_HOST" bash -s <<'REMOTE'
+          set -euo pipefail
+          sudo install -m 0755 -o root -g root /tmp/counter /opt/counter/counter
+          sudo install -m 0644 -o root -g root /tmp/counter.service /etc/systemd/system/counter.service
+          sudo install -m 0644 -o root -g root /tmp/Caddyfile /etc/caddy/Caddyfile
+          rm -f /tmp/counter /tmp/counter.service /tmp/Caddyfile
+          sudo /bin/systemctl daemon-reload
+          sudo /bin/systemctl restart counter
+          sudo /bin/systemctl reload caddy
+          REMOTE
+
+      - name: Healthcheck
+        run: |
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            if curl -fsS https://luliu.me/api/_health | grep -q '^ok'; then
+              echo "healthcheck ok on attempt $i"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "healthcheck FAILED"
+          exit 1
