@@ -1,0 +1,38 @@
+name: counter-backup
+on:
+  schedule:
+    - cron: '0 3 * * *'   # 03:00 UTC daily
+  workflow_dispatch: {}
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Setup SSH
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.VM_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Rsync counter.db.bak from VM
+        run: |
+          mkdir -p backup
+          rsync -az \
+            "deploy@${{ secrets.VM_HOST }}:/var/lib/counter/counter.db.bak" \
+            backup/counter.db.bak || {
+              echo "no snapshot yet, falling back to live DB"
+              rsync -az \
+                "deploy@${{ secrets.VM_HOST }}:/var/lib/counter/counter.db" \
+                backup/counter.db
+            }
+          ls -lh backup/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: counter-db-${{ github.run_id }}
+          path: backup/
+          retention-days: 90
