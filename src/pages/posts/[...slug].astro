@@ -1,6 +1,8 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostEngagement from '../../components/PostEngagement.astro';
+import { readingStats } from '../../lib/reading-stats';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -16,6 +18,8 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const { words, minutes } = readingStats(post.body ?? '');
+const slug = post.data.slug ?? post.id;
 
 function fmt(d: Date): string {
   return d.toISOString().slice(0, 10);
@@ -26,6 +30,7 @@ function fmt(d: Date): string {
     <h1>{post.data.title}</h1>
     <p class="post-meta">
       <span>{fmt(post.data.date)}</span>
+      <span> · 约 {minutes} 分钟读完</span>
       {post.data.tags.length > 0 && <span> · </span>}
       {post.data.tags.map((t) => <span class="tag">{t}</span>)}
       {post.data.source === 'cnblogs' && post.data.sourceUrl && (
@@ -33,5 +38,6 @@ function fmt(d: Date): string {
       )}
     </p>
     <Content />
+    <PostEngagement slug={slug} words={words} />
   </article>
 </BaseLayout>

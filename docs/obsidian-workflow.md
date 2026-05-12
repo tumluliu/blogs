@@ -136,6 +136,31 @@ If `git config --get core.hooksPath` does not return `.githooks`, run
 `pnpm install` once. The hook is `.githooks/pre-push` — read it, edit
 it, or skip it via `git push --no-verify`.
 
+## Counter service (engagement features)
+
+Posts show word count, reading time, view count, Like and Share at
+the bottom. Engagement data lives in a tiny Go service on the same
+Hetzner VM at `localhost:8787`, reverse-proxied by Caddy under
+`/api/*`. State is one SQLite file (`/var/lib/counter/counter.db`).
+
+Day-to-day: nothing to do. The counter is deployed by CI on push to
+`master` when anything under `infra/services/counter/**` or
+`infra/Caddyfile` changes.
+
+One-time VM bootstrap (already in `infra/vm-bootstrap.sh`): creates
+the `counter` user, `/var/lib/counter`, `/opt/counter`, a placeholder
+`counter.service` unit, a nightly `counter-backup.timer`, and sudoers
+for `deploy` to install the binary, reload Caddy, and restart counter.
+
+Backups: nightly GitHub Action pulls `/var/lib/counter/counter.db.bak`
+(taken by a systemd timer that runs `sqlite3 ".backup"`) into a
+workflow artifact with 90-day retention. Restore = scp `.bak` back
+and `systemctl restart counter`.
+
+If the counter is down, posts still render fine — the engagement chrome
+shows `—` for both counters and the Like / Share buttons stay
+non-functional (console.warn only, no on-page error).
+
 ## Cheatsheet
 
 - "I want to write a post." → create a `.md` file with a `# H1`. Nothing else needed.

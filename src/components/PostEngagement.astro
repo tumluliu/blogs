@@ -1,0 +1,21 @@
+---
+interface Props {
+  slug: string;
+  words: number;
+}
+const { slug, words } = Astro.props;
+---
+<aside class="engagement" data-slug={slug}>
+  <div class="stats">
+    <span class="views" aria-label="阅读次数">— 次阅读</span>
+    <span class="words">{words.toLocaleString()} 字</span>
+  </div>
+  <div class="actions">
+    <button class="like-btn" aria-pressed="false" type="button">
+      <span aria-hidden="true">♡</span> <span class="count">—</span>
+    </button>
+    <button class="share-btn" type="button">分享</button>
+  </div>
+  <div class="toast" aria-live="polite"></div>
+</aside>
+<script src="../scripts/engagement.ts"></script>
