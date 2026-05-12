@@ -9,7 +9,7 @@ interface Props {
   ogImage?: string;
 }
 
-const { title, description = '少刷微信多读书', ogImage } = Astro.props;
+const { title, description = '主题没有,内容瞎写', ogImage } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 <!doctype html>
