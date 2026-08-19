@@ -13,7 +13,7 @@ export function touch(d: Draft, now: Date): Draft {
   return { ...d, updatedAt: now.toISOString() };
 }
 
-const CJK = /[㐀-鿿豈-﫿぀-ヿ]/u;
+const CJK = /[\u{3400}-\u{9FFF}\u{F900}-\u{FAFF}\u{3040}-\u{30FF}]/u;
 
 // CJK counts per character, latin per whitespace-delimited word — the same
 // convention the blog's own reading-time estimate uses.
@@ -39,15 +39,28 @@ export function countWords(body: string): number {
   return count;
 }
 
-export function createAutosaver(save: (d: Draft) => Promise<void>, delayMs = 800) {
+export function createAutosaver(
+  save: (d: Draft) => Promise<void>,
+  delayMs = 800,
+  options?: { onError?: (err: unknown, d: Draft) => void },
+) {
   let timer: ReturnType<typeof setTimeout> | null = null;
   let pending: Draft | null = null;
+  let inFlight: Promise<void> | null = null;
 
   const run = async () => {
     if (!pending) return;
     const d = pending;
     pending = null;
-    await save(d);
+    try {
+      await save(d);
+    } catch (err) {
+      options?.onError?.(err, d);
+      // Re-queue the failed draft only if nothing newer is pending
+      if (!pending) {
+        pending = d;
+      }
+    }
   };
 
   return {
@@ -56,7 +69,7 @@ export function createAutosaver(save: (d: Draft) => Promise<void>, delayMs = 800
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
         timer = null;
-        void run();
+        inFlight = run();
       }, delayMs);
     },
     async flush() {
@@ -64,7 +77,25 @@ export function createAutosaver(save: (d: Draft) => Promise<void>, delayMs = 800
         clearTimeout(timer);
         timer = null;
       }
-      await run();
+      // Wait for any in-flight save to complete
+      if (inFlight) {
+        await inFlight;
+        inFlight = null;
+      }
+      // Save any newly pending draft
+      if (pending) {
+        const d = pending;
+        pending = null;
+        try {
+          await save(d);
+        } catch (err) {
+          options?.onError?.(err, d);
+          // Re-queue if nothing newer is pending
+          if (!pending) {
+            pending = d;
+          }
+        }
+      }
     },
   };
 }

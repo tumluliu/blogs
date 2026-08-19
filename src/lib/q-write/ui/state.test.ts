@@ -34,6 +34,12 @@ describe('countWords', () => {
   it('ignores markdown image placeholders', () => {
     expect(countWords('图\n\n![](uploading:img-1)')).toBe(1);
   });
+
+  it('counts Hangul syllables as words, not per-character', () => {
+    // Hangul should NOT be counted per-character like CJK
+    // '한국어 테스트' = 2 words (한국어, 테스트)
+    expect(countWords('한국어 테스트')).toBe(2);
+  });
 });
 
 describe('touch', () => {
@@ -74,5 +80,91 @@ describe('createAutosaver', () => {
     const save = vi.fn().mockResolvedValue(undefined);
     await createAutosaver(save, 800).flush();
     expect(save).not.toHaveBeenCalled();
+  });
+
+  it('re-queues draft when save fails', async () => {
+    vi.useFakeTimers();
+    const save = vi.fn()
+      .mockRejectedValueOnce(new Error('IndexedDB failed'))
+      .mockResolvedValueOnce(undefined);
+    const onError = vi.fn();
+    const auto = createAutosaver(save, 100, { onError });
+    auto.schedule({ ...base(), body: 'first' });
+    await vi.advanceTimersByTimeAsync(100);
+    expect(save).toHaveBeenCalledTimes(1);
+    expect(onError).toHaveBeenCalledTimes(1);
+    // Draft should be re-queued, not lost
+    auto.schedule({ ...base(), body: 'second' });
+    await vi.advanceTimersByTimeAsync(100);
+    expect(save).toHaveBeenCalledTimes(2);
+    expect(save.mock.calls[1][0].body).toBe('second');
+    vi.useRealTimers();
+  });
+
+  it('clobbers stale draft with newer on retry', async () => {
+    vi.useFakeTimers();
+    const save = vi.fn()
+      .mockRejectedValueOnce(new Error('IndexedDB failed'))
+      .mockResolvedValueOnce(undefined);
+    const onError = vi.fn();
+    const auto = createAutosaver(save, 100, { onError });
+    auto.schedule({ ...base(), body: 'stale' });
+    await vi.advanceTimersByTimeAsync(100);
+    // Error occurs, draft re-queued
+    // Before next retry, a newer draft arrives
+    auto.schedule({ ...base(), body: 'fresh' });
+    // Fresh draft should replace stale
+    await vi.advanceTimersByTimeAsync(100);
+    expect(save.mock.calls[1][0].body).toBe('fresh');
+    vi.useRealTimers();
+  });
+
+  it('flush waits for in-flight save', async () => {
+    vi.useFakeTimers();
+    let resolveFirstSave: (() => void) | null = null;
+    const save = vi.fn().mockImplementation(() => {
+      return new Promise<void>((resolve) => {
+        resolveFirstSave = resolve;
+      });
+    });
+    const auto = createAutosaver(save, 100);
+    auto.schedule({ ...base(), body: 'in-flight' });
+    await vi.advanceTimersByTimeAsync(100);
+    // save() is now running but not yet resolved
+    expect(save).toHaveBeenCalledTimes(1);
+    const flushPromise = auto.flush();
+    expect(save).toHaveBeenCalledTimes(1); // No new save yet
+    // Resolve the in-flight save
+    resolveFirstSave?.();
+    await flushPromise;
+    // flush should have waited for in-flight before returning
+    expect(save).toHaveBeenCalledTimes(1);
+    vi.useRealTimers();
+  });
+
+  it('flush saves newly pending while waiting for in-flight', async () => {
+    vi.useFakeTimers();
+    let resolveFirstSave: (() => void) | null = null;
+    const save = vi.fn()
+      .mockImplementationOnce(() => {
+        return new Promise<void>((resolve) => {
+          resolveFirstSave = resolve;
+        });
+      })
+      .mockResolvedValueOnce(undefined);
+    const auto = createAutosaver(save, 100);
+    auto.schedule({ ...base(), body: 'first' });
+    await vi.advanceTimersByTimeAsync(100);
+    // save() is in-flight
+    expect(save).toHaveBeenCalledTimes(1);
+    const flushPromise = auto.flush();
+    // While flush is waiting, new draft arrives
+    auto.schedule({ ...base(), body: 'second' });
+    resolveFirstSave?.();
+    await flushPromise;
+    // flush should have saved the second draft too
+    expect(save).toHaveBeenCalledTimes(2);
+    expect(save.mock.calls[1][0].body).toBe('second');
+    vi.useRealTimers();
   });
 });
