@@ -2,12 +2,12 @@ const PAT_KEY = 'qsort.pat';
 const REPO_KEY = 'qsort.repo';
 const DEFAULT_REPO = 'tumluliu/blogs';
 
-export interface QSortConfig {
+export interface GhConfig {
   pat: string | null;
   repo: string;
 }
 
-export function loadConfig(): QSortConfig {
+export function loadConfig(): GhConfig {
   return {
     pat: localStorage.getItem(PAT_KEY),
     repo: localStorage.getItem(REPO_KEY) ?? DEFAULT_REPO,
