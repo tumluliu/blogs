@@ -1,9 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
-import { placeholder, replacePlaceholder, uploadImage } from './images.js';
+import { placeholder, replacePlaceholder, uploadImage, UploadRows, createSerialQueue } from './images.js';
 
 const NOW = new Date(2026, 7, 19);
 const auth = (fetchMock: unknown) => ({ fetch: fetchMock as typeof fetch, pat: 'ghp_test', repo: 'tumluliu/blogs' });
 const blobOf = (bytes: number[]) => new Blob([new Uint8Array(bytes)]);
+const fileOf = (name: string) => new File([new Uint8Array([1])], name, { type: 'image/png' });
 
 describe('placeholders', () => {
   it('builds a markdown image placeholder', () => {
@@ -78,5 +79,96 @@ describe('uploadImage', () => {
       .mockResolvedValueOnce({ ok: false, status: 401, json: async () => ({ message: 'Bad credentials' }) });
     const res = await uploadImage(auth(fetchMock), blobOf([1]), 'webp', NOW);
     expect(res).toMatchObject({ ok: false, status: 401 });
+  });
+});
+
+// Finding 1 (review round 1): a multi-file batch used to render one row at
+// a time, replacing the whole strip on every call — so a second file's
+// "compressing" row erased an earlier file's still-unresolved error row
+// (and with it, that row's retry button). UploadRows is the fix: each file
+// owns its row by id, independent of what any other id is doing.
+describe('UploadRows', () => {
+  it('keeps an earlier row visible when a later row is set (does not overwrite the whole strip)', () => {
+    const rows = new UploadRows();
+    rows.set('img-1', { label: 'img-1 · 上传失败 401', file: fileOf('a.png'), error: true });
+    rows.set('img-2', { label: 'img-2 · 压缩中…', file: fileOf('b.png') });
+
+    const ids = rows.list().map((r) => r.id);
+    expect(ids).toEqual(['img-1', 'img-2']);
+    expect(rows.list().find((r) => r.id === 'img-1')).toMatchObject({ error: true, label: 'img-1 · 上传失败 401' });
+  });
+
+  it('clear() removes only the named row, leaving the others', () => {
+    const rows = new UploadRows();
+    rows.set('img-1', { label: 'a', file: fileOf('a.png') });
+    rows.set('img-2', { label: 'b', file: fileOf('b.png') });
+    rows.clear('img-1');
+    expect(rows.list().map((r) => r.id)).toEqual(['img-2']);
+  });
+
+  it('set() on an existing id updates that row in place without disturbing order or others', () => {
+    const rows = new UploadRows();
+    rows.set('img-1', { label: 'a · 压缩中…', file: fileOf('a.png') });
+    rows.set('img-2', { label: 'b · 压缩中…', file: fileOf('b.png') });
+    rows.set('img-1', { label: 'a · 上传中…', file: fileOf('a.png') });
+    expect(rows.list().map((r) => [r.id, r.label])).toEqual([
+      ['img-1', 'a · 上传中…'],
+      ['img-2', 'b · 压缩中…'],
+    ]);
+  });
+});
+
+// Finding 3 (review round 1): change/paste/drop each fired handleFiles
+// independently, so two triggers close together could run concurrently —
+// racing the same content's getFile probe into two PUTs for one path.
+// createSerialQueue is the fix, mirroring the promise-chain shape
+// ui/state.ts's createAutosaver already uses for the same reason.
+describe('createSerialQueue', () => {
+  it('runs pushed items one at a time, in the order pushed, even when pushed before the first settles', async () => {
+    const order: string[] = [];
+    let releaseA: () => void = () => {};
+    const gate = new Promise<void>((resolve) => {
+      releaseA = resolve;
+    });
+
+    const queue = createSerialQueue<string>(async (item) => {
+      order.push(`start:${item}`);
+      if (item === 'a') await gate;
+      order.push(`end:${item}`);
+    });
+
+    const pA = queue.push('a');
+    const pB = queue.push('b'); // fired before 'a' settles, like a paste right after a drop
+
+    // Let pending microtasks run. If the queue did not serialize, 'b' would
+    // already have started here — its worker has no gate holding it open.
+    await Promise.resolve();
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(order).toEqual(['start:a']);
+
+    releaseA();
+    await pA;
+    await pB;
+
+    expect(order).toEqual(['start:a', 'end:a', 'start:b', 'end:b']);
+  });
+
+  it('a later push still settles even when an earlier one throws', async () => {
+    const order: string[] = [];
+    const errors: unknown[] = [];
+    const queue = createSerialQueue<string>(
+      async (item) => {
+        if (item === 'a') throw new Error('boom');
+        order.push(item);
+      },
+      (err) => errors.push(err),
+    );
+
+    await queue.push('a');
+    await queue.push('b');
+
+    expect(order).toEqual(['b']);
+    expect(errors).toHaveLength(1);
   });
 });

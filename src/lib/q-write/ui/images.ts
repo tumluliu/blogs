@@ -49,3 +49,51 @@ export async function uploadImage(
   if (!res.ok) return { ok: false, status: res.status, message: res.message };
   return { ok: true, url, status: res.status };
 }
+
+export interface UploadRow {
+  label: string;
+  file: File;
+  error?: boolean;
+}
+
+// Tracks one row per in-flight (or failed) upload, keyed by the placeholder
+// id that owns it. A multi-file batch calls set()/clear() once per file as
+// its own upload progresses, without disturbing any other file's row — the
+// bug this replaces was a single-slot "last write wins" strip that erased
+// an earlier file's still-unresolved error row the moment the next file's
+// row was painted.
+export class UploadRows {
+  private rows = new Map<string, UploadRow>();
+
+  set(id: string, row: UploadRow): void {
+    this.rows.set(id, row);
+  }
+
+  clear(id: string): void {
+    this.rows.delete(id);
+  }
+
+  list(): (UploadRow & { id: string })[] {
+    return Array.from(this.rows, ([id, row]) => ({ id, ...row }));
+  }
+}
+
+// A tiny FIFO queue: every push() waits for every previously pushed item's
+// worker to settle before starting its own. Same promise-chain shape as
+// ui/state.ts's createAutosaver, applied here so that the picker's change
+// event, a paste, and a drop firing close together never run their uploads
+// concurrently — which would otherwise let two triggers race the same
+// content's getFile probe into two PUTs for one path.
+export function createSerialQueue<T>(
+  worker: (item: T) => Promise<void>,
+  onError?: (err: unknown, item: T) => void,
+) {
+  let chain: Promise<void> = Promise.resolve();
+  return {
+    push(item: T): Promise<void> {
+      const next = chain.then(() => worker(item)).catch((err) => onError?.(err, item));
+      chain = next;
+      return next;
+    },
+  };
+}

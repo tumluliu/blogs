@@ -435,7 +435,7 @@
       import { applyTitle, applySlug, touch, countWords, createAutosaver } from '../../lib/q-write/ui/state';
       import { wrapSelection, insertAtCursor, prefixLine, renderPreview } from '../../lib/q-write/ui/editor';
       import { compressImage } from '../../lib/q-write/image';
-      import { placeholder, replacePlaceholder, uploadImage } from '../../lib/q-write/ui/images';
+      import { placeholder, replacePlaceholder, uploadImage, UploadRows, createSerialQueue } from '../../lib/q-write/ui/images';
 
       const $ = (id) => document.getElementById(id);
       const screens = { list: $('s-list'), editor: $('s-editor') };
@@ -660,13 +660,17 @@
         try { localStorage.setItem('theme', next); } catch {}
       });
 
-      // image insert pipeline: picker / paste / drop all funnel through
-      // handleFiles, which inserts a placeholder immediately, then swaps it
-      // for the real URL once compression + upload finish.
+      // image insert pipeline: picker / paste / drop all funnel through a
+      // single serial queue in front of handleFiles, which inserts a
+      // placeholder immediately, then swaps it for the real URL once
+      // compression + upload finish. uploadRows tracks one strip row per
+      // in-flight/failed file, independent of what any other file is doing.
       let uploadSeq = 0;
+      const uploadRows = new UploadRows();
 
-      function setUploadStrip(rows) {
+      function paintUploads() {
         const strip = $('uploads');
+        const rows = uploadRows.list();
         strip.hidden = rows.length === 0;
         strip.textContent = '';
         for (const r of rows) {
@@ -677,7 +681,11 @@
             const retry = document.createElement('button');
             retry.className = 'retry';
             retry.textContent = '重试';
-            retry.addEventListener('click', () => void handleFiles([r.file]));
+            retry.addEventListener('click', () => {
+              uploadRows.clear(r.id);
+              paintUploads();
+              void uploadQueue.push([r.file]);
+            });
             div.append(retry);
           }
           strip.append(div);
@@ -690,22 +698,26 @@
           insertAtCursor($('body'), `\n${placeholder(id)}\n`);
           edit((d) => ({ ...d, body: $('body').value }));
 
-          setUploadStrip([{ label: `${id} · 压缩中…`, file }]);
+          uploadRows.set(id, { label: `${id} · 压缩中…`, file });
+          paintUploads();
           let compressed;
           try {
             compressed = await compressImage(file);
           } catch (err) {
             console.error('q-write compress failed', err, file);
-            setUploadStrip([{ label: `${id} · 压缩失败`, file, error: true }]);
+            uploadRows.set(id, { label: `${id} · 压缩失败`, file, error: true });
+            paintUploads();
             continue;
           }
 
           const kb = (n) => `${Math.round(n / 1024)}KB`;
-          setUploadStrip([{ label: `${id} · ${kb(file.size)} → ${kb(compressed.blob.size)} · 上传中…`, file }]);
+          uploadRows.set(id, { label: `${id} · ${kb(file.size)} → ${kb(compressed.blob.size)} · 上传中…`, file });
+          paintUploads();
 
           const res = await uploadImage(auth(), compressed.blob, compressed.ext, new Date());
           if (!res.ok) {
-            setUploadStrip([{ label: `${id} · 上传失败 ${res.status} ${res.message ?? ''}`, file, error: true }]);
+            uploadRows.set(id, { label: `${id} · 上传失败 ${res.status} ${res.message ?? ''}`, file, error: true });
+            paintUploads();
             continue;
           }
 
@@ -713,22 +725,30 @@
           const next = replacePlaceholder($('body').value, id, `![](${res.url})`);
           $('body').value = next;
           edit((d) => ({ ...d, body: next }));
-          setUploadStrip([]);
+          uploadRows.clear(id);
+          paintUploads();
         }
       }
+
+      // Serializes every trigger (picker, paste, drop, and a strip's own
+      // retry button) through one queue, so two firing close together never
+      // run their uploads concurrently — see createSerialQueue's doc comment.
+      const uploadQueue = createSerialQueue(handleFiles, (err, files) => {
+        console.error('q-write upload queue failed', err, files);
+      });
 
       $('t-image').addEventListener('click', () => $('file-input').click());
       $('file-input').addEventListener('change', (e) => {
         const files = Array.from(e.target.files ?? []);
         e.target.value = '';
-        void handleFiles(files);
+        void uploadQueue.push(files);
       });
 
       $('body').addEventListener('paste', (e) => {
-        const files = Array.from(e.clipboardData?.files ?? []);
+        const files = Array.from(e.clipboardData?.files ?? []).filter((f) => f.type.startsWith('image/'));
         if (files.length === 0) return;
         e.preventDefault();
-        void handleFiles(files);
+        void uploadQueue.push(files);
       });
 
       // A drop target must preventDefault on dragover, or the browser's
@@ -743,7 +763,7 @@
         const files = Array.from(e.dataTransfer?.files ?? []).filter((f) => f.type.startsWith('image/'));
         if (files.length === 0) return;
         e.preventDefault();
-        void handleFiles(files);
+        void uploadQueue.push(files);
       });
 
       show('list');
