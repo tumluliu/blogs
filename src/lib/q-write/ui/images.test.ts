@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { placeholder, replacePlaceholder, uploadImage, UploadRows, createSerialQueue } from './images.js';
+import { placeholder, replacePlaceholder, uploadImage, UploadRows, createSerialQueue, findUploadingPlaceholder } from './images.js';
 
 const NOW = new Date(2026, 7, 19);
 const auth = (fetchMock: unknown) => ({ fetch: fetchMock as typeof fetch, pat: 'ghp_test', repo: 'tumluliu/blogs' });
@@ -20,6 +20,23 @@ describe('placeholders', () => {
 
   it('is a no-op when the placeholder was already deleted by the user', () => {
     expect(replacePlaceholder('body only', 'img-1', 'x')).toBe('body only');
+  });
+});
+
+describe('findUploadingPlaceholder', () => {
+  it('finds the id of an unfinished upload left in the body', () => {
+    const body = '开头\n\n![](uploading:img-3)\n\n结尾';
+    expect(findUploadingPlaceholder(body)).toBe('img-3');
+  });
+
+  it('returns null once every placeholder has been replaced', () => {
+    const body = '开头\n\n![](/media/2026/08/aa.webp)\n\n结尾';
+    expect(findUploadingPlaceholder(body)).toBeNull();
+  });
+
+  it('returns null for an empty or plain body', () => {
+    expect(findUploadingPlaceholder('')).toBeNull();
+    expect(findUploadingPlaceholder('just text, no images')).toBeNull();
   });
 });
 

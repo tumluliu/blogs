@@ -13,6 +13,16 @@ export function replacePlaceholder(body: string, id: string, replacement: string
   return body.split(placeholder(id)).join(replacement);
 }
 
+// Matches any `![...](uploading:ID)` placeholder() left in a draft's body —
+// e.g. when an upload failed and the user never retried. Save/publish must
+// refuse while one is present, or a broken image reference reaches the live
+// site. Returns the placeholder's id (for the user-facing message) or null.
+const UPLOADING_RE = /!\[[^\]]*\]\(uploading:([^)]+)\)/;
+
+export function findUploadingPlaceholder(body: string): string | null {
+  return UPLOADING_RE.exec(body)?.[1] ?? null;
+}
+
 export interface UploadResult {
   ok: boolean;
   url?: string;

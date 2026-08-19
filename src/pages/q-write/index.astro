@@ -407,8 +407,8 @@
         </div>
 
         <div class="actions">
-          <button class="btn ghost">存到仓库</button>
-          <button class="btn solid">发布</button>
+          <button class="btn ghost" id="save-btn">存到仓库</button>
+          <button class="btn solid" id="publish-btn">发布</button>
         </div>
       </section>
     </div>
@@ -431,11 +431,12 @@
       import { listDir, getFile } from '../../lib/gh/client';
       import { listDrafts, getDraft, putDraft, deleteDraft, newDraft } from '../../lib/q-write/drafts';
       import { filterEntries, renderDrafts, renderRepoList } from '../../lib/q-write/ui/list';
-      import { draftFromRemote } from '../../lib/q-write/ui/publish';
+      import { draftFromRemote, saveDraftToRepo } from '../../lib/q-write/ui/publish';
+      import { postPath } from '../../lib/q-write/paths';
       import { applyTitle, applySlug, touch, countWords, createAutosaver } from '../../lib/q-write/ui/state';
       import { wrapSelection, insertAtCursor, prefixLine, renderPreview } from '../../lib/q-write/ui/editor';
       import { compressImage } from '../../lib/q-write/image';
-      import { placeholder, replacePlaceholder, uploadImage, UploadRows, createSerialQueue } from '../../lib/q-write/ui/images';
+      import { placeholder, replacePlaceholder, uploadImage, UploadRows, createSerialQueue, findUploadingPlaceholder } from '../../lib/q-write/ui/images';
 
       const $ = (id) => document.getElementById(id);
       const screens = { list: $('s-list'), editor: $('s-editor') };
@@ -620,6 +621,85 @@
         await refreshDrafts();
         show('list');
       });
+
+      async function commitDraft(publish) {
+        if (!current.slug) {
+          setStatus('先写标题（或手动填 slug）', 'error');
+          return;
+        }
+        const cfg = loadConfig();
+        if (!cfg.pat) {
+          setStatus('设置里填 PAT', 'error');
+          return;
+        }
+
+        // An unfinished image upload leaves a literal `uploading:` placeholder
+        // in the body — never let that reach a real commit on the live site.
+        const stuck = findUploadingPlaceholder(current.body);
+        if (stuck) {
+          setStatus(`图片 ${stuck} 还没传完，重试或删除后再存`, 'error');
+          return;
+        }
+
+        await autosaver.flush();
+        setStatus(publish ? '发布中…' : '保存到仓库…');
+
+        // A brand-new post must not silently overwrite an existing file.
+        if (!current.remotePath) {
+          const probe = await getFile(auth(), postPath(current.slug));
+          if (probe.ok) {
+            setStatus(`slug 已存在：${current.slug}，换一个`, 'error');
+            return;
+          }
+        }
+
+        const out = await saveDraftToRepo(auth(), current, { publish, now: new Date() });
+
+        if (out.conflict) {
+          const overwrite = confirm('远端已经变了。\n\n确定 = 用当前内容覆盖远端\n取消 = 保留本地内容，改个 slug 另存为新文件');
+          if (!overwrite) {
+            setStatus('已取消 · 改 slug 后可另存为新文件，远端未动', 'error');
+            return;
+          }
+          const fresh = await getFile(auth(), current.remotePath);
+          if (!fresh.ok) {
+            setStatus(`拉取远端 sha 失败: ${fresh.status}`, 'error');
+            return;
+          }
+          const retry = await saveDraftToRepo(auth(), { ...current, remoteSha: fresh.data.sha }, { publish, now: new Date() });
+          if (!retry.ok) {
+            setStatus(`失败: ${retry.status} ${retry.message ?? ''}`, 'error');
+            return;
+          }
+          current = retry.draft;
+          await putDraft(current);
+          await refreshDrafts();
+          setStatus('已覆盖远端 · 部署中（约 2 分钟）', 'ok');
+          return;
+        }
+
+        if (!out.ok) {
+          const hint =
+            out.status === 401 ? 'PAT 失效，去设置里换一个'
+            : out.status === 403 || out.status === 404 ? '仓库或权限不对'
+            : out.status === 0 ? '离线 · 已存本地，联网后重试'
+            : `GitHub ${out.status}，可重试`;
+          setStatus(`失败: ${hint}`, 'error');
+          if (out.status === 401) $('settings').showModal();
+          return;
+        }
+
+        current = out.draft;
+        await putDraft(current);
+        await refreshDrafts();
+        setStatus(
+          out.message ? `完成，但：${out.message}` : publish ? '已发布 · 部署中（约 2 分钟）' : '已存到仓库',
+          out.message ? 'error' : 'ok',
+        );
+      }
+
+      $('save-btn').addEventListener('click', () => void commitDraft(false));
+      $('publish-btn').addEventListener('click', () => void commitDraft(true));
 
       $('repo-search').addEventListener('input', paintRepo);
       $('new-post').addEventListener('click', async () => {
