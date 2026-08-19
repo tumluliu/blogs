@@ -1,7 +1,6 @@
 ---
-// /q-write/ — VISUAL MOCK for design review only.
-// Static markup + CSS. No GitHub calls, no IndexedDB, no deps.
-// Replaced by the real implementation once the design is approved.
+// /q-write/ — long-form post editor PWA. List screen: local drafts (IndexedDB)
+// plus a searchable list of the repo's posts (GitHub Contents API).
 ---
 <!doctype html>
 <html lang="zh">
@@ -10,7 +9,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="robots" content="noindex,nofollow" />
     <meta name="theme-color" content="#fdfcf9" />
-    <title>q-write · mock</title>
+    <script is:inline>
+      // Pre-paint: apply persisted theme before CSS to avoid flash.
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') {
+          document.documentElement.setAttribute('data-theme', t);
+        }
+      } catch {}
+    </script>
+    <title>q-write</title>
     <style>
       :root {
         --bg: #fdfcf9;
@@ -291,51 +299,25 @@
     </style>
   </head>
   <body>
-    <div id="mockbar">
-      <b>MOCK</b>
-      <button data-go="list" aria-pressed="true">列表</button>
-      <button data-go="editor">编辑</button>
-      <button data-go="preview">预览</button>
-      <button data-go="settings">设置</button>
-      <span class="sp"></span>
-      <button id="theme">◐ 主题</button>
-    </div>
-
     <div id="app">
       <!-- ============ LIST ============ -->
       <section class="screen on" id="s-list">
         <div class="topbar">
           <span class="brand">q-write</span>
-          <span class="status">已同步 · 12:07</span>
-          <button class="icon-btn" title="设置">⚙</button>
+          <span class="status" id="status">已同步 · 12:07</span>
+          <button class="icon-btn" id="theme-btn" title="主题">◐</button>
+          <button class="icon-btn" id="settings-btn" title="设置">⚙</button>
         </div>
 
-        <button class="newpost">＋ 新文章</button>
+        <button class="newpost" id="new-post">＋ 新文章</button>
 
-        <div class="sect-label">草稿 · 3</div>
-        <button class="row">
-          <div class="row-title">从 Obsidian 到 q-write：长文也该在手机上写</div>
-          <div class="row-meta"><span class="dot local"></span>本地 · 2 分钟前 · 1,240 字</div>
-        </button>
-        <button class="row">
-          <div class="row-title">空间记忆的工程化路线：从认知地图到可查询世界状态</div>
-          <div class="row-meta"><span class="dot synced"></span>已存仓库 · 昨天 21:40 · 3,802 字</div>
-        </button>
-        <button class="row">
-          <div class="row-title">慕尼黑的雨季</div>
-          <div class="row-meta"><span class="dot local"></span>本地 · 3 天前 · 210 字</div>
-        </button>
+        <div class="sect-label">草稿 · <span id="drafts-count">0</span></div>
+        <div id="drafts"></div>
 
-        <div class="sect-label">仓库文章 · 229</div>
-        <input class="search" placeholder="搜索 slug…" value="kong-jian" />
-        <button class="row">
-          <div class="row-title">空间记忆：智能系统缺失的认知底座</div>
-          <div class="row-meta"><span class="dot published"></span><span class="row-slug">kong-jian-ji-yi-zhi-neng-xi-tong-que-shi-de-ren-zhi-di-zuo</span></div>
-        </button>
-        <button class="row">
-          <div class="row-title">空间数据的三种尺度</div>
-          <div class="row-meta"><span class="dot published"></span><span class="row-slug">kong-jian-shu-ju-de-san-zhong-chi-du</span></div>
-        </button>
+        <div class="sect-label">仓库文章 · <span id="repo-count">0</span></div>
+        <input class="search" id="repo-search" placeholder="搜索 slug…" />
+        <div id="repo-rows"></div>
+        <div id="repo-more" style="font-family: var(--sans); font-size: 11px; color: var(--soft); padding: 0.2rem 1rem 0.8rem;"></div>
       </section>
 
       <!-- ============ EDITOR ============ -->
@@ -433,43 +415,124 @@
     <dialog id="settings">
       <h3>设置</h3>
       <label for="pat">GITHUB PAT · CONTENTS:WRITE</label>
-      <input id="pat" type="password" value="github_pat_11ABCDEFG0xxxxxxxxxxxx" />
+      <input id="pat" type="password" value="" />
       <label for="repo">REPO</label>
       <input id="repo" value="tumluliu/blogs" />
       <div class="row2">
-        <button class="btn ghost" id="s-close">关闭</button>
-        <button class="btn solid">保存</button>
+        <button class="btn ghost" id="settings-clear">清除 PAT</button>
+        <button class="btn solid" id="settings-save">保存</button>
       </div>
     </dialog>
 
-    <script is:inline>
-      const show = (id) => {
-        document.querySelectorAll('.screen').forEach((s) => s.classList.toggle('on', s.id === id));
-      };
-      const pane = (name) => {
-        document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.pane === name)));
-        document.getElementById('p-write').classList.toggle('on', name === 'write');
-        document.getElementById('p-preview').classList.toggle('on', name === 'preview');
-      };
-      document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => pane(t.dataset.pane)));
-      document.querySelectorAll('#mockbar button[data-go]').forEach((b) => {
-        b.addEventListener('click', () => {
-          document.querySelectorAll('#mockbar button[data-go]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-          const go = b.dataset.go;
-          if (go === 'list') show('s-list');
-          else if (go === 'editor') { show('s-editor'); pane('write'); }
-          else if (go === 'preview') { show('s-editor'); pane('preview'); }
-          else document.getElementById('settings').showModal();
-        });
+    <script>
+      import { loadConfig, saveConfig, clearConfig } from '../../lib/gh/config';
+      import { listDir, getFile } from '../../lib/gh/client';
+      import { listDrafts, getDraft, putDraft, deleteDraft, newDraft } from '../../lib/q-write/drafts';
+      import { filterEntries, renderDrafts, renderRepoList } from '../../lib/q-write/ui/list';
+      import { draftFromRemote } from '../../lib/q-write/ui/publish';
+
+      const $ = (id) => document.getElementById(id);
+      const screens = { list: $('s-list'), editor: $('s-editor') };
+      let repoNames = [];
+
+      function show(name) {
+        for (const [key, el] of Object.entries(screens)) el.classList.toggle('on', key === name);
+      }
+
+      function auth() {
+        const cfg = loadConfig();
+        return { fetch: window.fetch.bind(window), pat: cfg.pat ?? '', repo: cfg.repo };
+      }
+
+      function setStatus(text, kind) {
+        const el = $('status');
+        el.textContent = text;
+        el.className = `status ${kind ?? ''}`.trim();
+      }
+
+      async function refreshDrafts() {
+        const drafts = await listDrafts();
+        $('drafts-count').textContent = String(drafts.length);
+        renderDrafts($('drafts'), drafts, (id) => openDraft(id));
+      }
+
+      async function refreshRepo() {
+        const cfg = loadConfig();
+        if (!cfg.pat) {
+          setStatus('设置里填 PAT', 'error');
+          return;
+        }
+        const res = await listDir(auth(), 'src/content/posts');
+        if (!res.ok) {
+          setStatus(`仓库列表失败: ${res.status}`, 'error');
+          return;
+        }
+        repoNames = res.data.map((e) => e.name).filter((n) => n.endsWith('.md')).sort();
+        $('repo-count').textContent = String(repoNames.length);
+        paintRepo();
+      }
+
+      function paintRepo() {
+        const matched = filterEntries(repoNames, $('repo-search').value);
+        renderRepoList($('repo-rows'), matched, (slug) => openRemote(slug));
+        $('repo-more').textContent = matched.length > 50 ? `还有 ${matched.length - 50} 篇，继续输入以缩小范围` : '';
+      }
+
+      async function openRemote(slug) {
+        setStatus('拉取中…');
+        const res = await getFile(auth(), `src/content/posts/${slug}.md`);
+        if (!res.ok) {
+          setStatus(`拉取失败: ${res.status}`, 'error');
+          return;
+        }
+        const draft = draftFromRemote(crypto.randomUUID(), res.data.path, res.data.sha, res.data.text, new Date());
+        await putDraft(draft);
+        await refreshDrafts();
+        openDraft(draft.id);
+      }
+
+      // Real definition arrives in Task 9, in this same script block.
+      let openDraft = async (_id) => {};
+
+      $('repo-search').addEventListener('input', paintRepo);
+      $('new-post').addEventListener('click', async () => {
+        const d = newDraft(crypto.randomUUID(), new Date());
+        await putDraft(d);
+        await refreshDrafts();
+        openDraft(d.id);
       });
-      document.getElementById('s-close').addEventListener('click', () => document.getElementById('settings').close());
-      document.querySelector('.newpost').addEventListener('click', () => { show('s-editor'); pane('write'); });
-      document.querySelectorAll('#s-list .row').forEach((r) => r.addEventListener('click', () => { show('s-editor'); pane('write'); }));
-      document.querySelector('#s-editor .icon-btn').addEventListener('click', () => show('s-list'));
-      document.getElementById('theme').addEventListener('click', () => {
+
+      // settings dialog
+      $('settings-btn').addEventListener('click', () => {
+        const cfg = loadConfig();
+        $('pat').value = cfg.pat ?? '';
+        $('repo').value = cfg.repo;
+        $('settings').showModal();
+      });
+      $('settings-save').addEventListener('click', (e) => {
+        e.preventDefault();
+        saveConfig($('pat').value.trim(), $('repo').value.trim());
+        $('settings').close();
+        setStatus('已保存设置', 'ok');
+        void refreshRepo();
+      });
+      $('settings-clear').addEventListener('click', () => {
+        clearConfig();
+        $('settings').close();
+        setStatus('已清除 PAT', 'error');
+      });
+
+      // theme, unchanged from q-sort
+      $('theme-btn').addEventListener('click', () => {
         const cur = document.documentElement.getAttribute('data-theme');
-        document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+        const next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch {}
       });
+
+      show('list');
+      void refreshDrafts();
+      void refreshRepo();
     </script>
   </body>
 </html>
