@@ -88,7 +88,16 @@
       #mockbar button[aria-pressed="true"] { background: #d68b54; color: #161514; border-color: #d68b54; }
       #mockbar .sp { flex: 1; }
 
-      /* ---------- app frame ---------- */
+      /* ---------- app frame ----------
+         Phone (<600px): unchanged — a 430px column, border-inline hidden
+         below 460px exactly as before. From 600px up the column widens
+         past the phone shape into a laptop-comfortable reading measure,
+         growing with the viewport and self-capping at 720px (the blog's
+         own --max-width, src/styles/global.css) so the textarea never
+         spans a wide monitor. The hairline border-inline keeps framing
+         the column at every width above the phone breakpoint rather than
+         gaining a second device (a card, a shadow) — same "rules, not
+         cards" language the rest of the design already uses. */
       #app {
         max-width: 430px; margin: 0 auto; min-height: calc(100dvh - 28px);
         display: flex; flex-direction: column;
@@ -96,6 +105,9 @@
         background: var(--bg);
       }
       @media (max-width: 460px) { #app { border-inline: 0; } }
+      @media (min-width: 600px) {
+        #app { max-width: min(94vw, 720px); }
+      }
 
       .screen { display: none; flex: 1; flex-direction: column; min-height: 0; }
       .screen.on { display: flex; }
@@ -435,6 +447,7 @@
       import { postPath } from '../../lib/q-write/paths';
       import { applyTitle, applySlug, touch, countWords, createAutosaver } from '../../lib/q-write/ui/state';
       import { wrapSelection, insertAtCursor, prefixLine, renderPreview } from '../../lib/q-write/ui/editor';
+      import { matchShortcut } from '../../lib/q-write/ui/shortcuts';
       import { compressImage } from '../../lib/q-write/image';
       import { placeholder, replacePlaceholder, uploadImage, UploadRows, createSerialQueue } from '../../lib/q-write/ui/images';
 
@@ -759,6 +772,25 @@
         const next = cur === 'light' ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', next);
         try { localStorage.setItem('theme', next); } catch {}
+      });
+
+      // Keyboard shortcuts: active only while the editor screen is showing
+      // and the settings dialog is closed. matchShortcut is the only place
+      // that decides what a keydown means; this listener just dispatches to
+      // the SAME click handlers the toolbar/action buttons already use, so
+      // bold/link/save/preview logic exists in exactly one place each.
+      // 发布 has no shortcut on purpose — it deploys the live site and stays
+      // a deliberate click.
+      document.addEventListener('keydown', (e) => {
+        if (!screens.editor.classList.contains('on')) return;
+        if ($('settings').open) return;
+        const action = matchShortcut(e);
+        if (!action) return;
+        e.preventDefault();
+        if (action === 'save') $('save-btn').click();
+        else if (action === 'bold') $('t-bold').click();
+        else if (action === 'link') $('t-link').click();
+        else if (action === 'preview') document.querySelector('.tab[aria-selected="false"]')?.click();
       });
 
       // image insert pipeline: picker / paste / drop all funnel through a
