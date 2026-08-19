@@ -391,12 +391,12 @@
           </div>
         </div>
 
-        <div class="uploads">
-          <div class="up"><span>IMG-3 · 3.8MB → 312KB</span><span class="bar"><i></i></span><span>62%</span></div>
-        </div>
+        <div class="uploads" id="uploads" hidden></div>
+
+        <input id="file-input" type="file" accept="image/*" multiple hidden />
 
         <div class="toolbar">
-          <button class="tool primary" title="插图" aria-label="插图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-4.5 5-2.5-2.5L3 19"/></svg></button>
+          <button class="tool primary" id="t-image" title="插图" aria-label="插图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-4.5 5-2.5-2.5L3 19"/></svg></button>
           <span class="tool-sep"></span>
           <button class="tool mono" id="t-h2">H2</button>
           <button class="tool mono" id="t-bold"><strong>B</strong></button>
@@ -434,6 +434,8 @@
       import { draftFromRemote } from '../../lib/q-write/ui/publish';
       import { applyTitle, applySlug, touch, countWords, createAutosaver } from '../../lib/q-write/ui/state';
       import { wrapSelection, insertAtCursor, prefixLine, renderPreview } from '../../lib/q-write/ui/editor';
+      import { compressImage } from '../../lib/q-write/image';
+      import { placeholder, replacePlaceholder, uploadImage } from '../../lib/q-write/ui/images';
 
       const $ = (id) => document.getElementById(id);
       const screens = { list: $('s-list'), editor: $('s-editor') };
@@ -656,6 +658,92 @@
         const next = cur === 'light' ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', next);
         try { localStorage.setItem('theme', next); } catch {}
+      });
+
+      // image insert pipeline: picker / paste / drop all funnel through
+      // handleFiles, which inserts a placeholder immediately, then swaps it
+      // for the real URL once compression + upload finish.
+      let uploadSeq = 0;
+
+      function setUploadStrip(rows) {
+        const strip = $('uploads');
+        strip.hidden = rows.length === 0;
+        strip.textContent = '';
+        for (const r of rows) {
+          const div = document.createElement('div');
+          div.className = r.error ? 'up err' : 'up';
+          div.textContent = r.label;
+          if (r.error) {
+            const retry = document.createElement('button');
+            retry.className = 'retry';
+            retry.textContent = '重试';
+            retry.addEventListener('click', () => void handleFiles([r.file]));
+            div.append(retry);
+          }
+          strip.append(div);
+        }
+      }
+
+      async function handleFiles(files) {
+        for (const file of files) {
+          const id = `img-${++uploadSeq}`;
+          insertAtCursor($('body'), `\n${placeholder(id)}\n`);
+          edit((d) => ({ ...d, body: $('body').value }));
+
+          setUploadStrip([{ label: `${id} · 压缩中…`, file }]);
+          let compressed;
+          try {
+            compressed = await compressImage(file);
+          } catch (err) {
+            console.error('q-write compress failed', err, file);
+            setUploadStrip([{ label: `${id} · 压缩失败`, file, error: true }]);
+            continue;
+          }
+
+          const kb = (n) => `${Math.round(n / 1024)}KB`;
+          setUploadStrip([{ label: `${id} · ${kb(file.size)} → ${kb(compressed.blob.size)} · 上传中…`, file }]);
+
+          const res = await uploadImage(auth(), compressed.blob, compressed.ext, new Date());
+          if (!res.ok) {
+            setUploadStrip([{ label: `${id} · 上传失败 ${res.status} ${res.message ?? ''}`, file, error: true }]);
+            continue;
+          }
+
+          blobMap.set(res.url, URL.createObjectURL(compressed.blob));
+          const next = replacePlaceholder($('body').value, id, `![](${res.url})`);
+          $('body').value = next;
+          edit((d) => ({ ...d, body: next }));
+          setUploadStrip([]);
+        }
+      }
+
+      $('t-image').addEventListener('click', () => $('file-input').click());
+      $('file-input').addEventListener('change', (e) => {
+        const files = Array.from(e.target.files ?? []);
+        e.target.value = '';
+        void handleFiles(files);
+      });
+
+      $('body').addEventListener('paste', (e) => {
+        const files = Array.from(e.clipboardData?.files ?? []);
+        if (files.length === 0) return;
+        e.preventDefault();
+        void handleFiles(files);
+      });
+
+      // A drop target must preventDefault on dragover, or the browser's
+      // default action (navigate the tab to the dropped file) wins before
+      // 'drop' ever gets a chance to run — the same guard also lets a plain
+      // text drag-select-and-move inside the textarea keep working.
+      $('body').addEventListener('dragover', (e) => {
+        if (Array.from(e.dataTransfer?.types ?? []).includes('Files')) e.preventDefault();
+      });
+
+      $('body').addEventListener('drop', (e) => {
+        const files = Array.from(e.dataTransfer?.files ?? []).filter((f) => f.type.startsWith('image/'));
+        if (files.length === 0) return;
+        e.preventDefault();
+        void handleFiles(files);
       });
 
       show('list');

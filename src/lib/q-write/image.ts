@@ -6,7 +6,13 @@ export function fitLongEdge(w: number, h: number, max: number): { width: number;
 }
 
 export async function hash8(bytes: Uint8Array): Promise<string> {
-  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  // crypto.subtle.digest wants BufferSource, which excludes a Uint8Array
+  // backed by a SharedArrayBuffer. Narrow to a plain ArrayBuffer view,
+  // copying only in that rare case rather than casting past the checker.
+  const view = bytes.buffer instanceof ArrayBuffer
+    ? new Uint8Array(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+    : bytes.slice();
+  const digest = await crypto.subtle.digest('SHA-256', view);
   return Array.from(new Uint8Array(digest).subarray(0, 4))
     .map((b) => b.toString(16).padStart(2, '0'))
     .join('');
