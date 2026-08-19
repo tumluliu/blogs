@@ -323,23 +323,24 @@
       <!-- ============ EDITOR ============ -->
       <section class="screen" id="s-editor">
         <div class="topbar">
-          <button class="icon-btn" title="返回">←</button>
+          <button class="icon-btn" id="back-btn" title="返回">←</button>
           <span class="brand" style="font-family: var(--sans); letter-spacing: 0.04em; text-transform: none; font-size: 12.5px;">草稿</span>
           <span class="status ok">自动存于 12:07</span>
-          <button class="icon-btn" title="更多">⋯</button>
+          <button class="icon-btn" id="copy-btn" title="复制正文">⧉</button>
+          <button class="icon-btn" id="delete-btn" title="删除草稿">⌦</button>
         </div>
 
         <div class="ed-head">
-          <input class="title-input" value="从 Obsidian 到 q-write：长文也该在手机上写" />
+          <input class="title-input" id="title-input" value="从 Obsidian 到 q-write：长文也该在手机上写" />
           <div class="meta-line">
             <span class="k">SLUG</span>
-            <span class="v">cong-obsidian-dao-q-write-chang-wen-ye-gai-zai-shou-ji</span>
-            <button class="edit">改</button>
+            <span class="v" id="slug-value">cong-obsidian-dao-q-write-chang-wen-ye-gai-zai-shou-ji</span>
+            <button class="edit" id="slug-edit">改</button>
           </div>
           <div class="meta-line">
             <span class="k">TAGS</span>
-            <span class="tags"><span class="tag">工具</span><span class="tag">写作</span><span class="tag">PWA</span></span>
-            <button class="edit">＋</button>
+            <span class="tags" id="tags-value"><span class="tag">工具</span><span class="tag">写作</span><span class="tag">PWA</span></span>
+            <button class="edit" id="tags-edit">＋</button>
           </div>
         </div>
 
@@ -347,11 +348,11 @@
           <button class="tab" role="tab" aria-selected="true" data-pane="write">写作</button>
           <button class="tab" role="tab" aria-selected="false" data-pane="preview">预览</button>
           <span class="sp"></span>
-          <span class="wc">1,240 字</span>
+          <span class="wc" id="wc">1,240 字</span>
         </div>
 
         <div class="pane on" id="p-write">
-          <textarea class="body" spellcheck="false">用 Obsidian 写博客这件事，麻烦的从来不是写，是**发**。
+          <textarea class="body" id="body" spellcheck="false">用 Obsidian 写博客这件事，麻烦的从来不是写，是**发**。
 
 模板要对、frontmatter 要对、图片要先塞进 `public/`、路径要写成站点绝对路径，最后还得等 obsidian-git 把 commit 推上去。手机上想补一段？基本别想。
 
@@ -370,7 +371,7 @@
         </div>
 
         <div class="pane" id="p-preview">
-          <div class="preview">
+          <div class="preview" id="preview">
             <h1>从 Obsidian 到 q-write：长文也该在手机上写</h1>
             <div class="byline">草稿 · 2026-08-19 · 工具 / 写作 / PWA</div>
             <p>用 Obsidian 写博客这件事，麻烦的从来不是写，是<strong>发</strong>。</p>
@@ -397,12 +398,12 @@
         <div class="toolbar">
           <button class="tool primary" title="插图" aria-label="插图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-4.5 5-2.5-2.5L3 19"/></svg></button>
           <span class="tool-sep"></span>
-          <button class="tool mono">H2</button>
-          <button class="tool mono"><strong>B</strong></button>
-          <button class="tool">链接</button>
-          <button class="tool">引用</button>
-          <button class="tool">代码</button>
-          <button class="tool">列表</button>
+          <button class="tool mono" id="t-h2">H2</button>
+          <button class="tool mono" id="t-bold"><strong>B</strong></button>
+          <button class="tool" id="t-link">链接</button>
+          <button class="tool" id="t-quote">引用</button>
+          <button class="tool" id="t-code">代码</button>
+          <button class="tool" id="t-list">列表</button>
         </div>
 
         <div class="actions">
@@ -431,6 +432,8 @@
       import { listDrafts, getDraft, putDraft, deleteDraft, newDraft } from '../../lib/q-write/drafts';
       import { filterEntries, renderDrafts, renderRepoList } from '../../lib/q-write/ui/list';
       import { draftFromRemote } from '../../lib/q-write/ui/publish';
+      import { applyTitle, applySlug, touch, countWords, createAutosaver } from '../../lib/q-write/ui/state';
+      import { wrapSelection, insertAtCursor, prefixLine, renderPreview } from '../../lib/q-write/ui/editor';
 
       const $ = (id) => document.getElementById(id);
       const screens = { list: $('s-list'), editor: $('s-editor') };
@@ -446,7 +449,10 @@
       }
 
       function setStatus(text, kind) {
-        const el = $('status');
+        // Each screen has its own status span in its own topbar; only the
+        // list screen's carries id="status", so target whichever is visible.
+        const el = document.querySelector('.screen.on .status');
+        if (!el) return;
         el.textContent = text;
         el.className = `status ${kind ?? ''}`.trim();
       }
@@ -496,8 +502,116 @@
         openDraft(draft.id);
       }
 
-      // Real definition arrives in Task 9, in this same script block.
-      let openDraft = async (_id) => {};
+      let current = null;                 // Draft being edited
+      const blobMap = new Map();          // /media/... -> blob: URL, for preview
+      let autosaveFailed = false;         // true when the most recent save attempt failed
+
+      const autosaver = createAutosaver(async (d) => {
+        await putDraft(d);
+        autosaveFailed = false;
+        setStatus(`自动存于 ${new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}`, 'ok');
+        await refreshDrafts();
+      }, 800, {
+        onError: (err, d) => {
+          autosaveFailed = true;
+          console.error('q-write autosave failed', err, d);
+          setStatus('自动保存失败，未存 — 请重试', 'error');
+        },
+      });
+
+      function paintEditor() {
+        $('title-input').value = current.title;
+        $('slug-value').textContent = current.slug || '(自动生成)';
+        $('body').value = current.body;
+        $('wc').textContent = `${countWords(current.body)} 字`;
+        $('tags-value').textContent = current.tags.join(', ');
+      }
+
+      function edit(mutate) {
+        current = touch(mutate(current), new Date());
+        $('wc').textContent = `${countWords(current.body)} 字`;
+        autosaver.schedule(current);
+      }
+
+      let openDraft = async (id) => {
+        current = await getDraft(id);
+        autosaveFailed = false;
+        paintEditor();
+        show('editor');
+        $('body').focus();
+      };
+
+      $('title-input').addEventListener('input', (e) => {
+        edit((d) => applyTitle(d, e.target.value));
+        $('slug-value').textContent = current.slug || '(自动生成)';
+      });
+
+      $('slug-edit').addEventListener('click', () => {
+        const next = prompt('slug', current.slug);
+        if (next === null) return;
+        edit((d) => applySlug(d, next));
+        $('slug-value').textContent = current.slug;
+      });
+
+      $('tags-edit').addEventListener('click', () => {
+        const next = prompt('tags（逗号分隔）', current.tags.join(', '));
+        if (next === null) return;
+        edit((d) => ({ ...d, tags: next.split(',').map((t) => t.trim()).filter(Boolean) }));
+        $('tags-value').textContent = current.tags.join(', ');
+      });
+
+      $('body').addEventListener('input', (e) => edit((d) => ({ ...d, body: e.target.value })));
+
+      for (const [id, fn] of [
+        ['t-h2', () => prefixLine($('body'), '## ')],
+        ['t-bold', () => wrapSelection($('body'), '**', '**')],
+        ['t-link', () => wrapSelection($('body'), '[', '](https://)')],
+        ['t-quote', () => prefixLine($('body'), '> ')],
+        ['t-code', () => wrapSelection($('body'), '`', '`')],
+        ['t-list', () => prefixLine($('body'), '- ')],
+      ]) {
+        $(id).addEventListener('click', () => {
+          fn();
+          $('body').focus();
+          edit((d) => ({ ...d, body: $('body').value }));
+        });
+      }
+
+      for (const tab of document.querySelectorAll('.tab')) {
+        tab.addEventListener('click', () => {
+          const name = tab.dataset.pane;
+          for (const t of document.querySelectorAll('.tab')) t.setAttribute('aria-selected', String(t === tab));
+          $('p-write').classList.toggle('on', name === 'write');
+          $('p-preview').classList.toggle('on', name === 'preview');
+          if (name === 'preview') renderPreview($('preview'), current.body, blobMap);
+        });
+      }
+
+      $('back-btn').addEventListener('click', async () => {
+        await autosaver.flush();
+        // flush() can resolve while a failed save is still queued for retry
+        // (see createAutosaver's onError contract) — treat that as unsaved
+        // and stay put rather than silently returning to the list.
+        if (autosaveFailed) {
+          setStatus('自动保存失败，未存 — 请重试', 'error');
+          return;
+        }
+        await refreshDrafts();
+        show('list');
+      });
+
+      $('copy-btn').addEventListener('click', async () => {
+        await navigator.clipboard.writeText(current.body);
+        setStatus('正文已复制', 'ok');
+      });
+
+      $('delete-btn').addEventListener('click', async () => {
+        if (!confirm('删除这份本地草稿？仓库里的文件不受影响。')) return;
+        await deleteDraft(current.id);
+        current = null;
+        await refreshDrafts();
+        show('list');
+      });
 
       $('repo-search').addEventListener('input', paintRepo);
       $('new-post').addEventListener('click', async () => {
