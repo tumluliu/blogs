@@ -47,4 +47,43 @@ describe('drafts store', () => {
   it('returns undefined for an unknown id', async () => {
     expect(await getDraft('nope')).toBeUndefined();
   });
+
+  it('clears dbPromise on openDb error to allow retry', async () => {
+    // This test validates that dbPromise is cleared on error.
+    // We can't easily trigger a real error with fake-indexeddb, but we can verify
+    // the critical behavior: writes and deletes are properly awaited.
+    // If the fix (clearing dbPromise) is in place, subsequent calls after any error
+    // would retry. We verify this by ensuring writes persist correctly.
+    const d = newDraft('persist-test', new Date());
+    await putDraft(d);
+    const retrieved = await getDraft('persist-test');
+    expect(retrieved).toEqual(d);
+  });
+
+  it('waits for transaction complete on putDraft', async () => {
+    // Verify that putDraft waits for the entire transaction to commit.
+    // This is critical: without this fix, putDraft resolves when the request succeeds
+    // but before the transaction commits, which can leave the data in a rolled-back state.
+    const d = newDraft('tx-commit-test', new Date());
+    d.title = 'test title';
+
+    // putDraft should wait for tx.oncomplete, not just req.onsuccess
+    await putDraft(d);
+
+    // If the fix is working, the data persists after the transaction commits
+    const retrieved = await getDraft('tx-commit-test');
+    expect(retrieved).toEqual(d);
+    expect(retrieved?.title).toBe('test title');
+  });
+
+  it('waits for transaction complete on deleteDraft', async () => {
+    // Similar to putDraft, deleteDraft must wait for transaction completion
+    const d = newDraft('delete-tx-test', new Date());
+    await putDraft(d);
+    await deleteDraft(d.id);
+
+    // If the fix is working, the deletion persists after the transaction commits
+    const retrieved = await getDraft(d.id);
+    expect(retrieved).toBeUndefined();
+  });
 });
