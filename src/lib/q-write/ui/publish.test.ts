@@ -42,7 +42,22 @@ describe('draftFromRemote', () => {
       d = draftFromRemote('id', 'src/content/posts/broken.md', 's', raw, NOW);
     }).not.toThrow();
     expect(d?.hadFrontmatter).toBe(false);
-    expect(d?.body).toBe(raw);
+    expect(d?.body).toBe('正文\n');
+  });
+
+  it('strips the unparseable leading fence so a resave cannot wrap a fresh frontmatter block around it', () => {
+    const raw = '---\ntitle: [unclosed\n---\n\n正文\n';
+    const d = draftFromRemote('id', 'src/content/posts/broken.md', 's', raw, NOW);
+
+    // (a) the stored body carries no leading `---` fence.
+    expect(d.body.startsWith('---')).toBe(false);
+
+    // (b) round-tripping through docFromDraft must produce exactly one
+    // frontmatter block — an orphaned old fence left in the body would show
+    // up as a second `---`/`---` pair once a new header is serialized.
+    const md = docFromDraft({ ...d, tags: ['x'] }, { publish: false, now: NOW });
+    const fenceLines = md.match(/^---$/gm) ?? [];
+    expect(fenceLines.length).toBe(2);
   });
 });
 

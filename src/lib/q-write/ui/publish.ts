@@ -9,6 +9,12 @@ import { putFile, deleteFile, type GhAuth } from '../../gh/client.js';
 // frontmatterExtra so it survives a round-trip untouched.
 const META_KEYS = new Set(['title', 'tags', 'draft', 'updated']);
 
+// Matches only a fence that starts at position 0 — never a `---` horizontal
+// rule that shows up later in the body. Used solely to strip an orphaned,
+// unparseable frontmatter block; the leading `---...---` region itself isn't
+// trusted to carry usable data once yaml.load has already rejected it.
+const LEADING_FENCE_RE = /^---\r?\n[\s\S]*?\r?\n---\r?\n?/;
+
 export function draftFromRemote(id: string, path: string, sha: string, raw: string, now: Date): Draft {
   let doc: Doc;
   try {
@@ -16,9 +22,13 @@ export function draftFromRemote(id: string, path: string, sha: string, raw: stri
   } catch (e) {
     // 229 posts, some hand-edited or imported from cnblogs — a malformed
     // frontmatter block must not crash the editor. Fall back to treating the
-    // whole file as body text, same as a file with no `---` block at all.
+    // file as body text, same as a file with no `---` block at all — but
+    // strip the orphaned fence first. Leaving it in place would let a later
+    // resave wrap a brand-new frontmatter block around it, demoting whatever
+    // was in there to inert text sitting under a second `---` pair.
     console.warn(`q-write: malformed frontmatter in ${path}, opening as plain body`, e);
-    doc = { fm: {}, hadFrontmatter: false, body: raw };
+    const body = raw.replace(LEADING_FENCE_RE, '').replace(/^\r?\n/, '');
+    doc = { fm: {}, hadFrontmatter: false, body };
   }
   const { title } = docTitle(doc);
   const extra: Record<string, unknown> = {};
