@@ -1,0 +1,475 @@
+---
+// /q-write/ — VISUAL MOCK for design review only.
+// Static markup + CSS. No GitHub calls, no IndexedDB, no deps.
+// Replaced by the real implementation once the design is approved.
+---
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="theme-color" content="#fdfcf9" />
+    <title>q-write · mock</title>
+    <style>
+      :root {
+        --bg: #fdfcf9;
+        --bg-sunk: #f6f2e8;
+        --fg: #1a1a1a;
+        --muted: #6b6b6b;
+        --soft: #999999;
+        --accent: #b25c2c;
+        --accent-soft: #f0e2d6;
+        --link: #1a4789;
+        --rule: #e7e3d9;
+        --rule-strong: #d8d2c4;
+        --code-bg: #f3efe5;
+        --ok: #4a7c4e;
+        --warn: #b8860b;
+        --serif: 'Source Han Serif SC', 'Noto Serif CJK SC', 'Songti SC', Georgia, 'Times New Roman', serif;
+        --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        --mono: 'SF Mono', 'JetBrains Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+      }
+      :root[data-theme="dark"] {
+        --bg: #161514;
+        --bg-sunk: #1d1b19;
+        --fg: #e6e3dc;
+        --muted: #98948c;
+        --soft: #6b6864;
+        --accent: #d68b54;
+        --accent-soft: #33261d;
+        --link: #8ab4f8;
+        --rule: #2b2926;
+        --rule-strong: #3a3733;
+        --code-bg: #22201d;
+        --ok: #7fa982;
+        --warn: #cfa64a;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; height: 100%; }
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--serif);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      /* paper grain */
+      body::after {
+        content: '';
+        position: fixed; inset: 0; z-index: 99;
+        pointer-events: none; opacity: 0.4; mix-blend-mode: multiply;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      }
+      :root[data-theme="dark"] body::after { mix-blend-mode: screen; opacity: 0.25; }
+
+      /* ---------- mock chrome (not part of the design) ---------- */
+      #mockbar {
+        position: sticky; top: 0; z-index: 100;
+        display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;
+        background: #2b2926; color: #d8d2c4;
+        font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+        padding: 0.4rem 0.7rem;
+      }
+      #mockbar b { color: #d68b54; letter-spacing: 0.14em; }
+      #mockbar button {
+        background: transparent; color: #d8d2c4; border: 1px solid #4a4640;
+        font: inherit; padding: 0.2rem 0.55rem; cursor: pointer; border-radius: 2px;
+      }
+      #mockbar button[aria-pressed="true"] { background: #d68b54; color: #161514; border-color: #d68b54; }
+      #mockbar .sp { flex: 1; }
+
+      /* ---------- app frame ---------- */
+      #app {
+        max-width: 430px; margin: 0 auto; min-height: calc(100dvh - 28px);
+        display: flex; flex-direction: column;
+        border-inline: 1px solid var(--rule);
+        background: var(--bg);
+      }
+      @media (max-width: 460px) { #app { border-inline: 0; } }
+
+      .screen { display: none; flex: 1; flex-direction: column; min-height: 0; }
+      .screen.on { display: flex; }
+
+      /* ---------- shared chrome ---------- */
+      .topbar {
+        display: flex; align-items: center; gap: 0.5rem;
+        padding: 0.75rem 1rem 0.6rem;
+        border-bottom: 1px solid var(--rule);
+      }
+      .brand {
+        font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em;
+        text-transform: uppercase; color: var(--accent);
+      }
+      .status {
+        font-family: var(--sans); font-size: 11.5px; color: var(--soft);
+        flex: 1; text-align: right; letter-spacing: 0;
+      }
+      .status.ok { color: var(--ok); }
+      .icon-btn {
+        background: none; border: 0; color: var(--muted); cursor: pointer;
+        font-size: 1rem; padding: 0.25rem 0.3rem; line-height: 1; min-width: 32px;
+      }
+      .icon-btn:hover { color: var(--accent); }
+
+      /* ---------- list screen ---------- */
+      .newpost {
+        margin: 1rem 1rem 0.4rem; padding: 0.85rem 1rem;
+        background: var(--accent); color: #fdfcf9; border: 0; cursor: pointer;
+        font-family: var(--sans); font-size: 14px; letter-spacing: 0.06em;
+        border-radius: 2px;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.12);
+      }
+      .sect-label {
+        font-family: var(--sans); font-size: 11px; letter-spacing: 0.06em;
+        color: var(--soft);
+        padding: 1.4rem 1rem 0.4rem; display: flex; align-items: baseline; gap: 0.6rem;
+      }
+      .sect-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+      .row {
+        display: block; width: 100%; text-align: left; cursor: pointer;
+        background: none; border: 0; border-bottom: 1px solid var(--rule);
+        padding: 0.8rem 1rem; color: inherit; font-family: inherit;
+        animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+      }
+      .row:hover { background: var(--bg-sunk); }
+      .row:nth-child(2) { animation-delay: 0.04s; }
+      .row:nth-child(3) { animation-delay: 0.08s; }
+      .row:nth-child(4) { animation-delay: 0.12s; }
+      .row:nth-child(5) { animation-delay: 0.16s; }
+      @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
+
+      .row-title { font-size: 1rem; line-height: 1.45; margin-bottom: 0.25rem; }
+      .row-meta {
+        font-family: var(--sans); font-size: 11px; color: var(--soft);
+        letter-spacing: 0; display: flex; gap: 0.5rem; align-items: center;
+      }
+      .dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+      .dot.local { background: var(--warn); }
+      .dot.synced { background: var(--link); }
+      .dot.published { background: var(--ok); }
+      .row-slug { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+      .search {
+        margin: 0.5rem 1rem 0.6rem; width: calc(100% - 2rem);
+        background: var(--bg-sunk); border: 1px solid var(--rule);
+        color: var(--fg); font-family: var(--mono); font-size: 13px;
+        padding: 0.6rem 0.7rem; border-radius: 2px;
+      }
+      .search:focus { outline: 0; border-color: var(--accent); }
+
+      /* ---------- editor screen ---------- */
+      .ed-head { padding: 0.7rem 1rem 0; border-bottom: 1px solid var(--rule); }
+      .title-input {
+        width: 100%; background: none; border: 0; color: var(--fg);
+        font-family: var(--serif); font-size: 1.25rem; line-height: 1.4;
+        padding: 0.2rem 0; margin-bottom: 0.35rem;
+      }
+      .title-input:focus { outline: 0; }
+      .title-input::placeholder { color: var(--soft); }
+      .meta-line {
+        display: flex; gap: 0.5rem; align-items: center;
+        font-family: var(--mono); font-size: 11px; color: var(--soft);
+        padding-bottom: 0.5rem; overflow: hidden;
+      }
+      .meta-line .k { color: var(--soft); letter-spacing: 0.1em; }
+      .meta-line .v { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .meta-line .edit { color: var(--accent); cursor: pointer; border: 0; background: none; font: inherit; }
+      .tags { display: flex; gap: 0.3rem; }
+      .tag {
+        background: var(--accent-soft); color: var(--accent);
+        padding: 0.1rem 0.4rem; border-radius: 2px; font-size: 10.5px;
+      }
+
+      .tabs { display: flex; gap: 1.2rem; padding: 0 1rem; border-bottom: 1px solid var(--rule); }
+      .tab {
+        background: none; border: 0; cursor: pointer; padding: 0.55rem 0 0.5rem;
+        font-family: var(--sans); font-size: 12.5px; letter-spacing: 0.08em;
+        color: var(--soft); position: relative;
+      }
+      .tab[aria-selected="true"] { color: var(--fg); }
+      .tab[aria-selected="true"]::after {
+        content: ''; position: absolute; left: 0; right: 0; bottom: -1px;
+        height: 2px; background: var(--accent);
+        animation: slidein 0.25s cubic-bezier(0.2, 0.7, 0.3, 1);
+      }
+      @keyframes slidein { from { transform: scaleX(0.2); opacity: 0; } }
+      .tabs .sp { flex: 1; }
+      .wc { font-family: var(--mono); font-size: 10.5px; color: var(--soft); align-self: center; }
+
+      .pane { flex: 1; min-height: 0; overflow: auto; display: none; }
+      .pane.on { display: block; }
+
+      textarea.body {
+        width: 100%; height: 100%; min-height: 46dvh;
+        background: none; border: 0; resize: none; color: var(--fg);
+        font-family: var(--serif); font-size: 1.02rem; line-height: 1.85;
+        padding: 1rem 1rem 2rem; letter-spacing: 0.01em;
+      }
+      textarea.body:focus { outline: 0; }
+
+      /* upload strip */
+      .uploads { border-top: 1px solid var(--rule); background: var(--bg-sunk); padding: 0.45rem 1rem; }
+      .up {
+        display: flex; align-items: center; gap: 0.5rem;
+        font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+      }
+      .up .bar { flex: 1; height: 2px; background: var(--rule-strong); overflow: hidden; }
+      .up .bar i { display: block; height: 100%; width: 62%; background: var(--accent); animation: pulse 1.4s ease-in-out infinite; }
+      @keyframes pulse { 50% { opacity: 0.45; } }
+      .up.err { color: var(--accent); }
+      .up.err .retry { border: 1px solid var(--accent); background: none; color: var(--accent); font: inherit; padding: 0.05rem 0.4rem; cursor: pointer; }
+
+      /* toolbar */
+      .toolbar {
+        display: flex; align-items: center; gap: 0.1rem;
+        border-top: 1px solid var(--rule); background: var(--bg);
+        padding: 0.3rem 0.5rem; overflow-x: auto;
+      }
+      .tool {
+        background: none; border: 0; cursor: pointer; color: var(--muted);
+        font-family: var(--sans); font-size: 12.5px; letter-spacing: 0;
+        padding: 0.55rem 0.6rem; min-width: 40px; border-radius: 2px;
+        display: inline-flex; align-items: center; justify-content: center;
+      }
+      .tool.mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; }
+      .tool svg { width: 17px; height: 17px; display: block; }
+      .tool:hover { color: var(--accent); background: var(--bg-sunk); }
+      .tool.primary { color: var(--accent); font-size: 15px; }
+      .tool-sep { width: 1px; height: 18px; background: var(--rule); margin: 0 0.25rem; }
+
+      /* actions */
+      .actions {
+        display: flex; gap: 0.6rem; padding: 0.7rem 1rem 1rem;
+        border-top: 1px solid var(--rule);
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+      }
+      .btn {
+        flex: 1; padding: 0.8rem 0.5rem; cursor: pointer; border-radius: 2px;
+        font-family: var(--sans); font-size: 13.5px; letter-spacing: 0.06em;
+      }
+      .btn.ghost { background: none; border: 1px solid var(--rule-strong); color: var(--muted); }
+      .btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+      .btn.solid { background: var(--accent); border: 1px solid var(--accent); color: #fdfcf9; }
+      .btn.solid:hover { filter: brightness(1.06); }
+
+      /* preview pane = blog typography */
+      .preview { padding: 1.2rem 1rem 3rem; }
+      .preview h1 { font-size: 1.5rem; line-height: 1.35; margin: 0 0 0.2rem; }
+      .preview .byline { font-family: var(--mono); font-size: 10.5px; color: var(--soft); letter-spacing: 0.08em; margin-bottom: 1.2rem; }
+      .preview h2 { font-size: 1.15rem; margin: 1.8rem 0 0.6rem; }
+      .preview p { line-height: 1.85; margin: 0 0 1rem; }
+      .preview a { color: var(--link); text-underline-offset: 2px; }
+      .preview blockquote {
+        margin: 1rem 0; padding: 0.2rem 0 0.2rem 0.9rem;
+        border-left: 2px solid var(--accent); color: var(--muted);
+      }
+      .preview code { font-family: var(--mono); font-size: 0.85em; background: var(--code-bg); padding: 0.1em 0.3em; }
+      .preview img { max-width: 100%; display: block; border: 1px solid var(--rule); }
+      .preview figcaption { font-family: var(--sans); font-size: 0.78rem; color: var(--soft); margin-top: 0.4rem; line-height: 1.5; }
+      .preview .local-badge {
+        font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; color: var(--warn);
+        border: 1px solid var(--warn); padding: 0 0.25rem; margin-left: 0.4rem;
+      }
+
+      dialog {
+        background: var(--bg); color: var(--fg); border: 1px solid var(--rule-strong);
+        border-radius: 2px; padding: 1.2rem; max-width: min(380px, 92vw);
+      }
+      dialog::backdrop { background: rgba(20,18,16,0.55); }
+      dialog h3 { font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.9rem; }
+      dialog label { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--soft); margin-top: 0.8rem; }
+      dialog input {
+        width: 100%; margin-top: 0.3rem; padding: 0.55rem 0.6rem;
+        background: var(--bg-sunk); border: 1px solid var(--rule); color: var(--fg);
+        font-family: var(--mono); font-size: 13px; border-radius: 2px;
+      }
+      dialog .row2 { display: flex; gap: 0.5rem; margin-top: 1.2rem; }
+      dialog .row2 .btn { flex: 1; }
+    </style>
+  </head>
+  <body>
+    <div id="mockbar">
+      <b>MOCK</b>
+      <button data-go="list" aria-pressed="true">列表</button>
+      <button data-go="editor">编辑</button>
+      <button data-go="preview">预览</button>
+      <button data-go="settings">设置</button>
+      <span class="sp"></span>
+      <button id="theme">◐ 主题</button>
+    </div>
+
+    <div id="app">
+      <!-- ============ LIST ============ -->
+      <section class="screen on" id="s-list">
+        <div class="topbar">
+          <span class="brand">q-write</span>
+          <span class="status">已同步 · 12:07</span>
+          <button class="icon-btn" title="设置">⚙</button>
+        </div>
+
+        <button class="newpost">＋ 新文章</button>
+
+        <div class="sect-label">草稿 · 3</div>
+        <button class="row">
+          <div class="row-title">从 Obsidian 到 q-write：长文也该在手机上写</div>
+          <div class="row-meta"><span class="dot local"></span>本地 · 2 分钟前 · 1,240 字</div>
+        </button>
+        <button class="row">
+          <div class="row-title">空间记忆的工程化路线：从认知地图到可查询世界状态</div>
+          <div class="row-meta"><span class="dot synced"></span>已存仓库 · 昨天 21:40 · 3,802 字</div>
+        </button>
+        <button class="row">
+          <div class="row-title">慕尼黑的雨季</div>
+          <div class="row-meta"><span class="dot local"></span>本地 · 3 天前 · 210 字</div>
+        </button>
+
+        <div class="sect-label">仓库文章 · 229</div>
+        <input class="search" placeholder="搜索 slug…" value="kong-jian" />
+        <button class="row">
+          <div class="row-title">空间记忆：智能系统缺失的认知底座</div>
+          <div class="row-meta"><span class="dot published"></span><span class="row-slug">kong-jian-ji-yi-zhi-neng-xi-tong-que-shi-de-ren-zhi-di-zuo</span></div>
+        </button>
+        <button class="row">
+          <div class="row-title">空间数据的三种尺度</div>
+          <div class="row-meta"><span class="dot published"></span><span class="row-slug">kong-jian-shu-ju-de-san-zhong-chi-du</span></div>
+        </button>
+      </section>
+
+      <!-- ============ EDITOR ============ -->
+      <section class="screen" id="s-editor">
+        <div class="topbar">
+          <button class="icon-btn" title="返回">←</button>
+          <span class="brand" style="font-family: var(--sans); letter-spacing: 0.04em; text-transform: none; font-size: 12.5px;">草稿</span>
+          <span class="status ok">自动存于 12:07</span>
+          <button class="icon-btn" title="更多">⋯</button>
+        </div>
+
+        <div class="ed-head">
+          <input class="title-input" value="从 Obsidian 到 q-write：长文也该在手机上写" />
+          <div class="meta-line">
+            <span class="k">SLUG</span>
+            <span class="v">cong-obsidian-dao-q-write-chang-wen-ye-gai-zai-shou-ji</span>
+            <button class="edit">改</button>
+          </div>
+          <div class="meta-line">
+            <span class="k">TAGS</span>
+            <span class="tags"><span class="tag">工具</span><span class="tag">写作</span><span class="tag">PWA</span></span>
+            <button class="edit">＋</button>
+          </div>
+        </div>
+
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" aria-selected="true" data-pane="write">写作</button>
+          <button class="tab" role="tab" aria-selected="false" data-pane="preview">预览</button>
+          <span class="sp"></span>
+          <span class="wc">1,240 字</span>
+        </div>
+
+        <div class="pane on" id="p-write">
+          <textarea class="body" spellcheck="false">用 Obsidian 写博客这件事，麻烦的从来不是写，是**发**。
+
+模板要对、frontmatter 要对、图片要先塞进 `public/`、路径要写成站点绝对路径，最后还得等 obsidian-git 把 commit 推上去。手机上想补一段？基本别想。
+
+## 于是有了 q-write
+
+思路很简单：既然 [q-sort](/q-sort/) 已经能把一条 thought 一键怼进仓库，长文没理由做不到。
+
+![](/diagrams/article/01-chat-memory-vs-world-memory.png)
+
+> 关键差别在于长文有生命周期——它要写好几天。
+
+![](uploading:img-3)
+
+正在传的那张图会在原地替换成真实路径，不用等。
+</textarea>
+        </div>
+
+        <div class="pane" id="p-preview">
+          <div class="preview">
+            <h1>从 Obsidian 到 q-write：长文也该在手机上写</h1>
+            <div class="byline">草稿 · 2026-08-19 · 工具 / 写作 / PWA</div>
+            <p>用 Obsidian 写博客这件事，麻烦的从来不是写，是<strong>发</strong>。</p>
+            <p>模板要对、frontmatter 要对、图片要先塞进 <code>public/</code>、路径要写成站点绝对路径，最后还得等 obsidian-git 把 commit 推上去。手机上想补一段？基本别想。</p>
+            <h2>于是有了 q-write</h2>
+            <p>思路很简单：既然 <a href="/q-sort/">q-sort</a> 已经能把一条 thought 一键怼进仓库，长文没理由做不到。</p>
+            <figure style="margin:0 0 1rem">
+              <img src="/diagrams/article/01-chat-memory-vs-world-memory.png" alt="示意图" />
+              <figcaption>图 1 — 已上传，指向 /media/2026/08/a3f91c02.webp</figcaption>
+            </figure>
+            <blockquote>关键差别在于长文有生命周期——它要写好几天。</blockquote>
+            <figure style="margin:0 0 1rem">
+              <img src="/diagrams/article/03-perception-cognition-cliff.png" alt="上传中" style="opacity:.55" />
+              <figcaption>图 2 — 本地预览<span class="local-badge">尚未上传</span></figcaption>
+            </figure>
+            <p>正在传的那张图会在原地替换成真实路径，不用等。</p>
+          </div>
+        </div>
+
+        <div class="uploads">
+          <div class="up"><span>IMG-3 · 3.8MB → 312KB</span><span class="bar"><i></i></span><span>62%</span></div>
+        </div>
+
+        <div class="toolbar">
+          <button class="tool primary" title="插图" aria-label="插图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-4.5 5-2.5-2.5L3 19"/></svg></button>
+          <span class="tool-sep"></span>
+          <button class="tool mono">H2</button>
+          <button class="tool mono"><strong>B</strong></button>
+          <button class="tool">链接</button>
+          <button class="tool">引用</button>
+          <button class="tool">代码</button>
+          <button class="tool">列表</button>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost">存到仓库</button>
+          <button class="btn solid">发布</button>
+        </div>
+      </section>
+    </div>
+
+    <dialog id="settings">
+      <h3>设置</h3>
+      <label for="pat">GITHUB PAT · CONTENTS:WRITE</label>
+      <input id="pat" type="password" value="github_pat_11ABCDEFG0xxxxxxxxxxxx" />
+      <label for="repo">REPO</label>
+      <input id="repo" value="tumluliu/blogs" />
+      <div class="row2">
+        <button class="btn ghost" id="s-close">关闭</button>
+        <button class="btn solid">保存</button>
+      </div>
+    </dialog>
+
+    <script is:inline>
+      const show = (id) => {
+        document.querySelectorAll('.screen').forEach((s) => s.classList.toggle('on', s.id === id));
+      };
+      const pane = (name) => {
+        document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.pane === name)));
+        document.getElementById('p-write').classList.toggle('on', name === 'write');
+        document.getElementById('p-preview').classList.toggle('on', name === 'preview');
+      };
+      document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => pane(t.dataset.pane)));
+      document.querySelectorAll('#mockbar button[data-go]').forEach((b) => {
+        b.addEventListener('click', () => {
+          document.querySelectorAll('#mockbar button[data-go]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          const go = b.dataset.go;
+          if (go === 'list') show('s-list');
+          else if (go === 'editor') { show('s-editor'); pane('write'); }
+          else if (go === 'preview') { show('s-editor'); pane('preview'); }
+          else document.getElementById('settings').showModal();
+        });
+      });
+      document.getElementById('s-close').addEventListener('click', () => document.getElementById('settings').close());
+      document.querySelector('.newpost').addEventListener('click', () => { show('s-editor'); pane('write'); });
+      document.querySelectorAll('#s-list .row').forEach((r) => r.addEventListener('click', () => { show('s-editor'); pane('write'); }));
+      document.querySelector('#s-editor .icon-btn').addEventListener('click', () => show('s-list'));
+      document.getElementById('theme').addEventListener('click', () => {
+        const cur = document.documentElement.getAttribute('data-theme');
+        document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+      });
+    </script>
+  </body>
+</html>
