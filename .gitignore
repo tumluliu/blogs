@@ -34,3 +34,6 @@ vm-backup-*/
 scripts/cnblogs-cache/*.json
 scripts/cnblogs-cache/*.xml
 scripts/cnblogs-cache/*.log
+
+# claude worktrees
+.claude/worktrees/
