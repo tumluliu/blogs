@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { draftFromRemote, docFromDraft, saveDraftToRepo } from './publish.js';
+import { draftFromRemote, docFromDraft, saveDraftToRepo, preflightCommit } from './publish.js';
 import { newDraft } from '../drafts.js';
 
 const NOW = new Date(2026, 7, 19, 12, 0);
@@ -163,5 +163,38 @@ describe('saveDraftToRepo', () => {
 
     expect(out.ok).toBe(true);
     expect(out.message).toMatch(/old-slug/);
+  });
+});
+
+describe('preflightCommit', () => {
+  it('refuses a draft with no slug', () => {
+    const d = { ...newDraft('id', NOW), slug: '', body: '正文' };
+    const out = preflightCommit(d);
+    expect(out.ok).toBe(false);
+    if (!out.ok) {
+      expect(out.reason).toBe('no-slug');
+      expect(out.message).toBe('先写标题（或手动填 slug）');
+    }
+  });
+
+  it('refuses a draft whose body still carries an unfinished upload placeholder', () => {
+    const d = { ...newDraft('id', NOW), slug: 't', body: '开头\n\n![](uploading:img-2)\n\n结尾' };
+    const out = preflightCommit(d);
+    expect(out.ok).toBe(false);
+    if (out.ok || out.reason !== 'uploading') throw new Error('expected an uploading refusal');
+    expect(out.uploadId).toBe('img-2');
+    expect(out.message).toContain('img-2');
+  });
+
+  it('passes a draft with a slug and no unfinished upload', () => {
+    const d = { ...newDraft('id', NOW), slug: 't', body: '正文，没有占位符' };
+    expect(preflightCommit(d)).toEqual({ ok: true });
+  });
+
+  it('reports the no-slug refusal even when an upload placeholder is also present', () => {
+    const d = { ...newDraft('id', NOW), slug: '', body: '![](uploading:img-9)' };
+    const out = preflightCommit(d);
+    expect(out.ok).toBe(false);
+    if (!out.ok) expect(out.reason).toBe('no-slug');
   });
 });

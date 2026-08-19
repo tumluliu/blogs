@@ -3,6 +3,7 @@ import { parseDoc, serializeDoc, docTitle, setDocTitle, patchMeta, type Doc } fr
 import { postPath, slugFromEntryName } from '../paths.js';
 import { utf8Base64 } from '../../gh/encoding.js';
 import { putFile, deleteFile, type GhAuth } from '../../gh/client.js';
+import { findUploadingPlaceholder } from './images.js';
 
 // Keys q-write owns and rewrites on every save. Everything else — including
 // `date` (stamped once, never rewritten) and `slug` — rides along in
@@ -137,4 +138,31 @@ export async function saveDraftToRepo(
       updatedAt: opts.now.toISOString(),
     },
   };
+}
+
+// The pure decision behind the "can this draft even be committed" gate that
+// the editor's save/publish buttons must check before doing anything else.
+// Extracted out of the DOM wiring (which vitest's `node` environment can't
+// exercise) so both refusals — and the exact message shown for each — are
+// covered by a real test instead of living only in an `<script>` `if` that
+// nothing catches if it's ever deleted.
+export type PreflightResult =
+  | { ok: true }
+  | { ok: false; reason: 'no-slug'; message: string }
+  | { ok: false; reason: 'uploading'; message: string; uploadId: string };
+
+export function preflightCommit(d: Draft): PreflightResult {
+  if (!d.slug) {
+    return { ok: false, reason: 'no-slug', message: '先写标题（或手动填 slug）' };
+  }
+  const uploadId = findUploadingPlaceholder(d.body);
+  if (uploadId) {
+    return {
+      ok: false,
+      reason: 'uploading',
+      uploadId,
+      message: `图片 ${uploadId} 还没传完，重试或删除后再存`,
+    };
+  }
+  return { ok: true };
 }
