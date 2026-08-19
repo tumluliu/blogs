@@ -304,7 +304,7 @@
       <section class="screen on" id="s-list">
         <div class="topbar">
           <span class="brand">q-write</span>
-          <span class="status" id="status">已同步 · 12:07</span>
+          <span class="status" id="status">未同步</span>
           <button class="icon-btn" id="theme-btn" title="主题">◐</button>
           <button class="icon-btn" id="settings-btn" title="设置">⚙</button>
         </div>
@@ -419,6 +419,7 @@
       <label for="repo">REPO</label>
       <input id="repo" value="tumluliu/blogs" />
       <div class="row2">
+        <button class="btn ghost" id="settings-close">关闭</button>
         <button class="btn ghost" id="settings-clear">清除 PAT</button>
         <button class="btn solid" id="settings-save">保存</button>
       </div>
@@ -470,6 +471,10 @@
         repoNames = res.data.map((e) => e.name).filter((n) => n.endsWith('.md')).sort();
         $('repo-count').textContent = String(repoNames.length);
         paintRepo();
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        setStatus(`已同步 · ${hh}:${mm}`, 'ok');
       }
 
       function paintRepo() {
@@ -508,6 +513,9 @@
         $('pat').value = cfg.pat ?? '';
         $('repo').value = cfg.repo;
         $('settings').showModal();
+      });
+      $('settings-close').addEventListener('click', () => {
+        $('settings').close();
       });
       $('settings-save').addEventListener('click', (e) => {
         e.preventDefault();
