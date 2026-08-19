@@ -607,6 +607,12 @@
 
       $('delete-btn').addEventListener('click', async () => {
         if (!confirm('删除这份本地草稿？仓库里的文件不受影响。')) return;
+        // confirm() blocks JS while open; a debounce timer armed by the last
+        // edit() can mature during that block and fire the moment it
+        // returns. Flush it first so a queued autosave's putDraft (an
+        // upsert by id) can't land after deleteDraft and resurrect the
+        // draft we're about to remove.
+        await autosaver.flush();
         await deleteDraft(current.id);
         current = null;
         await refreshDrafts();
