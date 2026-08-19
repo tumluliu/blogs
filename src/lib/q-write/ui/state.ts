@@ -46,26 +46,36 @@ export function createAutosaver(
 ) {
   let timer: ReturnType<typeof setTimeout> | null = null;
   let pending: Draft | null = null;
-  let chain: Promise<void> = Promise.resolve();
+  // Every save goes through this chain, so at most one is ever in flight and
+  // they run in the order they were queued.
+  let chain: Promise<Draft | null> = Promise.resolve(null);
 
-  const run = async () => {
-    if (!pending) return;
+  // Saves whatever is pending. Returns the draft a failed save put back on the
+  // queue, or null when the save succeeded or a newer draft superseded it.
+  const run = async (): Promise<Draft | null> => {
+    if (!pending) return null;
     const d = pending;
     pending = null;
     try {
       await save(d);
+      return null;
     } catch (err) {
       options?.onError?.(err, d);
       // Re-queue the failed draft only if nothing newer is pending
       if (!pending) {
         pending = d;
+        return d;
       }
+      return null;
     }
   };
 
-  const enqueue = (): Promise<void> => {
-    chain = chain.then(() => run());
-    return chain;
+  const enqueue = (): Promise<Draft | null> => {
+    // The catch keeps a throwing onError from poisoning the chain for every
+    // later save, or surfacing as an unhandled rejection from the timer below.
+    const next = chain.then(() => run()).catch(() => null);
+    chain = next;
+    return next;
   };
 
   return {
@@ -77,17 +87,31 @@ export function createAutosaver(
         void enqueue();
       }, delayMs);
     },
-    async flush() {
-      if (timer) {
-        clearTimeout(timer);
-        timer = null;
+    async flush(): Promise<void> {
+      // Loop until one pass observes a quiet autosaver: no armed timer, nothing
+      // pending, and a chain nothing extended while we awaited it. Re-reading
+      // `chain` after every await is what makes that safe — a debounce timer
+      // that fires mid-await appends to `chain`, and a lone `await chain` would
+      // resolve against the stale snapshot and report "saved" too early.
+      let requeued: Draft | null = null;
+      for (;;) {
+        if (timer) {
+          clearTimeout(timer);
+          timer = null;
+        }
+        // Drain the pending draft, except when it is the one our own failed save
+        // just put back: retrying it here would spin against a failing store.
+        // It stays queued for the next schedule() or flush() to pick up.
+        if (pending !== null && pending !== requeued) {
+          requeued = await enqueue();
+          continue;
+        }
+        const settled = chain;
+        await settled;
+        if (settled === chain && timer === null && (pending === null || pending === requeued)) {
+          return;
+        }
       }
-      // Keep enqueueing any pending drafts that arrive while we're flushing
-      while (pending) {
-        await enqueue();
-      }
-      // Finally, await the chain to ensure all queued work completes
-      await chain;
     },
   };
 }
