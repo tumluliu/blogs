@@ -46,7 +46,7 @@ export function createAutosaver(
 ) {
   let timer: ReturnType<typeof setTimeout> | null = null;
   let pending: Draft | null = null;
-  let inFlight: Promise<void> | null = null;
+  let chain: Promise<void> = Promise.resolve();
 
   const run = async () => {
     if (!pending) return;
@@ -63,13 +63,18 @@ export function createAutosaver(
     }
   };
 
+  const enqueue = (): Promise<void> => {
+    chain = chain.then(() => run());
+    return chain;
+  };
+
   return {
     schedule(d: Draft) {
       pending = d;
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
         timer = null;
-        inFlight = run();
+        void enqueue();
       }, delayMs);
     },
     async flush() {
@@ -77,17 +82,12 @@ export function createAutosaver(
         clearTimeout(timer);
         timer = null;
       }
-      // Wait for any in-flight save to complete
-      if (inFlight) {
-        await inFlight;
-        inFlight = null;
+      // Keep enqueueing any pending drafts that arrive while we're flushing
+      while (pending) {
+        await enqueue();
       }
-      // Save any newly pending draft, tracking it as in-flight
-      if (pending) {
-        inFlight = run();
-        await inFlight;
-        inFlight = null;
-      }
+      // Finally, await the chain to ensure all queued work completes
+      await chain;
     },
   };
 }

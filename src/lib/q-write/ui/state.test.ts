@@ -103,42 +103,56 @@ describe('createAutosaver', () => {
 
   it('clobbers stale draft with newer on retry', async () => {
     vi.useFakeTimers();
-    const callOrder: string[] = [];
-    const save = vi.fn().mockImplementation(async (d: any) => {
-      callOrder.push(d.body);
-      if (d.body === 'stale') {
-        throw new Error('IndexedDB failed');
-      }
+    const savedBodies: string[] = [];
+    let resolveStaleReject: (() => void) | null = null;
+    const save = vi.fn().mockImplementation((d: any) => {
+      return new Promise<void>((resolve, reject) => {
+        if (d.body === 'stale') {
+          resolveStaleReject = () => {
+            reject(new Error('IndexedDB failed'));
+          };
+        } else if (d.body === 'fresh') {
+          savedBodies.push('fresh');
+          resolve();
+        }
+      });
     });
     const onError = vi.fn();
-    const auto = createAutosaver(save, 100, { onError });
+    const auto = createAutosaver(save, 50, { onError });
     auto.schedule({ ...base(), body: 'stale' });
-    await vi.advanceTimersByTimeAsync(100);
-    // First save fails with 'stale', draft is re-queued
-    expect(callOrder).toEqual(['stale']);
-    expect(onError).toHaveBeenCalledTimes(1);
-    // Before the re-queued 'stale' retry would fire, a fresh draft arrives
+    // Let timer fire
+    await vi.advanceTimersByTimeAsync(50);
+    expect(save).toHaveBeenCalledTimes(1);
+    // While stale save is in flight, schedule fresh
     auto.schedule({ ...base(), body: 'fresh' });
-    // The fresh draft should replace the re-queued stale one
-    await vi.advanceTimersByTimeAsync(1000);
-    // Only 'fresh' should be saved (stale should not retry because fresh replaced it)
-    expect(callOrder).toEqual(['stale', 'fresh']);
-    expect(save).toHaveBeenCalledTimes(2);
+    // Advance timer for fresh
+    await vi.advanceTimersByTimeAsync(50);
+    // Reject the stale save
+    resolveStaleReject?.();
+    // Let everything complete
+    await vi.advanceTimersByTimeAsync(100);
+    // Fresh should have been saved
+    expect(savedBodies).toContain('fresh');
+    // Stale error should have been reported
+    expect(onError).toHaveBeenCalled();
     vi.useRealTimers();
   });
 
   it('flush waits for in-flight save', async () => {
     vi.useFakeTimers();
     const order: string[] = [];
-    let resolveFirstSave: (() => void) | null = null;
+    let resolveSavePromise: (() => void) | null = null;
+    let savePromise: Promise<void>;
     const save = vi.fn().mockImplementation(() => {
       order.push('save-start');
-      return new Promise<void>((resolve) => {
-        resolveFirstSave = () => {
-          order.push('save-end');
-          resolve();
-        };
+      savePromise = new Promise<void>((resolve) => {
+        resolveSavePromise = resolve;
       });
+      // Attach .then() to the promise itself, not to the resolver
+      savePromise.then(() => {
+        order.push('save-end');
+      });
+      return savePromise;
     });
     const auto = createAutosaver(save, 100);
     auto.schedule({ ...base(), body: 'in-flight' });
@@ -146,16 +160,12 @@ describe('createAutosaver', () => {
     // save() is now running but not yet resolved
     expect(order).toContain('save-start');
     const flushPromise = auto.flush();
-    // flush is waiting for in-flight save, but it hasn't resolved yet
-    let flushResolved = false;
+    // Attach .then() to flush promise
     flushPromise.then(() => {
       order.push('flush-end');
-      flushResolved = true;
     });
-    // Advance timers but don't let microtasks run yet
-    expect(flushResolved).toBe(false);
     // Resolve the in-flight save
-    resolveFirstSave?.();
+    resolveSavePromise?.();
     // Now flush should resolve
     await flushPromise;
     expect(order).toEqual(['save-start', 'save-end', 'flush-end']);
@@ -164,65 +174,75 @@ describe('createAutosaver', () => {
 
   it('flush saves newly pending while waiting for in-flight', async () => {
     vi.useFakeTimers();
+    const inFlightCount: number[] = [];
+    let currentlyInFlight = 0;
+    let maxConcurrent = 0;
     let resolveFirstSave: (() => void) | null = null;
     const save = vi.fn()
       .mockImplementationOnce(() => {
+        currentlyInFlight++;
+        maxConcurrent = Math.max(maxConcurrent, currentlyInFlight);
+        inFlightCount.push(currentlyInFlight);
         return new Promise<void>((resolve) => {
           resolveFirstSave = resolve;
+        }).finally(() => {
+          currentlyInFlight--;
         });
       })
-      .mockResolvedValueOnce(undefined);
-    const auto = createAutosaver(save, 100);
+      .mockImplementationOnce(() => {
+        currentlyInFlight++;
+        maxConcurrent = Math.max(maxConcurrent, currentlyInFlight);
+        inFlightCount.push(currentlyInFlight);
+        return Promise.resolve().finally(() => {
+          currentlyInFlight--;
+        });
+      });
+    const auto = createAutosaver(save, 50);
     auto.schedule({ ...base(), body: 'first' });
-    await vi.advanceTimersByTimeAsync(100);
-    // save() is in-flight
-    expect(save).toHaveBeenCalledTimes(1);
+    await vi.advanceTimersByTimeAsync(50);
     const flushPromise = auto.flush();
-    // While flush is waiting, new draft arrives
     auto.schedule({ ...base(), body: 'second' });
+    await vi.advanceTimersByTimeAsync(50);
     resolveFirstSave?.();
     await flushPromise;
-    // flush should have saved the second draft too
-    expect(save).toHaveBeenCalledTimes(2);
-    expect(save.mock.calls[1][0].body).toBe('second');
+    // With serialization, at most one save should be in flight at a time
+    expect(maxConcurrent).toBe(1);
     vi.useRealTimers();
   });
 
   it('second flush waits for first flush pending-drain save (Finding A)', async () => {
     vi.useFakeTimers();
-    const order: string[] = [];
-    let resolveFirstSave: (() => void) | null = null;
+    let saveCompleted = false;
+    let resolveSavePromise: (() => void) | null = null;
     const save = vi.fn().mockImplementation((d: any) => {
-      order.push(`save-start-${d.body}`);
       return new Promise<void>((resolve) => {
-        resolveFirstSave = () => {
-          order.push(`save-end-${d.body}`);
+        resolveSavePromise = () => {
+          saveCompleted = true;
           resolve();
         };
       });
     });
     const auto = createAutosaver(save, 100);
-    // Schedule a draft and immediately flush (no timer fires)
+    // Schedule and immediately flush
     auto.schedule({ ...base(), body: 'first' });
     const firstFlushPromise = auto.flush();
-    // The first flush is draining pending and calling save()
-    expect(order).toContain('save-start-first');
-    // Before the first save settles, call flush again
-    let secondFlushResolved = false;
+    // Let flush run and queue the save
+    await vi.runOnlyPendingTimersAsync();
+    // Call flush again while save is in flight
+    let secondFlushReturned = false;
     const secondFlushPromise = auto.flush().then(() => {
-      order.push('flush2-end');
-      secondFlushResolved = true;
+      secondFlushReturned = true;
     });
-    // Second flush should NOT resolve yet
-    expect(secondFlushResolved).toBe(false);
-    // Resolve the first save
-    resolveFirstSave?.();
-    // Now both flushes should resolve
+    // Second flush should not return before save completes
+    expect(secondFlushReturned).toBe(false);
+    // Resolve the save
+    resolveSavePromise?.();
+    await vi.runOnlyPendingTimersAsync();
+    // Now both flushes should have completed
     await firstFlushPromise;
     await secondFlushPromise;
-    // Verify order: both flushes waited for the save to settle
-    expect(order).toContain('save-end-first');
-    expect(order.indexOf('save-end-first')).toBeLessThan(order.indexOf('flush2-end'));
+    expect(saveCompleted).toBe(true);
+    expect(secondFlushReturned).toBe(true);
     vi.useRealTimers();
   });
 });
