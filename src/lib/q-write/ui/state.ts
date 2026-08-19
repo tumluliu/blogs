@@ -82,19 +82,11 @@ export function createAutosaver(
         await inFlight;
         inFlight = null;
       }
-      // Save any newly pending draft
+      // Save any newly pending draft, tracking it as in-flight
       if (pending) {
-        const d = pending;
-        pending = null;
-        try {
-          await save(d);
-        } catch (err) {
-          options?.onError?.(err, d);
-          // Re-queue if nothing newer is pending
-          if (!pending) {
-            pending = d;
-          }
-        }
+        inFlight = run();
+        await inFlight;
+        inFlight = null;
       }
     },
   };

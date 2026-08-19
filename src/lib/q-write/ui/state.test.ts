@@ -103,42 +103,62 @@ describe('createAutosaver', () => {
 
   it('clobbers stale draft with newer on retry', async () => {
     vi.useFakeTimers();
-    const save = vi.fn()
-      .mockRejectedValueOnce(new Error('IndexedDB failed'))
-      .mockResolvedValueOnce(undefined);
+    const callOrder: string[] = [];
+    const save = vi.fn().mockImplementation(async (d: any) => {
+      callOrder.push(d.body);
+      if (d.body === 'stale') {
+        throw new Error('IndexedDB failed');
+      }
+    });
     const onError = vi.fn();
     const auto = createAutosaver(save, 100, { onError });
     auto.schedule({ ...base(), body: 'stale' });
     await vi.advanceTimersByTimeAsync(100);
-    // Error occurs, draft re-queued
-    // Before next retry, a newer draft arrives
+    // First save fails with 'stale', draft is re-queued
+    expect(callOrder).toEqual(['stale']);
+    expect(onError).toHaveBeenCalledTimes(1);
+    // Before the re-queued 'stale' retry would fire, a fresh draft arrives
     auto.schedule({ ...base(), body: 'fresh' });
-    // Fresh draft should replace stale
-    await vi.advanceTimersByTimeAsync(100);
-    expect(save.mock.calls[1][0].body).toBe('fresh');
+    // The fresh draft should replace the re-queued stale one
+    await vi.advanceTimersByTimeAsync(1000);
+    // Only 'fresh' should be saved (stale should not retry because fresh replaced it)
+    expect(callOrder).toEqual(['stale', 'fresh']);
+    expect(save).toHaveBeenCalledTimes(2);
     vi.useRealTimers();
   });
 
   it('flush waits for in-flight save', async () => {
     vi.useFakeTimers();
+    const order: string[] = [];
     let resolveFirstSave: (() => void) | null = null;
     const save = vi.fn().mockImplementation(() => {
+      order.push('save-start');
       return new Promise<void>((resolve) => {
-        resolveFirstSave = resolve;
+        resolveFirstSave = () => {
+          order.push('save-end');
+          resolve();
+        };
       });
     });
     const auto = createAutosaver(save, 100);
     auto.schedule({ ...base(), body: 'in-flight' });
     await vi.advanceTimersByTimeAsync(100);
     // save() is now running but not yet resolved
-    expect(save).toHaveBeenCalledTimes(1);
+    expect(order).toContain('save-start');
     const flushPromise = auto.flush();
-    expect(save).toHaveBeenCalledTimes(1); // No new save yet
+    // flush is waiting for in-flight save, but it hasn't resolved yet
+    let flushResolved = false;
+    flushPromise.then(() => {
+      order.push('flush-end');
+      flushResolved = true;
+    });
+    // Advance timers but don't let microtasks run yet
+    expect(flushResolved).toBe(false);
     // Resolve the in-flight save
     resolveFirstSave?.();
+    // Now flush should resolve
     await flushPromise;
-    // flush should have waited for in-flight before returning
-    expect(save).toHaveBeenCalledTimes(1);
+    expect(order).toEqual(['save-start', 'save-end', 'flush-end']);
     vi.useRealTimers();
   });
 
@@ -165,6 +185,44 @@ describe('createAutosaver', () => {
     // flush should have saved the second draft too
     expect(save).toHaveBeenCalledTimes(2);
     expect(save.mock.calls[1][0].body).toBe('second');
+    vi.useRealTimers();
+  });
+
+  it('second flush waits for first flush pending-drain save (Finding A)', async () => {
+    vi.useFakeTimers();
+    const order: string[] = [];
+    let resolveFirstSave: (() => void) | null = null;
+    const save = vi.fn().mockImplementation((d: any) => {
+      order.push(`save-start-${d.body}`);
+      return new Promise<void>((resolve) => {
+        resolveFirstSave = () => {
+          order.push(`save-end-${d.body}`);
+          resolve();
+        };
+      });
+    });
+    const auto = createAutosaver(save, 100);
+    // Schedule a draft and immediately flush (no timer fires)
+    auto.schedule({ ...base(), body: 'first' });
+    const firstFlushPromise = auto.flush();
+    // The first flush is draining pending and calling save()
+    expect(order).toContain('save-start-first');
+    // Before the first save settles, call flush again
+    let secondFlushResolved = false;
+    const secondFlushPromise = auto.flush().then(() => {
+      order.push('flush2-end');
+      secondFlushResolved = true;
+    });
+    // Second flush should NOT resolve yet
+    expect(secondFlushResolved).toBe(false);
+    // Resolve the first save
+    resolveFirstSave?.();
+    // Now both flushes should resolve
+    await firstFlushPromise;
+    await secondFlushPromise;
+    // Verify order: both flushes waited for the save to settle
+    expect(order).toContain('save-end-first');
+    expect(order.indexOf('save-end-first')).toBeLessThan(order.indexOf('flush2-end'));
     vi.useRealTimers();
   });
 });
