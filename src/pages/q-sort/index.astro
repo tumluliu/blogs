@@ -169,9 +169,10 @@
     </dialog>
 
     <script>
-      import { buildFilename, buildMarkdown, utf8Base64 } from '../../lib/q-sort/builders';
-      import { publishThought } from '../../lib/q-sort/api';
-      import { loadConfig, saveConfig, clearConfig } from '../../lib/q-sort/storage';
+      import { buildFilename, buildMarkdown } from '../../lib/q-sort/builders';
+      import { utf8Base64 } from '../../lib/gh/encoding';
+      import { putFile } from '../../lib/gh/client';
+      import { loadConfig, saveConfig, clearConfig } from '../../lib/gh/config';
 
       const $ = (id) => document.getElementById(id);
       const status = $('status');
@@ -256,14 +257,14 @@
         const contentBase64 = utf8Base64(md);
         const stamp = filename.replace('.md', '').replace(/-(\d{2})(\d{2})$/, ' $1:$2');
 
-        const result = await publishThought({
-          fetch: window.fetch.bind(window),
-          pat: cfg.pat,
-          repo: cfg.repo,
-          filename,
-          contentBase64,
-          message: `thought: ${stamp} via q-sort`,
-        });
+        const result = await putFile(
+          { fetch: window.fetch.bind(window), pat: cfg.pat, repo: cfg.repo },
+          {
+            path: `src/content/thoughts/${filename}`,
+            contentBase64,
+            message: `thought: ${stamp} via q-sort`,
+          },
+        );
 
         inFlight = false;
 
