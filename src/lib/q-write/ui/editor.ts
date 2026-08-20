@@ -1,4 +1,5 @@
 import { marked } from 'marked';
+import { highlightCodeBlocks } from './highlight.js';
 
 export function insertAtCursor(el: HTMLTextAreaElement, text: string): void {
   const { selectionStart: s, selectionEnd: e, value } = el;
@@ -108,15 +109,22 @@ export function setSanitizedHtml(container: HTMLElement, html: string): void {
 
 // Freshly uploaded images are not deployed yet, so /media/... 404s. Swap in
 // the in-memory blob URL for anything still local.
+//
+// The markup lands synchronously; syntax highlighting resolves after it, once
+// shiki and the grammars this draft needs have loaded. Highlighting runs over
+// the *sanitised* DOM — it reads each block's textContent, never markup — so
+// it cannot widen what the sanitiser lets through. The returned promise never
+// rejects; if any of that fails the plain code block simply stays.
 export function renderPreview(
   container: HTMLElement,
   markdown: string,
   blobMap: Map<string, string>,
-): void {
+): Promise<void> {
   let md = markdown;
   for (const [path, blobUrl] of blobMap) {
     md = md.split(path).join(blobUrl);
   }
   md = md.replace(/!\[([^\]]*)\]\(uploading:[^)]*\)/g, '_[图片上传中…]_');
   setSanitizedHtml(container, marked.parse(md, { async: false }) as string);
+  return highlightCodeBlocks(container);
 }
