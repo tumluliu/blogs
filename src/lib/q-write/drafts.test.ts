@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { newDraft, putDraft, getDraft, listDrafts, deleteDraft } from './drafts.js';
 
 describe('drafts store', () => {
@@ -48,42 +48,77 @@ describe('drafts store', () => {
     expect(await getDraft('nope')).toBeUndefined();
   });
 
-  it('clears dbPromise on openDb error to allow retry', async () => {
-    // This test validates that dbPromise is cleared on error.
-    // We can't easily trigger a real error with fake-indexeddb, but we can verify
-    // the critical behavior: writes and deletes are properly awaited.
-    // If the fix (clearing dbPromise) is in place, subsequent calls after any error
-    // would retry. We verify this by ensuring writes persist correctly.
-    const d = newDraft('persist-test', new Date());
-    await putDraft(d);
-    const retrieved = await getDraft('persist-test');
-    expect(retrieved).toEqual(d);
+  it('rejects putDraft when the write transaction aborts', async () => {
+    // A put that reports request success and then loses the transaction
+    // (quota, a crash mid-commit) must not look like a saved draft: the
+    // editor's autosave treats a resolved putDraft as "safely stored".
+    const { spy } = stubAbortingTransaction();
+    try {
+      await expect(putDraft(newDraft('aborted', new Date()))).rejects.toThrow(/abort/i);
+    } finally {
+      spy.mockRestore();
+    }
   });
 
-  it('waits for transaction complete on putDraft', async () => {
-    // Verify that putDraft waits for the entire transaction to commit.
-    // This is critical: without this fix, putDraft resolves when the request succeeds
-    // but before the transaction commits, which can leave the data in a rolled-back state.
-    const d = newDraft('tx-commit-test', new Date());
-    d.title = 'test title';
-
-    // putDraft should wait for tx.oncomplete, not just req.onsuccess
-    await putDraft(d);
-
-    // If the fix is working, the data persists after the transaction commits
-    const retrieved = await getDraft('tx-commit-test');
-    expect(retrieved).toEqual(d);
-    expect(retrieved?.title).toBe('test title');
+  it('rejects deleteDraft when the write transaction aborts', async () => {
+    const { spy } = stubAbortingTransaction();
+    try {
+      await expect(deleteDraft('aborted')).rejects.toThrow(/abort/i);
+    } finally {
+      spy.mockRestore();
+    }
   });
 
-  it('waits for transaction complete on deleteDraft', async () => {
-    // Similar to putDraft, deleteDraft must wait for transaction completion
-    const d = newDraft('delete-tx-test', new Date());
-    await putDraft(d);
-    await deleteDraft(d.id);
+  it('retries opening the database after a failed open instead of caching the rejection', async () => {
+    // A phone that denies IndexedDB once (private mode prompt, transient
+    // quota error) must not leave the app permanently unable to store a
+    // draft: the failed open must not stay cached in dbPromise.
+    vi.resetModules();
+    const realOpen = indexedDB.open.bind(indexedDB);
+    let opens = 0;
+    const spy = vi.spyOn(indexedDB, 'open').mockImplementation(((...args: [string, number?]) => {
+      opens += 1;
+      if (opens > 1) return realOpen(...args);
+      const req: Record<string, unknown> = {
+        error: new Error('open denied'),
+        result: undefined,
+        onsuccess: null,
+        onerror: null,
+        onupgradeneeded: null,
+      };
+      queueMicrotask(() => (req.onerror as (() => void) | null)?.());
+      return req as unknown as IDBOpenDBRequest;
+    }) as typeof indexedDB.open);
 
-    // If the fix is working, the deletion persists after the transaction commits
-    const retrieved = await getDraft(d.id);
-    expect(retrieved).toBeUndefined();
+    try {
+      const fresh = await import('./drafts.js');
+      await expect(fresh.getDraft('anything')).rejects.toThrow('open denied');
+      await expect(fresh.getDraft('anything')).resolves.toBeUndefined();
+      expect(opens).toBe(2);
+    } finally {
+      spy.mockRestore();
+      vi.resetModules();
+    }
   });
 });
+
+// Replaces IDBDatabase#transaction with one that fires the request's success
+// callback — what the store used to resolve on — and then aborts.
+function stubAbortingTransaction() {
+  const req: Record<string, unknown> = { result: undefined, onsuccess: null, onerror: null };
+  const t: Record<string, unknown> = {
+    objectStore: () => ({ put: () => req, delete: () => req, get: () => req }),
+    oncomplete: null,
+    onerror: null,
+    onabort: null,
+    error: new Error('QuotaExceededError'),
+  };
+  const spy = vi.spyOn(IDBDatabase.prototype, 'transaction').mockImplementation(() => {
+    queueMicrotask(() => {
+      (req.onsuccess as (() => void) | null)?.();
+      (t.onabort as (() => void) | null)?.();
+    });
+    return t as unknown as IDBTransaction;
+  });
+  return { spy };
+}
