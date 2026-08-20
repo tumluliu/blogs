@@ -113,3 +113,183 @@ describe('renderPreview', () => {
     expect(container.querySelector('img')?.getAttribute('src')).toBe('/media/2026/08/a.webp');
   });
 });
+
+// The 预览 tab inserts parsed markdown into the live document, and that
+// document's localStorage holds a `Contents: Write` PAT for the blog repo.
+// Everything below is a payload that survived the first version of the
+// sanitiser; each one has to stay dead.
+describe('renderPreview sanitiser', () => {
+  let container: HTMLElement;
+
+  beforeEach(() => {
+    container = document.createElement('div');
+  });
+
+  // Type selectors are case-sensitive for non-HTML namespaces and jsdom's
+  // selector engine is inconsistent about it, so compare local names directly.
+  function tags(root: ParentNode): string[] {
+    return Array.from(root.querySelectorAll('*'), (el) => el.localName.toLowerCase());
+  }
+
+  it('strips <animate> that retargets an href onto its parent link', () => {
+    // SMIL runs in Chrome and Safari: clicking the text navigates to whatever
+    // <animate> wrote into the enclosing <a href>, in this page's origin.
+    const md = [
+      '正文',
+      '',
+      '<svg><a><animate attributeName="href" values="javascript:alert(1)"/><text>click</text></a></svg>',
+    ].join('\n');
+
+    renderPreview(container, md, new Map());
+
+    expect(tags(container)).not.toContain('animate');
+    expect(container.innerHTML).not.toContain('attributeName');
+    expect(container.innerHTML).not.toContain('javascript:');
+    expect(container.textContent).toContain('正文');
+  });
+
+  it('strips <set>, which retargets the same way', () => {
+    const md = '<svg><a><set attributeName="href" to="javascript:alert(1)"/><text>click</text></a></svg>';
+
+    renderPreview(container, md, new Map());
+
+    expect(tags(container)).not.toContain('set');
+    expect(container.innerHTML).not.toContain('javascript:');
+  });
+
+  it('strips <animateTransform> and <animateMotion>', () => {
+    const md = [
+      '<svg><a><animateTransform attributeName="transform" type="translate" values="0;200"/>',
+      '<animateMotion path="M0,0 L200,200"/><text>click</text></a></svg>',
+    ].join('\n');
+
+    renderPreview(container, md, new Map());
+
+    expect(tags(container)).not.toContain('animatetransform');
+    expect(tags(container)).not.toContain('animatemotion');
+  });
+
+  it('strips <meta http-equiv=refresh> wherever it sits in the draft', () => {
+    // A leading <meta> is hoisted into the parsed document's <head> and is
+    // dropped by accident; one that follows any other node stays in <body>.
+    const md = [
+      '<meta http-equiv="refresh" content="0;url=https://evil.example/lead">',
+      '',
+      '正文',
+      '',
+      '<meta http-equiv="refresh" content="0;url=https://evil.example/tail">',
+    ].join('\n');
+
+    renderPreview(container, md, new Map());
+
+    expect(tags(container)).not.toContain('meta');
+    expect(container.innerHTML).not.toContain('http-equiv');
+    expect(container.innerHTML).not.toContain('evil.example');
+  });
+
+  it('strips <base href>, which re-points every relative link on the page', () => {
+    const md = ['<base href="https://evil.example/">', '', '正文', '', '<base href="https://evil.example/2/">'].join(
+      '\n',
+    );
+
+    renderPreview(container, md, new Map());
+
+    expect(tags(container)).not.toContain('base');
+    expect(container.innerHTML).not.toContain('evil.example');
+  });
+
+  it('strips <style>, which can redress the surrounding UI', () => {
+    const md = [
+      '<style>#lead{display:none}</style>',
+      '',
+      '正文',
+      '',
+      '<style>body{background:red}</style>',
+    ].join('\n');
+
+    renderPreview(container, md, new Map());
+
+    expect(tags(container)).not.toContain('style');
+    expect(container.innerHTML).not.toContain('background:red');
+    expect(container.textContent).not.toContain('background:red');
+  });
+
+  it('strips <link rel=stylesheet>, which fetches remote CSS', () => {
+    const md = [
+      '<link rel="stylesheet" href="https://evil.example/lead.css">',
+      '',
+      '正文',
+      '',
+      '<link rel="stylesheet" href="https://evil.example/tail.css">',
+    ].join('\n');
+
+    renderPreview(container, md, new Map());
+
+    expect(tags(container)).not.toContain('link');
+    expect(container.innerHTML).not.toContain('evil.example');
+  });
+
+  it('strips <form>, which can post the page somewhere else', () => {
+    renderPreview(container, '正文\n\n<form action="https://evil.example"><button>go</button></form>', new Map());
+
+    expect(tags(container)).not.toContain('form');
+    expect(container.innerHTML).not.toContain('evil.example');
+  });
+
+  it('walks <template> content, which querySelectorAll does not reach', () => {
+    const md = '正文\n\n<template><script>window.__pwned = true;<\/script><img src=x onerror="window.__pwned = true"></template>';
+
+    renderPreview(container, md, new Map());
+
+    const tpl = container.querySelector('template') as HTMLTemplateElement | null;
+    if (tpl) {
+      expect(tags(tpl.content)).not.toContain('script');
+      expect(tpl.content.querySelector('img')?.hasAttribute('onerror')).toBe(false);
+    }
+    expect(container.innerHTML).not.toContain('onerror');
+    expect(container.innerHTML).not.toContain('__pwned');
+  });
+
+  it('still renders ordinary markdown in full', () => {
+    const md = [
+      '# 标题',
+      '',
+      'some **bold** and `inline code` and [remote](https://example.com/) and [local](/posts/foo/).',
+      '',
+      '> quote',
+      '',
+      '- one',
+      '- two',
+      '',
+      '| a | b |',
+      '| --- | --- |',
+      '| 1 | 2 |',
+      '',
+      '```ts',
+      'const x = 1;',
+      '```',
+    ].join('\n');
+
+    renderPreview(container, md, new Map());
+
+    expect(container.querySelector('h1')?.textContent).toBe('标题');
+    expect(container.querySelector('strong')?.textContent).toBe('bold');
+    expect(container.querySelector('code')?.textContent).toBe('inline code');
+    expect(container.querySelector('pre code')?.textContent).toContain('const x = 1;');
+    expect(container.querySelector('blockquote')?.textContent).toContain('quote');
+    expect(container.querySelectorAll('li')).toHaveLength(2);
+    expect(container.querySelector('table td')?.textContent).toBe('1');
+    expect(Array.from(container.querySelectorAll('a'), (a) => a.getAttribute('href'))).toEqual([
+      'https://example.com/',
+      '/posts/foo/',
+    ]);
+  });
+
+  it('still renders a blob: image source for a freshly inserted photo', () => {
+    const blobMap = new Map([['/media/2026/08/x.webp', 'blob:http://localhost:4321/9f2-a1']]);
+
+    renderPreview(container, '![alt](/media/2026/08/x.webp)', blobMap);
+
+    expect(container.querySelector('img')?.getAttribute('src')).toBe('blob:http://localhost:4321/9f2-a1');
+  });
+});
