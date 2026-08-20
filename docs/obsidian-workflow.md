@@ -96,7 +96,8 @@ device configured for one tool is configured for both.
   a SHA-256 hash of the *compressed* bytes — so inserting the same
   photo a second time resolves to the same file instead of uploading
   a duplicate (a `getFile` probe runs first; the `PUT` only happens
-  on a 404). The path is `public/media/YYYY/MM/<hash8>.webp`,
+  when that probe doesn't find it already there). The path is
+  `public/media/YYYY/MM/<hash8>.webp`,
   referenced in the markdown as `/media/YYYY/MM/<hash8>.webp` —
   already under `public/` and site-absolute, matching this repo's
   own asset convention rather than needing any cleanup afterward.
@@ -110,8 +111,10 @@ device configured for one tool is configured for both.
 
 ### Keyboard shortcuts
 
-Available once the body textarea (or, for Save, anywhere in the
-editor) has focus:
+Save and Preview fire from anywhere on the editor screen; Bold and
+Link need the body textarea itself focused (they act on its
+selection, so firing from the title field would silently edit the
+body instead):
 
 | Shortcut | Action |
 |----------|--------|
