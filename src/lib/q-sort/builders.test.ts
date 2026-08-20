@@ -14,11 +14,33 @@ describe('buildFilename', () => {
   });
 });
 
+// The stamp is deliberately LOCAL time with a numeric offset, so asserting a
+// literal offset would only pass in the author's timezone — it did, and CI
+// (UTC) caught it the first time the suite ran there. Assert the contract
+// instead: the shape, and that it round-trips to the same instant.
+const STAMP_RE = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})([+-]\d{4})$/;
+
+function expectedOffset(d: Date): string {
+  const mins = -d.getTimezoneOffset();
+  const sign = mins >= 0 ? '+' : '-';
+  const abs = Math.abs(mins);
+  return `${sign}${String(Math.floor(abs / 60)).padStart(2, '0')}${String(abs % 60).padStart(2, '0')}`;
+}
+
 describe('buildFrontmatter', () => {
   it('emits ISO 8601 with timezone offset and an empty tags array', () => {
     const d = new Date('2026-05-07T09:07:33+02:00');
     const fm = buildFrontmatter(d);
-    expect(fm).toContain('date: 2026-05-07T09:07:33+0200');
+
+    const stamp = fm.match(/^---\ndate: (.+)\n/)?.[1];
+    expect(stamp).toBeDefined();
+    const parts = stamp!.match(STAMP_RE);
+    expect(parts, `stamp not ISO 8601 with numeric offset: ${stamp}`).not.toBeNull();
+
+    // Offset is the runtime's own, and the whole stamp names the same instant.
+    expect(parts![2]).toBe(expectedOffset(d));
+    expect(new Date(`${parts![1]}${parts![2]}`).getTime()).toBe(d.getTime());
+
     expect(fm).toContain('tags: []');
     expect(fm.startsWith('---\n')).toBe(true);
     expect(fm.endsWith('---\n')).toBe(true);
@@ -29,7 +51,10 @@ describe('buildMarkdown', () => {
   it('joins frontmatter and body with a single blank line', () => {
     const d = new Date('2026-05-07T09:07:33+02:00');
     const md = buildMarkdown(d, 'hello, world');
-    expect(md).toMatch(/^---\ndate: 2026-05-07T09:07:33\+0200\ntags: \[\]\n---\n\nhello, world\n$/);
+    expect(md).toMatch(
+      /^---\ndate: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{4}\ntags: \[\]\n---\n\nhello, world\n$/,
+    );
+    expect(md).toContain(`date: ${buildFrontmatter(d).match(/date: (.+)/)![1]}`);
   });
 
   it('preserves trailing newline and trims trailing whitespace from body', () => {
