@@ -32,26 +32,44 @@ export function serializeDoc(doc: Doc): string {
   return `---\n${block}---\n\n${body}`;
 }
 
-const H1_RE = /^#\s+(.+?)[ \t]*$/m;
+const H1_RE = /^#\s+(.+?)[ \t]*$/gm;
+
+// A body can carry more than one `# ` line. `docTitle`/`setDocTitle` only
+// ever reason about the *first* one — that's the position the loader's own
+// `extractFirstH1` (src/content.config.ts) treats as a post's implicit
+// title, so it's the only H1 a legacy post's derived title can ever have
+// come from. Built from `matchAll` (not a bare non-global `.match()`) so
+// "first" is a deliberate `[0]` pick over every H1 in the body, not an
+// accident of the regex having no `/g` flag.
+function firstH1(body: string): RegExpMatchArray | null {
+  return [...body.matchAll(H1_RE)][0] ?? null;
+}
 
 export function docTitle(doc: Doc): { title: string; source: 'fm' | 'h1' | 'none' } {
   const fmTitle = doc.fm.title;
   if (typeof fmTitle === 'string' && fmTitle.trim()) return { title: fmTitle, source: 'fm' };
-  const m = doc.body.match(H1_RE);
+  const m = firstH1(doc.body);
   if (m) return { title: m[1].trim(), source: 'h1' };
   return { title: '', source: 'none' };
 }
 
 export function setDocTitle(doc: Doc, title: string): Doc {
   const fm = { ...doc.fm, title };
-  const m = doc.body.match(H1_RE);
   // The title always lands in frontmatter — the corpus's rendering
   // convention (`<h1>{post.data.title}</h1>` from the template, no H1 in
   // the body) has no exception in this repo: all 229 legacy posts already
-  // carry `title:` and no body H1. A body H1 with the exact same text as
-  // the title would render as a second, duplicate heading, so drop that
-  // line; an H1 with different text is a deliberate heading and is left
-  // alone.
+  // carry `title:` and no body H1.
+  //
+  // Only the body's *first* H1 is ever a candidate for the drop below —
+  // same rationale as `firstH1` above. A later H1 that happens to repeat
+  // the title's text is left alone here even though it *is* a real
+  // duplicate the page would render twice: silently deleting a heading
+  // buried partway through a post's body is a bigger, less obviously-safe
+  // edit than dropping the one line sitting where a legacy import's title
+  // lives. That case is left for a human to fix — `scripts/check-post-front.ts`
+  // scans every H1 (not just the first) precisely so it still gets caught
+  // before it ships.
+  const m = firstH1(doc.body);
   if (!m || m[1].trim() !== title) {
     return { ...doc, hadFrontmatter: true, fm };
   }

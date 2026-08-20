@@ -72,6 +72,15 @@ describe('setDocTitle', () => {
     expect(doc.body).toBe('# 旧标题\n\n正文\n');
   });
 
+  it('only ever considers the first H1: a later H1 matching the title is left for a human, not auto-dropped', () => {
+    // The corresponding guard (scripts/check-post-front.ts) does scan every
+    // H1 and would flag this exact shape — this test documents that
+    // setDocTitle deliberately does not try to fix it itself.
+    const doc = setDocTitle(parseDoc('# 引言\n\n段落。\n\n# 正文标题\n\n更多内容\n'), '正文标题');
+    expect(doc.fm.title).toBe('正文标题');
+    expect(doc.body).toBe('# 引言\n\n段落。\n\n# 正文标题\n\n更多内容\n');
+  });
+
   it('writes fm.title when the doc already has frontmatter', () => {
     const doc = setDocTitle(parseDoc('---\ntitle: 旧\n---\n\n正文\n'), '新');
     expect(doc.fm.title).toBe('新');
