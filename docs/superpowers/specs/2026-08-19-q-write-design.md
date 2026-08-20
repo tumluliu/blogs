@@ -253,9 +253,13 @@ round-trip is js-yaml's, not the original's; that is accepted.
 
 Legacy posts with **no** frontmatter (title derived from the first `#`
 H1, date from filename or mtime) are not force-migrated on read: opening
-one shows that first H1 in the title field, and re-saving without
-touching the title leaves the post exactly as it was — no frontmatter
-block is written just because the file lacked one.
+one shows that first H1 in the title field. Re-saving without touching
+the title does *not* leave the file untouched — `updated` and `draft` are
+stamped on every save of an existing post regardless, so a frontmatter
+block is written either way — but it does not inject a `title:` key: with
+the title field unchanged, `renderDraft` never calls `setDocTitle`, so the
+post is not force-migrated into carrying both a frontmatter title and its
+original H1.
 
 But the moment a title is actually written — a new post, or an edited
 title on an existing one — `title` always lands in frontmatter, taken
