@@ -5,10 +5,27 @@ import { utf8Base64 } from '../../gh/encoding.js';
 import { putFile, deleteFile, type GhAuth } from '../../gh/client.js';
 import { findUploadingPlaceholder } from './images.js';
 
-// Keys q-write owns and rewrites on every save. Everything else — including
-// `date` (stamped once, never rewritten) and `slug` — rides along in
-// frontmatterExtra so it survives a round-trip untouched.
-const META_KEYS = new Set(['title', 'tags', 'draft', 'updated']);
+// Keys q-write derives wholesale from dedicated Draft fields and rewrites on
+// every save. Everything else — including `date` (stamped once, never
+// rewritten), `slug`, `source` and `title` — rides along in frontmatterExtra
+// so it survives a round-trip untouched.
+//
+// `title` deliberately rides along even though the editor has a title field:
+// where the title lives (a `title:` key vs. the body's H1) is a property of
+// the document, and `docTitle`/`setDocTitle` can only make that call if the
+// original `title:` key is still in front of them. Strip it here and a post
+// carrying both a `title:` and an H1 loses the key and has its H1 rewritten.
+const META_KEYS = new Set(['tags', 'draft', 'updated']);
+
+// The frontmatter a Draft carries between saves: everything the serialized
+// document holds except the keys rebuilt from Draft fields each time.
+function extraFrom(fm: Record<string, unknown>): Record<string, unknown> {
+  const extra: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(fm)) {
+    if (!META_KEYS.has(k)) extra[k] = v;
+  }
+  return extra;
+}
 
 // Matches only a fence that starts at position 0 — never a `---` horizontal
 // rule that shows up later in the body. Used solely to strip an orphaned,
@@ -32,10 +49,7 @@ export function draftFromRemote(id: string, path: string, sha: string, raw: stri
     doc = { fm: {}, hadFrontmatter: false, body };
   }
   const { title } = docTitle(doc);
-  const extra: Record<string, unknown> = {};
-  for (const [k, v] of Object.entries(doc.fm)) {
-    if (!META_KEYS.has(k)) extra[k] = v;
-  }
+  const extra = extraFrom(doc.fm);
   const iso = now.toISOString();
   return {
     id,
@@ -56,9 +70,14 @@ export function draftFromRemote(id: string, path: string, sha: string, raw: stri
   };
 }
 
-export function docFromDraft(d: Draft, opts: { publish: boolean; now: Date }): string {
+// Renders the draft to the exact bytes that go into the repo, and hands back
+// the document those bytes were serialized from so the caller can fold the
+// frontmatter it just wrote back into the Draft.
+export function renderDraft(d: Draft, opts: { publish: boolean; now: Date }): { markdown: string; doc: Doc } {
   let doc: Doc = { fm: { ...d.frontmatterExtra }, hadFrontmatter: d.hadFrontmatter, body: d.body };
 
+  // Taken before anything is patched, so the fm-vs-H1 question is answered
+  // against the document as it exists in the repo, not against a rebuilt one.
   const existingTitle = docTitle(doc);
   const isNew = !d.remotePath;
 
@@ -73,15 +92,22 @@ export function docFromDraft(d: Draft, opts: { publish: boolean; now: Date }): s
     // Editing something that already exists: `date` is left exactly as it was
     // (it rides in frontmatterExtra), and `updated` is stamped instead.
     if (d.title && d.title !== existingTitle.title) doc = setDocTitle(doc, d.title);
-    else if (existingTitle.source === 'fm') doc = setDocTitle(doc, d.title);
     if (doc.fm.slug !== undefined) doc = patchMeta(doc, { slug: d.slug });
     doc = patchMeta(doc, { updated: opts.now.toISOString() });
   }
 
-  if (d.tags.length > 0 || doc.fm.tags !== undefined) doc = patchMeta(doc, { tags: d.tags });
-  doc = patchMeta(doc, { draft: !opts.publish });
+  if (d.tags.length > 0) doc = patchMeta(doc, { tags: d.tags });
+  // 存到仓库 on a post that is already live is a checkpoint, not a retraction:
+  // the state machine only runs local → synced → published, and nothing in the
+  // UI announces an unpublish. Writing `draft: true` here would drop the post
+  // out of /, /posts/, /tags/* and rss.xml on the next deploy.
+  doc = patchMeta(doc, { draft: !opts.publish && d.state !== 'published' });
 
-  return serializeDoc(doc);
+  return { markdown: serializeDoc(doc), doc };
+}
+
+export function docFromDraft(d: Draft, opts: { publish: boolean; now: Date }): string {
+  return renderDraft(d, opts).markdown;
 }
 
 export interface SaveOutcome {
@@ -99,7 +125,7 @@ export async function saveDraftToRepo(
 ): Promise<SaveOutcome> {
   const path = postPath(d.slug);
   const renaming = !!d.remotePath && d.remotePath !== path;
-  const markdown = docFromDraft(d, opts);
+  const { markdown, doc } = renderDraft(d, opts);
   const message = `${opts.publish ? 'post' : 'draft'}: ${d.slug} via q-write`;
 
   const res = await putFile(auth, {
@@ -132,9 +158,20 @@ export async function saveDraftToRepo(
     message: message2,
     draft: {
       ...d,
+      // Fold the frontmatter that was just written back into the draft.
+      // Without this the next save rebuilds the document from a stale (for a
+      // first save, empty) frontmatterExtra while `remotePath` already makes
+      // it look like an edit — so `date`, `slug` and `source` would never be
+      // written again and the post would be re-dated by the build on every
+      // deploy.
+      frontmatterExtra: extraFrom(doc.fm),
+      hadFrontmatter: doc.hadFrontmatter,
       remotePath: path,
       remoteSha: res.data?.sha ?? d.remoteSha,
-      state: opts.publish ? 'published' : 'synced',
+      // A checkpoint of a live post leaves it live (see renderDraft), so the
+      // state must stay `published` too — falling back to `synced` would let
+      // the *next* checkpoint write draft: true and unpublish it after all.
+      state: opts.publish || d.state === 'published' ? 'published' : 'synced',
       updatedAt: opts.now.toISOString(),
     },
   };

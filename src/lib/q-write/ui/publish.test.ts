@@ -1,9 +1,17 @@
 import { describe, it, expect, vi } from 'vitest';
 import { draftFromRemote, docFromDraft, saveDraftToRepo, preflightCommit } from './publish.js';
 import { newDraft } from '../drafts.js';
+import { base64ToUtf8 } from '../../gh/encoding.js';
 
 const NOW = new Date(2026, 7, 19, 12, 0);
 const auth = (fetchMock: unknown) => ({ fetch: fetchMock as typeof fetch, pat: 'ghp_test', repo: 'tumluliu/blogs' });
+
+// The markdown actually handed to the Contents API on the i-th call.
+const written = (fetchMock: { mock: { calls: [string, { body: string }][] } }, i: number): string =>
+  base64ToUtf8(JSON.parse(fetchMock.mock.calls[i][1].body).content as string);
+
+const fmValue = (md: string, key: string): string | undefined =>
+  md.match(new RegExp(`^${key}: (.*)$`, 'm'))?.[1];
 
 describe('draftFromRemote', () => {
   it('lifts title, tags and unknown frontmatter off a published post', () => {
@@ -20,7 +28,9 @@ describe('draftFromRemote', () => {
       state: 'published',
       hadFrontmatter: true,
     });
-    expect(d.frontmatterExtra).toEqual({ source: 'cnblogs', sourceUrl: 'https://x/y' });
+    // `title` rides along too: where the title lives is a property of the
+    // document, and only the original `title:` key can answer that.
+    expect(d.frontmatterExtra).toEqual({ title: '老文', source: 'cnblogs', sourceUrl: 'https://x/y' });
   });
 
   it('marks a draft:true post as synced, not published', () => {
@@ -101,6 +111,43 @@ describe('docFromDraft', () => {
     expect(md).toContain('# 新标题');
     expect(md).not.toContain('老标题');
   });
+
+  it('keeps both the frontmatter title and a differing body H1 on an untouched round-trip', () => {
+    const raw = '---\ntitle: 空间记忆\ndate: 2020-01-01T00:00:00.000Z\n---\n\n# 空间记忆：另一个写法的大标题\n\n正文\n';
+    const d = draftFromRemote('id', 'src/content/posts/kong-jian-ji-yi.md', 'sha', raw, NOW);
+    expect(d.title).toBe('空间记忆');
+
+    const md = docFromDraft(d, { publish: true, now: NOW });
+
+    expect(fmValue(md, 'title')).toBe('空间记忆');
+    expect(md).toContain('# 空间记忆：另一个写法的大标题');
+  });
+
+  it('edits the frontmatter title, not the H1, when the post carries both', () => {
+    const raw = '---\ntitle: 空间记忆\n---\n\n# 空间记忆：另一个写法的大标题\n\n正文\n';
+    const d = draftFromRemote('id', 'src/content/posts/kong-jian-ji-yi.md', 'sha', raw, NOW);
+    const md = docFromDraft({ ...d, title: '新标题' }, { publish: true, now: NOW });
+    expect(fmValue(md, 'title')).toBe('新标题');
+    expect(md).toContain('# 空间记忆：另一个写法的大标题');
+  });
+
+  it('keeps a live post live when it is only checkpointed to the repo', () => {
+    const raw = '---\ntitle: 老文\ndate: 2020-01-01T00:00:00.000Z\ndraft: false\n---\n\n正文\n';
+    const d = draftFromRemote('id', 'src/content/posts/lao-wen.md', 'sha', raw, NOW);
+    expect(d.state).toBe('published');
+
+    // 存到仓库, not 发布 — a checkpoint must not retract a published post.
+    const md = docFromDraft({ ...d, body: '改到一半的正文' }, { publish: false, now: NOW });
+
+    expect(md).toContain('draft: false');
+    expect(md).not.toContain('draft: true');
+  });
+
+  it('still checkpoints an unpublished repo draft as draft: true', () => {
+    const raw = '---\ntitle: 半成品\ndraft: true\n---\n\n正文\n';
+    const d = draftFromRemote('id', 'src/content/posts/ban-cheng-pin.md', 'sha', raw, NOW);
+    expect(docFromDraft(d, { publish: false, now: NOW })).toContain('draft: true');
+  });
 });
 
 describe('saveDraftToRepo', () => {
@@ -150,6 +197,54 @@ describe('saveDraftToRepo', () => {
     expect(fetchMock.mock.calls[1][1].method).toBe('DELETE');
     expect(out.draft.remotePath).toBe('src/content/posts/new-slug.md');
     expect(out.ok).toBe(true);
+  });
+
+  it('folds the frontmatter it wrote back into the draft so a second save keeps date', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, status: 201, json: async () => ({ content: { sha: 'sha1' } }) })
+      .mockResolvedValueOnce({ ok: true, status: 200, json: async () => ({ content: { sha: 'sha2' } }) });
+    const d = { ...newDraft('id', NOW), title: '新文', slug: 'xin-wen', tags: ['写作'], body: '正文' };
+
+    // The canonical flow: 存到仓库, keep writing, 发布.
+    const first = await saveDraftToRepo(auth(fetchMock), d, { publish: false, now: NOW });
+    const later = new Date(2026, 8, 1, 9, 30);
+    const second = await saveDraftToRepo(
+      auth(fetchMock),
+      { ...first.draft, body: '正文，又写了一段' },
+      { publish: true, now: later },
+    );
+
+    const a = written(fetchMock, 0);
+    const b = written(fetchMock, 1);
+
+    // `date` is stamped once and never rewritten: without it the content
+    // loader falls back to the file's mtime, which the deploy runner's
+    // checkout resets — the post would be re-dated to "today" forever.
+    expect(fmValue(a, 'date')).toBeDefined();
+    expect(fmValue(b, 'date')).toBe(fmValue(a, 'date'));
+    expect(fmValue(b, 'date')).not.toContain('2026-09');
+
+    expect(fmValue(b, 'source')).toBe('original');
+    expect(fmValue(b, 'slug')).toBe('xin-wen');
+    expect(fmValue(b, 'title')).toBe('新文');
+    expect(fmValue(b, 'updated')).toBeDefined();
+    expect(second.draft.frontmatterExtra.date).toBe(NOW.toISOString());
+    expect(second.ok).toBe(true);
+  });
+
+  it('keeps a checkpointed published post in the published state', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ content: { sha: 's' } }) });
+    const raw = '---\ntitle: 老文\ndate: 2020-01-01T00:00:00.000Z\ndraft: false\n---\n\n正文\n';
+    const d = draftFromRemote('id', 'src/content/posts/lao-wen.md', 'sha', raw, NOW);
+
+    const first = await saveDraftToRepo(auth(fetchMock), d, { publish: false, now: NOW });
+    expect(first.draft.state).toBe('published');
+
+    // A second checkpoint must not find a downgraded state and retract it.
+    await saveDraftToRepo(auth(fetchMock), first.draft, { publish: false, now: NOW });
+    expect(written(fetchMock, 0)).toContain('draft: false');
+    expect(written(fetchMock, 1)).toContain('draft: false');
   });
 
   it('still succeeds if deleting the old path fails after the new one is written', async () => {
