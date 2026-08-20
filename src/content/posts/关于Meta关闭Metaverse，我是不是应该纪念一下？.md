@@ -1,3 +1,7 @@
+---
+date: "2026-05-11T09:09:30+0200"
+---
+
 - [Hacker news](https://news.ycombinator.com/item?id=47431053)
 - [The Verge](https://www.theverge.com/tech/896322/meta-is-shutting-down-its-vr-metaverse-on-june-15th)
 
