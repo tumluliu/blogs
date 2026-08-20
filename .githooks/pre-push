@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
-# Block pushes that don't build cleanly. Runs `pnpm build` (~1.5s here).
+# Block pushes that don't test or build cleanly. Runs `pnpm vitest run`
+# then `pnpm build`, followed by the dist-level checks.
 # Catches frontmatter loss, broken image refs that Astro validates,
 # schema drift, and stray TS errors in pages/components.
 #
@@ -17,8 +18,22 @@ if ! command -v pnpm >/dev/null 2>&1; then
   exit 0
 fi
 
+# Run the unit suite first — it is the fastest gate (~6s) and the one most
+# likely to catch a logic regression, so failing here saves a build.
+echo "pre-push: running vitest..." >&2
+if ! pnpm -s vitest run >/tmp/blogs-prepush.log 2>&1; then
+  echo "" >&2
+  echo "pre-push: tests FAILED. Push aborted." >&2
+  tail -40 /tmp/blogs-prepush.log >&2
+  echo "" >&2
+  echo "Full log: /tmp/blogs-prepush.log" >&2
+  echo "Bypass (use sparingly): git push --no-verify" >&2
+  exit 1
+fi
+echo "pre-push: tests ok" >&2
+
 echo "pre-push: running pnpm build..." >&2
-if ! pnpm build >/tmp/blogs-prepush.log 2>&1; then
+if ! pnpm build >>/tmp/blogs-prepush.log 2>&1; then
   echo "" >&2
   echo "pre-push: build FAILED. Push aborted." >&2
   echo "Last 30 lines of build output:" >&2

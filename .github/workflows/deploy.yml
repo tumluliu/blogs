@@ -34,6 +34,9 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - name: Run tests
+        run: pnpm vitest run
+
       - name: Lint content image paths
         run: pnpm check:content-paths
 
