@@ -9,6 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="robots" content="noindex,nofollow" />
     <meta name="theme-color" content="#fdfcf9" />
+    <link rel="manifest" href="/q-write.webmanifest" />
+    <link rel="icon" href="/icons/q-write-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/icons/q-write-192.png" />
     <script is:inline>
       // Pre-paint: apply persisted theme before CSS to avoid flash.
       try {
@@ -911,6 +914,13 @@
       show('list');
       void refreshDrafts();
       void refreshRepo();
+
+      // Service worker registration
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-q-write.js', { scope: '/q-write/' }).catch((err) => {
+          console.warn('SW registration failed', err);
+        });
+      }
     </script>
   </body>
 </html>

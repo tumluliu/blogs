@@ -1,0 +1,16 @@
+{
+  "name": "q-write",
+  "short_name": "q-write",
+  "description": "Long-form post editor for luliu.me",
+  "start_url": "/q-write/",
+  "scope": "/q-write/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fdfcf9",
+  "theme_color": "#fdfcf9",
+  "icons": [
+    { "src": "/icons/q-write-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/q-write-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/q-write-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
