@@ -274,6 +274,19 @@
         border-left: 2px solid var(--accent); color: var(--muted);
       }
       .preview code { font-family: var(--mono); font-size: 0.85em; background: var(--code-bg); padding: 0.1em 0.3em; }
+      /* Block code, mirroring `pre` in global.css. Without this a fence
+         inherits the inline-code pill above and one long line scrolls the
+         whole page sideways. Highlighted blocks arrive with shiki's own
+         background/colour inline (the site's theme); these rules are the box
+         around it, and the whole box for a block shiki couldn't reach. */
+      .preview pre {
+        font-family: var(--mono); font-size: 0.85em; line-height: 1.55;
+        margin: 0 0 1rem; padding: 1rem; border: 1px solid var(--rule);
+        border-radius: 4px; background: var(--code-bg);
+        max-width: 100%; overflow-x: auto;
+        white-space: pre-wrap; word-wrap: break-word;
+      }
+      .preview pre code { background: none; padding: 0; font-size: inherit; }
       .preview img { max-width: 100%; display: block; border: 1px solid var(--rule); }
       .preview figcaption { font-family: var(--sans); font-size: 0.78rem; color: var(--soft); margin-top: 0.4rem; line-height: 1.5; }
       .preview .local-badge {
