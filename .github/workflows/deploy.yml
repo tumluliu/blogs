@@ -40,6 +40,9 @@ jobs:
       - name: Lint content image paths
         run: pnpm check:content-paths
 
+      - name: Check post frontmatter (date, duplicate title)
+        run: pnpm check:post-front
+
       - run: pnpm build
 
       - name: Smoke check dist

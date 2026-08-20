@@ -37,3 +37,6 @@ scripts/cnblogs-cache/*.log
 
 # claude worktrees
 .claude/worktrees/
+
+# scratch notes from Claude sessions
+.superpowers-notes/

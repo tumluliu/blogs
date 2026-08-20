@@ -32,6 +32,21 @@ if ! pnpm -s vitest run >/tmp/blogs-prepush.log 2>&1; then
 fi
 echo "pre-push: tests ok" >&2
 
+# Source lint: every post needs a resolvable date (frontmatter or filename
+# prefix — mtime is not stable) and must not carry both a frontmatter title
+# and a duplicate body H1. Reads src/content/posts/ directly, so it runs
+# before the build rather than against dist/.
+if ! pnpm -s check:post-front >>/tmp/blogs-prepush.log 2>&1; then
+  echo "" >&2
+  echo "pre-push: post frontmatter check FAILED. Push aborted." >&2
+  tail -40 /tmp/blogs-prepush.log >&2
+  echo "" >&2
+  echo "Full log: /tmp/blogs-prepush.log" >&2
+  echo "Bypass (use sparingly): git push --no-verify" >&2
+  exit 1
+fi
+echo "pre-push: post frontmatter ok" >&2
+
 echo "pre-push: running pnpm build..." >&2
 if ! pnpm build >>/tmp/blogs-prepush.log 2>&1; then
   echo "" >&2

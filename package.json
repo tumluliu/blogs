@@ -15,6 +15,7 @@
     "test": "vitest",
     "check:assets": "tsx scripts/check-dead-assets.ts",
     "check:content-paths": "tsx scripts/check-content-image-paths.ts",
+    "check:post-front": "tsx scripts/check-post-front.ts",
     "check:thoughts-guid": "tsx scripts/check-thoughts-guid.ts",
     "rename-to-slug": "tsx scripts/rename-to-slug.ts",
     "rename-to-slug:apply": "tsx scripts/rename-to-slug.ts --apply",
