@@ -41,16 +41,22 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return;
 
   if (req.mode === 'navigate' || url.pathname === PAGE) {
+    const fromCache = () => caches.match(req).then((cached) => cached || caches.match(PAGE));
     event.respondWith(
       fetch(req)
         .then((res) => {
           if (res.ok) {
             const copy = res.clone();
             caches.open(CACHE).then((c) => c.put(req, copy));
+            return res;
           }
-          return res;
+          // A non-ok origin response (a transient 5xx, a botched-deploy
+          // 404, ...) isn't cached, but it also shouldn't beat a perfectly
+          // good cached shell from the last successful load — only let it
+          // through if there's genuinely nothing cached to fall back to.
+          return fromCache().then((cached) => cached || res);
         })
-        .catch(() => caches.match(req).then((cached) => cached || caches.match(PAGE))),
+        .catch(fromCache),
     );
     return;
   }
