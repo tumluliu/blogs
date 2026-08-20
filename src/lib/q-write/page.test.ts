@@ -44,4 +44,15 @@ describe('q-write page markup', () => {
   it('does not tell the user a slug change saves a copy', () => {
     expect(page).not.toContain('另存为新文件');
   });
+
+  // Astro scopes a plain <style> block by rewriting every selector with a
+  // data-astro-cid-* attribute limiter. Rows, repo rows and the upload strip
+  // are all built at runtime via document.createElement + className, so they
+  // never carry that attribute and none of the scoped rules would ever match
+  // them (drafts render as bare unstyled buttons instead of full-width rows).
+  // The block must stay global so those rules apply regardless of how the
+  // element entered the DOM.
+  it('keeps the page stylesheet global so runtime-created rows are styled', () => {
+    expect(page).toContain('<style is:global>');
+  });
 });
