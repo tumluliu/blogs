@@ -447,7 +447,7 @@
       import { postPath } from '../../lib/q-write/paths';
       import { applyTitle, applySlug, touch, countWords, createAutosaver } from '../../lib/q-write/ui/state';
       import { wrapSelection, insertAtCursor, prefixLine, renderPreview } from '../../lib/q-write/ui/editor';
-      import { matchShortcut } from '../../lib/q-write/ui/shortcuts';
+      import { matchShortcut, shouldDispatch } from '../../lib/q-write/ui/shortcuts';
       import { compressImage } from '../../lib/q-write/image';
       import { placeholder, replacePlaceholder, uploadImage, UploadRows, createSerialQueue } from '../../lib/q-write/ui/images';
 
@@ -781,11 +781,20 @@
       // bold/link/save/preview logic exists in exactly one place each.
       // 发布 has no shortcut on purpose — it deploys the live site and stays
       // a deliberate click.
+      //
+      // shouldDispatch additionally gates bold/link on the body textarea
+      // actually having focus: both reach into $('body')'s selection, so
+      // firing them while the caret is elsewhere on the editor screen (in
+      // practice: #title-input — slug/tags go through a blocking prompt()
+      // and can't receive a keydown while it's up) would silently edit the
+      // body and yank focus away from what's being typed. Save and preview
+      // are exempt: save reads the already-synced `current`, and preview
+      // is a plain view toggle.
       document.addEventListener('keydown', (e) => {
         if (!screens.editor.classList.contains('on')) return;
         if ($('settings').open) return;
         const action = matchShortcut(e);
-        if (!action) return;
+        if (!shouldDispatch(action, document.activeElement === $('body'))) return;
         e.preventDefault();
         if (action === 'save') $('save-btn').click();
         else if (action === 'bold') $('t-bold').click();

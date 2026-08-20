@@ -36,3 +36,18 @@ export function matchShortcut(e: ShortcutLikeEvent): ShortcutAction {
   if (key === 'p') return 'preview';
   return null;
 }
+
+// Whether a matched action should actually be dispatched. Kept separate
+// from matchShortcut (and just as DOM-free) because this decision depends
+// on *where the caret is*, not on the keydown itself: bold/link reach into
+// the body textarea's selection, so firing them while some other field
+// (title-input, in practice — slug/tags go through a blocking prompt()
+// and are naturally immune) has focus would silently edit the body and
+// yank focus away from what the user is actually typing into. Save syncs
+// the title on every keystroke and preview is a plain view toggle, so
+// neither needs the body to be focused.
+export function shouldDispatch(action: ShortcutAction, bodyHasFocus: boolean): boolean {
+  if (!action) return false;
+  if (action === 'bold' || action === 'link') return bodyHasFocus;
+  return true;
+}

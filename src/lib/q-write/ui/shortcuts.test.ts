@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { matchShortcut } from './shortcuts.js';
+import { matchShortcut, shouldDispatch } from './shortcuts.js';
 
 function key(
   k: string,
@@ -81,5 +81,35 @@ describe('matchShortcut', () => {
 
   it('matches the save combo regardless of key-casing (e.g. Caps Lock on)', () => {
     expect(matchShortcut(key('S', { meta: true }))).toBe('save');
+  });
+});
+
+describe('shouldDispatch', () => {
+  it('blocks bold when the body textarea is not focused (e.g. caret is in the title)', () => {
+    expect(shouldDispatch('bold', false)).toBe(false);
+  });
+
+  it('allows bold when the body textarea is focused', () => {
+    expect(shouldDispatch('bold', true)).toBe(true);
+  });
+
+  it('blocks link when the body textarea is not focused', () => {
+    expect(shouldDispatch('link', false)).toBe(false);
+  });
+
+  it('allows link when the body textarea is focused', () => {
+    expect(shouldDispatch('link', true)).toBe(true);
+  });
+
+  it('allows save regardless of focus (title syncs live)', () => {
+    expect(shouldDispatch('save', false)).toBe(true);
+  });
+
+  it('allows preview regardless of focus (it is a plain view toggle)', () => {
+    expect(shouldDispatch('preview', false)).toBe(true);
+  });
+
+  it('never dispatches a null action, even if focus says yes', () => {
+    expect(shouldDispatch(null, true)).toBe(false);
   });
 });
