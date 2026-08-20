@@ -2,6 +2,7 @@ import { defineCollection, z } from 'astro:content';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { join, basename } from 'node:path';
 import matter from 'gray-matter';
+import { entryIdFromPath } from './lib/content/entry-id';
 
 // Pull the first markdown H1 (`# Heading`) out of the body so a post can
 // declare its title without YAML frontmatter.
@@ -43,8 +44,7 @@ function buildLoader(name: string, baseDir: string, kind: 'post' | 'thought') {
       for (const full of mdFiles) {
         const raw = await readFile(full, 'utf-8');
         const { data: fm, content } = matter(raw);
-        const idRaw = full.slice(baseDir.length + 1).replace(/\\/g, '/');
-        const id = idRaw.replace(/\.md$/, '');
+        const id = entryIdFromPath(baseDir, full);
         const filename = basename(id);
         const stats = await stat(full);
 

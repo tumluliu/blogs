@@ -1,0 +1,912 @@
+---
+// /q-write/ — long-form post editor PWA. List screen: local drafts (IndexedDB)
+// plus a searchable list of the repo's posts (GitHub Contents API).
+---
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="theme-color" content="#fdfcf9" />
+    <link rel="manifest" href="/q-write.webmanifest" />
+    <link rel="icon" href="/icons/q-write-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/icons/q-write-192.png" />
+    <script is:inline>
+      // Pre-paint: apply persisted theme before CSS to avoid flash.
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') {
+          document.documentElement.setAttribute('data-theme', t);
+        }
+      } catch {}
+    </script>
+    <title>q-write</title>
+    <style is:global>
+      :root {
+        --bg: #fdfcf9;
+        --bg-sunk: #f6f2e8;
+        --fg: #1a1a1a;
+        --muted: #6b6b6b;
+        --soft: #999999;
+        --accent: #b25c2c;
+        --accent-soft: #f0e2d6;
+        --link: #1a4789;
+        --rule: #e7e3d9;
+        --rule-strong: #d8d2c4;
+        --code-bg: #f3efe5;
+        --ok: #4a7c4e;
+        --warn: #b8860b;
+        --serif: 'Source Han Serif SC', 'Noto Serif CJK SC', 'Songti SC', Georgia, 'Times New Roman', serif;
+        --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        --mono: 'SF Mono', 'JetBrains Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+      }
+      :root[data-theme="dark"] {
+        --bg: #161514;
+        --bg-sunk: #1d1b19;
+        --fg: #e6e3dc;
+        --muted: #98948c;
+        --soft: #6b6864;
+        --accent: #d68b54;
+        --accent-soft: #33261d;
+        --link: #8ab4f8;
+        --rule: #2b2926;
+        --rule-strong: #3a3733;
+        --code-bg: #22201d;
+        --ok: #7fa982;
+        --warn: #cfa64a;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; height: 100%; }
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--serif);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      /* paper grain */
+      body::after {
+        content: '';
+        position: fixed; inset: 0; z-index: 99;
+        pointer-events: none; opacity: 0.4; mix-blend-mode: multiply;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      }
+      :root[data-theme="dark"] body::after { mix-blend-mode: screen; opacity: 0.25; }
+
+      /* ---------- app frame ----------
+         Phone (<600px): unchanged — a 430px column, border-inline hidden
+         below 460px exactly as before. From 600px up the column widens
+         past the phone shape into a laptop-comfortable reading measure,
+         growing with the viewport and self-capping at 720px (the blog's
+         own --max-width, src/styles/global.css) so the textarea never
+         spans a wide monitor. The hairline border-inline keeps framing
+         the column at every width above the phone breakpoint rather than
+         gaining a second device (a card, a shadow) — same "rules, not
+         cards" language the rest of the design already uses. */
+      #app {
+        max-width: 430px; margin: 0 auto; min-height: 100dvh;
+        display: flex; flex-direction: column;
+        border-inline: 1px solid var(--rule);
+        background: var(--bg);
+      }
+      @media (max-width: 460px) { #app { border-inline: 0; } }
+      @media (min-width: 600px) {
+        #app { max-width: min(94vw, 720px); }
+      }
+
+      .screen { display: none; flex: 1; flex-direction: column; min-height: 0; }
+      .screen.on { display: flex; }
+
+      /* ---------- shared chrome ---------- */
+      .topbar {
+        display: flex; align-items: center; gap: 0.5rem;
+        padding: 0.75rem 1rem 0.6rem;
+        border-bottom: 1px solid var(--rule);
+      }
+      .brand {
+        font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em;
+        text-transform: uppercase; color: var(--accent);
+      }
+      .status {
+        font-family: var(--sans); font-size: 11.5px; color: var(--soft);
+        flex: 1; text-align: right; letter-spacing: 0;
+      }
+      .status.ok { color: var(--ok); }
+      .icon-btn {
+        background: none; border: 0; color: var(--muted); cursor: pointer;
+        font-size: 1rem; padding: 0.25rem 0.3rem; line-height: 1; min-width: 32px;
+      }
+      .icon-btn:hover { color: var(--accent); }
+
+      /* ---------- list screen ---------- */
+      .newpost {
+        margin: 1rem 1rem 0.4rem; padding: 0.85rem 1rem;
+        background: var(--accent); color: #fdfcf9; border: 0; cursor: pointer;
+        font-family: var(--sans); font-size: 14px; letter-spacing: 0.06em;
+        border-radius: 2px;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.12);
+      }
+      .sect-label {
+        font-family: var(--sans); font-size: 11px; letter-spacing: 0.06em;
+        color: var(--soft);
+        padding: 1.4rem 1rem 0.4rem; display: flex; align-items: baseline; gap: 0.6rem;
+      }
+      .sect-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+      .row {
+        display: block; width: 100%; text-align: left; cursor: pointer;
+        background: none; border: 0; border-bottom: 1px solid var(--rule);
+        padding: 0.8rem 1rem; color: inherit; font-family: inherit;
+        animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+      }
+      .row:hover { background: var(--bg-sunk); }
+      .row:nth-child(2) { animation-delay: 0.04s; }
+      .row:nth-child(3) { animation-delay: 0.08s; }
+      .row:nth-child(4) { animation-delay: 0.12s; }
+      .row:nth-child(5) { animation-delay: 0.16s; }
+      @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
+
+      .row-title { font-size: 1rem; line-height: 1.45; margin-bottom: 0.25rem; }
+      .row-meta {
+        font-family: var(--sans); font-size: 11px; color: var(--soft);
+        letter-spacing: 0; display: flex; gap: 0.5rem; align-items: center;
+      }
+      .dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+      .dot.local { background: var(--warn); }
+      .dot.synced { background: var(--link); }
+      .dot.published { background: var(--ok); }
+      .row-slug { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+      .search {
+        margin: 0.5rem 1rem 0.6rem; width: calc(100% - 2rem);
+        background: var(--bg-sunk); border: 1px solid var(--rule);
+        color: var(--fg); font-family: var(--mono); font-size: 13px;
+        padding: 0.6rem 0.7rem; border-radius: 2px;
+      }
+      .search:focus { outline: 0; border-color: var(--accent); }
+
+      /* ---------- editor screen ---------- */
+      .ed-head { padding: 0.7rem 1rem 0; border-bottom: 1px solid var(--rule); }
+      .title-input {
+        width: 100%; background: none; border: 0; color: var(--fg);
+        font-family: var(--serif); font-size: 1.25rem; line-height: 1.4;
+        padding: 0.2rem 0; margin-bottom: 0.35rem;
+      }
+      .title-input:focus { outline: 0; }
+      .title-input::placeholder { color: var(--soft); }
+      .meta-line {
+        display: flex; gap: 0.5rem; align-items: center;
+        font-family: var(--mono); font-size: 11px; color: var(--soft);
+        padding-bottom: 0.5rem; overflow: hidden;
+      }
+      .meta-line .k { color: var(--soft); letter-spacing: 0.1em; }
+      .meta-line .v { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .meta-line .edit { color: var(--accent); cursor: pointer; border: 0; background: none; font: inherit; }
+      .tags { display: flex; gap: 0.3rem; }
+      .tag {
+        background: var(--accent-soft); color: var(--accent);
+        padding: 0.1rem 0.4rem; border-radius: 2px; font-size: 10.5px;
+      }
+
+      .tabs { display: flex; gap: 1.2rem; padding: 0 1rem; border-bottom: 1px solid var(--rule); }
+      .tab {
+        background: none; border: 0; cursor: pointer; padding: 0.55rem 0 0.5rem;
+        font-family: var(--sans); font-size: 12.5px; letter-spacing: 0.08em;
+        color: var(--soft); position: relative;
+      }
+      .tab[aria-selected="true"] { color: var(--fg); }
+      .tab[aria-selected="true"]::after {
+        content: ''; position: absolute; left: 0; right: 0; bottom: -1px;
+        height: 2px; background: var(--accent);
+        animation: slidein 0.25s cubic-bezier(0.2, 0.7, 0.3, 1);
+      }
+      @keyframes slidein { from { transform: scaleX(0.2); opacity: 0; } }
+      .tabs .sp { flex: 1; }
+      .wc { font-family: var(--mono); font-size: 10.5px; color: var(--soft); align-self: center; }
+
+      .pane { flex: 1; min-height: 0; overflow: auto; display: none; }
+      .pane.on { display: block; }
+
+      textarea.body {
+        width: 100%; height: 100%; min-height: 46dvh;
+        background: none; border: 0; resize: none; color: var(--fg);
+        font-family: var(--serif); font-size: 1.02rem; line-height: 1.85;
+        padding: 1rem 1rem 2rem; letter-spacing: 0.01em;
+      }
+      textarea.body:focus { outline: 0; }
+
+      /* upload strip */
+      .uploads { border-top: 1px solid var(--rule); background: var(--bg-sunk); padding: 0.45rem 1rem; }
+      .up {
+        display: flex; align-items: center; gap: 0.5rem;
+        font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+      }
+      .up .bar { flex: 1; height: 2px; background: var(--rule-strong); overflow: hidden; }
+      .up .bar i { display: block; height: 100%; width: 62%; background: var(--accent); animation: pulse 1.4s ease-in-out infinite; }
+      @keyframes pulse { 50% { opacity: 0.45; } }
+      .up.err { color: var(--accent); }
+      .up.err .retry { border: 1px solid var(--accent); background: none; color: var(--accent); font: inherit; padding: 0.05rem 0.4rem; cursor: pointer; }
+
+      /* toolbar */
+      .toolbar {
+        display: flex; align-items: center; gap: 0.1rem;
+        border-top: 1px solid var(--rule); background: var(--bg);
+        padding: 0.3rem 0.5rem; overflow-x: auto;
+      }
+      .tool {
+        background: none; border: 0; cursor: pointer; color: var(--muted);
+        font-family: var(--sans); font-size: 12.5px; letter-spacing: 0;
+        padding: 0.55rem 0.6rem; min-width: 40px; border-radius: 2px;
+        display: inline-flex; align-items: center; justify-content: center;
+      }
+      .tool.mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; }
+      .tool svg { width: 17px; height: 17px; display: block; }
+      .tool:hover { color: var(--accent); background: var(--bg-sunk); }
+      .tool.primary { color: var(--accent); font-size: 15px; }
+      .tool-sep { width: 1px; height: 18px; background: var(--rule); margin: 0 0.25rem; }
+
+      /* actions */
+      .actions {
+        display: flex; gap: 0.6rem; padding: 0.7rem 1rem 1rem;
+        border-top: 1px solid var(--rule);
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+      }
+      .btn {
+        flex: 1; padding: 0.8rem 0.5rem; cursor: pointer; border-radius: 2px;
+        font-family: var(--sans); font-size: 13.5px; letter-spacing: 0.06em;
+      }
+      .btn.ghost { background: none; border: 1px solid var(--rule-strong); color: var(--muted); }
+      .btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+      .btn.solid { background: var(--accent); border: 1px solid var(--accent); color: #fdfcf9; }
+      .btn.solid:hover { filter: brightness(1.06); }
+
+      /* preview pane = blog typography */
+      .preview { padding: 1.2rem 1rem 3rem; }
+      .preview h1 { font-size: 1.5rem; line-height: 1.35; margin: 0 0 0.2rem; }
+      .preview .byline { font-family: var(--mono); font-size: 10.5px; color: var(--soft); letter-spacing: 0.08em; margin-bottom: 1.2rem; }
+      .preview h2 { font-size: 1.15rem; margin: 1.8rem 0 0.6rem; }
+      .preview p { line-height: 1.85; margin: 0 0 1rem; }
+      .preview a { color: var(--link); text-underline-offset: 2px; }
+      .preview blockquote {
+        margin: 1rem 0; padding: 0.2rem 0 0.2rem 0.9rem;
+        border-left: 2px solid var(--accent); color: var(--muted);
+      }
+      .preview code { font-family: var(--mono); font-size: 0.85em; background: var(--code-bg); padding: 0.1em 0.3em; }
+      /* Block code, mirroring `pre` in global.css. Without this a fence
+         inherits the inline-code pill above and one long line scrolls the
+         whole page sideways. Highlighted blocks arrive with shiki's own
+         background/colour inline (the site's theme); these rules are the box
+         around it, and the whole box for a block shiki couldn't reach. */
+      .preview pre {
+        font-family: var(--mono); font-size: 0.85em; line-height: 1.55;
+        margin: 0 0 1rem; padding: 1rem; border: 1px solid var(--rule);
+        border-radius: 4px; background: var(--code-bg);
+        max-width: 100%; overflow-x: auto;
+        white-space: pre-wrap; word-wrap: break-word;
+      }
+      .preview pre code { background: none; padding: 0; font-size: inherit; }
+      .preview img { max-width: 100%; display: block; border: 1px solid var(--rule); }
+      .preview figcaption { font-family: var(--sans); font-size: 0.78rem; color: var(--soft); margin-top: 0.4rem; line-height: 1.5; }
+      .preview .local-badge {
+        font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; color: var(--warn);
+        border: 1px solid var(--warn); padding: 0 0.25rem; margin-left: 0.4rem;
+      }
+
+      dialog {
+        background: var(--bg); color: var(--fg); border: 1px solid var(--rule-strong);
+        border-radius: 2px; padding: 1.2rem; max-width: min(380px, 92vw);
+      }
+      dialog::backdrop { background: rgba(20,18,16,0.55); }
+      dialog h3 { font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.9rem; }
+      dialog label { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--soft); margin-top: 0.8rem; }
+      dialog input {
+        width: 100%; margin-top: 0.3rem; padding: 0.55rem 0.6rem;
+        background: var(--bg-sunk); border: 1px solid var(--rule); color: var(--fg);
+        font-family: var(--mono); font-size: 13px; border-radius: 2px;
+      }
+      dialog .row2 { display: flex; gap: 0.5rem; margin-top: 1.2rem; }
+      dialog .row2 .btn { flex: 1; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- ============ LIST ============ -->
+      <section class="screen on" id="s-list">
+        <div class="topbar">
+          <span class="brand">q-write</span>
+          <span class="status" id="status">未同步</span>
+          <button class="icon-btn" id="theme-btn" title="主题">◐</button>
+          <button class="icon-btn" id="settings-btn" title="设置">⚙</button>
+        </div>
+
+        <button class="newpost" id="new-post">＋ 新文章</button>
+
+        <div class="sect-label">草稿 · <span id="drafts-count">0</span></div>
+        <div id="drafts"></div>
+
+        <div class="sect-label">仓库文章 · <span id="repo-count">0</span></div>
+        <input class="search" id="repo-search" placeholder="搜索 slug…" />
+        <div id="repo-rows"></div>
+        <div id="repo-more" style="font-family: var(--sans); font-size: 11px; color: var(--soft); padding: 0.2rem 1rem 0.8rem;"></div>
+      </section>
+
+      <!-- ============ EDITOR ============ -->
+      <section class="screen" id="s-editor">
+        <div class="topbar">
+          <button class="icon-btn" id="back-btn" title="返回">←</button>
+          <span class="brand" style="font-family: var(--sans); letter-spacing: 0.04em; text-transform: none; font-size: 12.5px;">草稿</span>
+          <span class="status"></span>
+          <button class="icon-btn" id="copy-btn" title="复制正文">⧉</button>
+          <button class="icon-btn" id="delete-btn" title="删除草稿">⌦</button>
+        </div>
+
+        <div class="ed-head">
+          <input class="title-input" id="title-input" placeholder="标题" />
+          <div class="meta-line">
+            <span class="k">SLUG</span>
+            <span class="v" id="slug-value"></span>
+            <button class="edit" id="slug-edit">改</button>
+          </div>
+          <div class="meta-line">
+            <span class="k">TAGS</span>
+            <span class="tags" id="tags-value"></span>
+            <button class="edit" id="tags-edit">＋</button>
+          </div>
+        </div>
+
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" aria-selected="true" data-pane="write">写作</button>
+          <button class="tab" role="tab" aria-selected="false" data-pane="preview">预览</button>
+          <span class="sp"></span>
+          <span class="wc" id="wc">0 字</span>
+        </div>
+
+        <div class="pane on" id="p-write">
+          <textarea class="body" id="body" spellcheck="false"></textarea>
+        </div>
+
+        <div class="pane" id="p-preview">
+          <div class="preview" id="preview"></div>
+        </div>
+
+        <div class="uploads" id="uploads" hidden></div>
+
+        <input id="file-input" type="file" accept="image/*" multiple hidden />
+
+        <div class="toolbar">
+          <button class="tool primary" id="t-image" title="插图" aria-label="插图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-4.5 5-2.5-2.5L3 19"/></svg></button>
+          <span class="tool-sep"></span>
+          <button class="tool mono" id="t-h2">H2</button>
+          <button class="tool mono" id="t-bold"><strong>B</strong></button>
+          <button class="tool" id="t-link">链接</button>
+          <button class="tool" id="t-quote">引用</button>
+          <button class="tool" id="t-code">代码</button>
+          <button class="tool" id="t-list">列表</button>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" id="save-btn">存到仓库</button>
+          <button class="btn solid" id="publish-btn">发布</button>
+        </div>
+      </section>
+    </div>
+
+    <dialog id="settings">
+      <h3>设置</h3>
+      <label for="pat">GITHUB PAT · CONTENTS:WRITE</label>
+      <input id="pat" type="password" value="" />
+      <label for="repo">REPO</label>
+      <input id="repo" value="tumluliu/blogs" />
+      <div class="row2">
+        <button class="btn ghost" id="settings-close">关闭</button>
+        <button class="btn ghost" id="settings-clear">清除</button>
+        <button class="btn solid" id="settings-save">保存</button>
+      </div>
+    </dialog>
+
+    <script>
+      import { loadConfig, saveConfig, clearConfig } from '../../lib/gh/config';
+      import { listDir, getFile } from '../../lib/gh/client';
+      import { listDrafts, getDraft, putDraft, deleteDraft, newDraft } from '../../lib/q-write/drafts';
+      import { filterEntries, renderDrafts, renderRepoList } from '../../lib/q-write/ui/list';
+      import { draftFromRemote, saveDraftToRepo, preflightCommit, renamePlan } from '../../lib/q-write/ui/publish';
+      import { postPath } from '../../lib/q-write/paths';
+      import { applyTitle, applySlug, touch, countWords, createAutosaver } from '../../lib/q-write/ui/state';
+      import { wrapSelection, insertAtCursor, prefixLine, renderPreview } from '../../lib/q-write/ui/editor';
+      import { matchShortcut, shouldDispatch } from '../../lib/q-write/ui/shortcuts';
+      import { compressImage } from '../../lib/q-write/image';
+      import { placeholder, replacePlaceholder, uploadImage, UploadRows, createSerialQueue } from '../../lib/q-write/ui/images';
+
+      const $ = (id) => document.getElementById(id);
+      const screens = { list: $('s-list'), editor: $('s-editor') };
+      let repoNames = [];
+
+      function show(name) {
+        for (const [key, el] of Object.entries(screens)) el.classList.toggle('on', key === name);
+      }
+
+      function auth() {
+        const cfg = loadConfig();
+        return { fetch: window.fetch.bind(window), pat: cfg.pat ?? '', repo: cfg.repo };
+      }
+
+      function setStatus(text, kind) {
+        // Each screen has its own status span in its own topbar; only the
+        // list screen's carries id="status", so target whichever is visible.
+        const el = document.querySelector('.screen.on .status');
+        if (!el) return;
+        el.textContent = text;
+        el.className = `status ${kind ?? ''}`.trim();
+      }
+
+      async function refreshDrafts() {
+        const drafts = await listDrafts();
+        $('drafts-count').textContent = String(drafts.length);
+        renderDrafts($('drafts'), drafts, (id) => openDraft(id));
+      }
+
+      async function refreshRepo() {
+        const cfg = loadConfig();
+        if (!cfg.pat) {
+          setStatus('设置里填 PAT', 'error');
+          return;
+        }
+        const res = await listDir(auth(), 'src/content/posts');
+        if (!res.ok) {
+          setStatus(`仓库列表失败: ${res.status}`, 'error');
+          return;
+        }
+        repoNames = res.data.map((e) => e.name).filter((n) => n.endsWith('.md')).sort();
+        $('repo-count').textContent = String(repoNames.length);
+        paintRepo();
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        setStatus(`已同步 · ${hh}:${mm}`, 'ok');
+      }
+
+      function paintRepo() {
+        const matched = filterEntries(repoNames, $('repo-search').value);
+        renderRepoList($('repo-rows'), matched, (slug) => openRemote(slug));
+        $('repo-more').textContent = matched.length > 50 ? `还有 ${matched.length - 50} 篇，继续输入以缩小范围` : '';
+      }
+
+      async function openRemote(slug) {
+        setStatus('拉取中…');
+        const res = await getFile(auth(), `src/content/posts/${slug}.md`);
+        if (!res.ok) {
+          setStatus(`拉取失败: ${res.status}`, 'error');
+          return;
+        }
+        const draft = draftFromRemote(crypto.randomUUID(), res.data.path, res.data.sha, res.data.text, new Date());
+        await putDraft(draft);
+        await refreshDrafts();
+        openDraft(draft.id);
+      }
+
+      let current = null;                 // Draft being edited
+      const blobMap = new Map();          // /media/... -> blob: URL, for preview
+      let autosaveFailed = false;         // true when the most recent save attempt failed
+
+      const autosaver = createAutosaver(async (d) => {
+        await putDraft(d);
+        autosaveFailed = false;
+        setStatus(`自动存于 ${new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}`, 'ok');
+        await refreshDrafts();
+      }, 800, {
+        onError: (err, d) => {
+          autosaveFailed = true;
+          console.error('q-write autosave failed', err, d);
+          setStatus('自动保存失败，未存 — 请重试', 'error');
+        },
+      });
+
+      function paintEditor() {
+        $('title-input').value = current.title;
+        $('slug-value').textContent = current.slug || '(自动生成)';
+        $('body').value = current.body;
+        $('wc').textContent = `${countWords(current.body)} 字`;
+        $('tags-value').textContent = current.tags.join(', ');
+      }
+
+      function edit(mutate) {
+        current = touch(mutate(current), new Date());
+        $('wc').textContent = `${countWords(current.body)} 字`;
+        autosaver.schedule(current);
+      }
+
+      // The editor's status line starts empty and must never claim a save that
+      // has not happened; on open it reports where the draft actually stands.
+      function draftStatus(d) {
+        const t = new Date(d.updatedAt);
+        const hh = String(t.getHours()).padStart(2, '0');
+        const mm = String(t.getMinutes()).padStart(2, '0');
+        if (d.state === 'published') return [`已发布 · 编辑于 ${hh}:${mm}`, 'ok'];
+        if (d.state === 'synced') return [`已存到仓库 · 编辑于 ${hh}:${mm}`, 'ok'];
+        return [`本地草稿 · 编辑于 ${hh}:${mm}`, ''];
+      }
+
+      let openDraft = async (id) => {
+        current = await getDraft(id);
+        autosaveFailed = false;
+        paintEditor();
+        show('editor');
+        // after show(), so setStatus targets the editor's own status span
+        setStatus(...draftStatus(current));
+        $('body').focus();
+      };
+
+      $('title-input').addEventListener('input', (e) => {
+        edit((d) => applyTitle(d, e.target.value));
+        $('slug-value').textContent = current.slug || '(自动生成)';
+      });
+
+      $('slug-edit').addEventListener('click', () => {
+        const next = prompt('slug', current.slug);
+        if (next === null) return;
+        edit((d) => applySlug(d, next));
+        $('slug-value').textContent = current.slug;
+      });
+
+      $('tags-edit').addEventListener('click', () => {
+        const next = prompt('tags（逗号分隔）', current.tags.join(', '));
+        if (next === null) return;
+        edit((d) => ({ ...d, tags: next.split(',').map((t) => t.trim()).filter(Boolean) }));
+        $('tags-value').textContent = current.tags.join(', ');
+      });
+
+      $('body').addEventListener('input', (e) => edit((d) => ({ ...d, body: e.target.value })));
+
+      for (const [id, fn] of [
+        ['t-h2', () => prefixLine($('body'), '## ')],
+        ['t-bold', () => wrapSelection($('body'), '**', '**')],
+        ['t-link', () => wrapSelection($('body'), '[', '](https://)')],
+        ['t-quote', () => prefixLine($('body'), '> ')],
+        ['t-code', () => wrapSelection($('body'), '`', '`')],
+        ['t-list', () => prefixLine($('body'), '- ')],
+      ]) {
+        $(id).addEventListener('click', () => {
+          fn();
+          $('body').focus();
+          edit((d) => ({ ...d, body: $('body').value }));
+        });
+      }
+
+      for (const tab of document.querySelectorAll('.tab')) {
+        tab.addEventListener('click', () => {
+          const name = tab.dataset.pane;
+          for (const t of document.querySelectorAll('.tab')) t.setAttribute('aria-selected', String(t === tab));
+          $('p-write').classList.toggle('on', name === 'write');
+          $('p-preview').classList.toggle('on', name === 'preview');
+          if (name === 'preview') renderPreview($('preview'), current.body, blobMap);
+        });
+      }
+
+      $('back-btn').addEventListener('click', async () => {
+        await autosaver.flush();
+        // flush() can resolve while a failed save is still queued for retry
+        // (see createAutosaver's onError contract) — treat that as unsaved
+        // and stay put rather than silently returning to the list.
+        if (autosaveFailed) {
+          setStatus('自动保存失败，未存 — 请重试', 'error');
+          return;
+        }
+        await refreshDrafts();
+        show('list');
+      });
+
+      $('copy-btn').addEventListener('click', async () => {
+        await navigator.clipboard.writeText(current.body);
+        setStatus('正文已复制', 'ok');
+      });
+
+      $('delete-btn').addEventListener('click', async () => {
+        if (!confirm('删除这份本地草稿？仓库里的文件不受影响。')) return;
+        // confirm() blocks JS while open; a debounce timer armed by the last
+        // edit() can mature during that block and fire the moment it
+        // returns. Flush it first so a queued autosave's putDraft (an
+        // upsert by id) can't land after deleteDraft and resurrect the
+        // draft we're about to remove.
+        await autosaver.flush();
+        await deleteDraft(current.id);
+        current = null;
+        await refreshDrafts();
+        show('list');
+      });
+
+      // Guards commitDraft against a rapid double-tap firing two concurrent
+      // writes (easy on a phone) — both buttons are disabled for the
+      // duration of a save/publish attempt and re-enabled in the `finally`
+      // so an early return or a thrown error can never leave them dead.
+      let committing = false;
+
+      async function commitDraft(publish) {
+        if (committing) return;
+        committing = true;
+        $('save-btn').disabled = true;
+        $('publish-btn').disabled = true;
+        try {
+          const pre = preflightCommit(current);
+          if (!pre.ok) {
+            setStatus(pre.message, 'error');
+            return;
+          }
+          const cfg = loadConfig();
+          if (!cfg.pat) {
+            setStatus('设置里填 PAT', 'error');
+            return;
+          }
+
+          await autosaver.flush();
+          setStatus(publish ? '发布中…' : '保存到仓库…');
+
+          const rename = renamePlan(current);
+          const targetPath = postPath(current.slug);
+          const isRename = rename.renames;
+
+          // A brand-new post, or an existing draft being renamed onto a slug
+          // some other post already owns, must not silently overwrite it.
+          // For a rename, saveDraftToRepo always omits the sha on the PUT
+          // (see its own doc comment), so writing to an occupied target
+          // would 422 no matter what — surfacing as a "remote changed"
+          // conflict with an overwrite button that can never succeed. Catch
+          // it here instead, before any write, with the real cause.
+          if (!current.remotePath || isRename) {
+            const probe = await getFile(auth(), targetPath);
+            if (probe.ok) {
+              setStatus(
+                isRename ? '该 slug 已被其他文章占用，换一个' : `slug 已存在：${current.slug}，换一个`,
+                'error',
+              );
+              return;
+            }
+          }
+
+          // A rename is PUT-new + DELETE-old: the old file — and every link
+          // pointing at it — goes away. Never do that without being asked.
+          if (isRename && !confirm(rename.message)) {
+            setStatus('已取消 · 未改名，远端未动', 'error');
+            return;
+          }
+
+          const out = await saveDraftToRepo(auth(), current, { publish, now: new Date() });
+
+          if (out.conflict) {
+            const overwrite = confirm('远端已经变了。\n\n确定 = 用当前内容覆盖远端\n取消 = 什么都不写，本地内容保留');
+            if (!overwrite) {
+              setStatus('已取消 · 远端未动（改 slug 是移动文件，不是复制）', 'error');
+              return;
+            }
+            const fresh = await getFile(auth(), current.remotePath);
+            if (!fresh.ok) {
+              setStatus(`拉取远端 sha 失败: ${fresh.status}`, 'error');
+              return;
+            }
+            const retry = await saveDraftToRepo(auth(), { ...current, remoteSha: fresh.data.sha }, { publish, now: new Date() });
+            if (!retry.ok) {
+              setStatus(`失败: ${retry.status} ${retry.message ?? ''}`, 'error');
+              return;
+            }
+            current = retry.draft;
+            await putDraft(current);
+            await refreshDrafts();
+            setStatus('已覆盖远端 · 部署中（约 2 分钟）', 'ok');
+            return;
+          }
+
+          if (!out.ok) {
+            const hint =
+              out.status === 401 ? 'PAT 失效，去设置里换一个'
+              : out.status === 403 || out.status === 404 ? '仓库或权限不对'
+              : out.status === 0 ? '离线 · 已存本地，联网后重试'
+              : `GitHub ${out.status}，可重试`;
+            setStatus(`失败: ${hint}`, 'error');
+            if (out.status === 401) $('settings').showModal();
+            return;
+          }
+
+          current = out.draft;
+          await putDraft(current);
+          await refreshDrafts();
+          setStatus(
+            out.message ? `完成，但：${out.message}` : publish ? '已发布 · 部署中（约 2 分钟）' : '已存到仓库',
+            out.message ? 'error' : 'ok',
+          );
+        } finally {
+          committing = false;
+          $('save-btn').disabled = false;
+          $('publish-btn').disabled = false;
+        }
+      }
+
+      $('save-btn').addEventListener('click', () => void commitDraft(false));
+      $('publish-btn').addEventListener('click', () => void commitDraft(true));
+
+      $('repo-search').addEventListener('input', paintRepo);
+      $('new-post').addEventListener('click', async () => {
+        const d = newDraft(crypto.randomUUID(), new Date());
+        await putDraft(d);
+        await refreshDrafts();
+        openDraft(d.id);
+      });
+
+      // settings dialog
+      $('settings-btn').addEventListener('click', () => {
+        const cfg = loadConfig();
+        $('pat').value = cfg.pat ?? '';
+        $('repo').value = cfg.repo;
+        $('settings').showModal();
+      });
+      $('settings-close').addEventListener('click', () => {
+        $('settings').close();
+      });
+      $('settings-save').addEventListener('click', (e) => {
+        e.preventDefault();
+        saveConfig($('pat').value.trim(), $('repo').value.trim());
+        $('settings').close();
+        setStatus('已保存设置', 'ok');
+        void refreshRepo();
+      });
+      $('settings-clear').addEventListener('click', () => {
+        clearConfig();
+        $('settings').close();
+        setStatus('已清除 PAT', 'error');
+      });
+
+      // theme, unchanged from q-sort
+      $('theme-btn').addEventListener('click', () => {
+        const cur = document.documentElement.getAttribute('data-theme');
+        const next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch {}
+      });
+
+      // Keyboard shortcuts: active only while the editor screen is showing
+      // and the settings dialog is closed. matchShortcut is the only place
+      // that decides what a keydown means; this listener just dispatches to
+      // the SAME click handlers the toolbar/action buttons already use, so
+      // bold/link/save/preview logic exists in exactly one place each.
+      // 发布 has no shortcut on purpose — it deploys the live site and stays
+      // a deliberate click.
+      //
+      // shouldDispatch additionally gates bold/link on the body textarea
+      // actually having focus: both reach into $('body')'s selection, so
+      // firing them while the caret is elsewhere on the editor screen (in
+      // practice: #title-input — slug/tags go through a blocking prompt()
+      // and can't receive a keydown while it's up) would silently edit the
+      // body and yank focus away from what's being typed. Save and preview
+      // are exempt: save reads the already-synced `current`, and preview
+      // is a plain view toggle.
+      document.addEventListener('keydown', (e) => {
+        if (!screens.editor.classList.contains('on')) return;
+        if ($('settings').open) return;
+        const action = matchShortcut(e);
+        if (!shouldDispatch(action, document.activeElement === $('body'))) return;
+        e.preventDefault();
+        if (action === 'save') $('save-btn').click();
+        else if (action === 'bold') $('t-bold').click();
+        else if (action === 'link') $('t-link').click();
+        else if (action === 'preview') document.querySelector('.tab[aria-selected="false"]')?.click();
+      });
+
+      // image insert pipeline: picker / paste / drop all funnel through a
+      // single serial queue in front of handleFiles, which inserts a
+      // placeholder immediately, then swaps it for the real URL once
+      // compression + upload finish. uploadRows tracks one strip row per
+      // in-flight/failed file, independent of what any other file is doing.
+      let uploadSeq = 0;
+      const uploadRows = new UploadRows();
+
+      function paintUploads() {
+        const strip = $('uploads');
+        const rows = uploadRows.list();
+        strip.hidden = rows.length === 0;
+        strip.textContent = '';
+        for (const r of rows) {
+          const div = document.createElement('div');
+          div.className = r.error ? 'up err' : 'up';
+          div.textContent = r.label;
+          if (r.error) {
+            const retry = document.createElement('button');
+            retry.className = 'retry';
+            retry.textContent = '重试';
+            retry.addEventListener('click', () => {
+              uploadRows.clear(r.id);
+              paintUploads();
+              void uploadQueue.push([r.file]);
+            });
+            div.append(retry);
+          }
+          strip.append(div);
+        }
+      }
+
+      async function handleFiles(files) {
+        for (const file of files) {
+          const id = `img-${++uploadSeq}`;
+          insertAtCursor($('body'), `\n${placeholder(id)}\n`);
+          edit((d) => ({ ...d, body: $('body').value }));
+
+          uploadRows.set(id, { label: `${id} · 压缩中…`, file });
+          paintUploads();
+          let compressed;
+          try {
+            compressed = await compressImage(file);
+          } catch (err) {
+            console.error('q-write compress failed', err, file);
+            uploadRows.set(id, { label: `${id} · 压缩失败`, file, error: true });
+            paintUploads();
+            continue;
+          }
+
+          const kb = (n) => `${Math.round(n / 1024)}KB`;
+          uploadRows.set(id, { label: `${id} · ${kb(file.size)} → ${kb(compressed.blob.size)} · 上传中…`, file });
+          paintUploads();
+
+          const res = await uploadImage(auth(), compressed.blob, compressed.ext, new Date());
+          if (!res.ok) {
+            uploadRows.set(id, { label: `${id} · 上传失败 ${res.status} ${res.message ?? ''}`, file, error: true });
+            paintUploads();
+            continue;
+          }
+
+          blobMap.set(res.url, URL.createObjectURL(compressed.blob));
+          const next = replacePlaceholder($('body').value, id, `![](${res.url})`);
+          $('body').value = next;
+          edit((d) => ({ ...d, body: next }));
+          uploadRows.clear(id);
+          paintUploads();
+        }
+      }
+
+      // Serializes every trigger (picker, paste, drop, and a strip's own
+      // retry button) through one queue, so two firing close together never
+      // run their uploads concurrently — see createSerialQueue's doc comment.
+      const uploadQueue = createSerialQueue(handleFiles, (err, files) => {
+        console.error('q-write upload queue failed', err, files);
+      });
+
+      $('t-image').addEventListener('click', () => $('file-input').click());
+      $('file-input').addEventListener('change', (e) => {
+        const files = Array.from(e.target.files ?? []);
+        e.target.value = '';
+        void uploadQueue.push(files);
+      });
+
+      $('body').addEventListener('paste', (e) => {
+        const files = Array.from(e.clipboardData?.files ?? []).filter((f) => f.type.startsWith('image/'));
+        if (files.length === 0) return;
+        e.preventDefault();
+        void uploadQueue.push(files);
+      });
+
+      // A drop target must preventDefault on dragover, or the browser's
+      // default action (navigate the tab to the dropped file) wins before
+      // 'drop' ever gets a chance to run — the same guard also lets a plain
+      // text drag-select-and-move inside the textarea keep working.
+      $('body').addEventListener('dragover', (e) => {
+        if (Array.from(e.dataTransfer?.types ?? []).includes('Files')) e.preventDefault();
+      });
+
+      $('body').addEventListener('drop', (e) => {
+        const files = Array.from(e.dataTransfer?.files ?? []).filter((f) => f.type.startsWith('image/'));
+        if (files.length === 0) return;
+        e.preventDefault();
+        void uploadQueue.push(files);
+      });
+
+      show('list');
+      void refreshDrafts();
+      void refreshRepo();
+
+      // Service worker registration
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-q-write.js', { scope: '/q-write/' }).catch((err) => {
+          console.warn('SW registration failed', err);
+        });
+      }
+    </script>
+  </body>
+</html>

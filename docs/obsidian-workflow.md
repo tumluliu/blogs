@@ -63,6 +63,81 @@ typical patterns:
 Avoid putting new content images under `public/`. Files there bypass
 the optimiser and ship at full size.
 
+## Writing long-form from a phone (or a laptop)
+
+`/q-write/` is a PWA for long-form posts — the sibling of `/q-sort/`
+for quick thoughts. Install it to the home screen (or just keep the
+tab open on a laptop; the layout is a single column capped at the
+blog's own reading measure — `--max-width: 720px` — from 600px of
+viewport width up, so it is comfortable on a desktop browser too, not
+just a phone). Paste a fine-grained PAT into settings once — it shares
+`localStorage` keys with `/q-sort/` (`qsort.pat`, `qsort.repo`), so a
+device configured for one tool is configured for both.
+
+### What it does
+
+- **Drafts**: autosave to IndexedDB 800ms after you stop typing, with
+  no network involved. "存到仓库" checkpoints the current draft to
+  `src/content/posts/<slug>.md` with `draft: true` (commit message
+  `draft: <slug> via q-write`) — that's the cross-device sync
+  mechanism: save on the phone, open the same repo entry on the
+  laptop.
+- **Publishing**: "发布" writes the same file with `draft: false`
+  (commit message `post: <slug> via q-write`). Draft posts are
+  already excluded from every listing page and the RSS feed, so a
+  repo checkpoint never leaks to the live site before you publish.
+- **Editing published posts**: the list screen's "仓库文章" section
+  searches all post slugs (one `listDir` call); picking one fetches
+  its content and sha and opens it in the same editor. Saving sets
+  `updated` to now and leaves every other frontmatter field alone.
+- **Images**: pick from the camera or the filesystem (or paste /
+  drag-drop on desktop). Each photo is downscaled to a 1600px long
+  edge, encoded to webp, and named by the first 8 hex characters of
+  a SHA-256 hash of the *compressed* bytes — so inserting the same
+  photo a second time resolves to the same file instead of uploading
+  a duplicate (a `getFile` probe runs first; the `PUT` only happens
+  when that probe doesn't find it already there). The path is
+  `public/media/YYYY/MM/<hash8>.webp`,
+  referenced in the markdown as `/media/YYYY/MM/<hash8>.webp` —
+  already under `public/` and site-absolute, matching this repo's
+  own asset convention rather than needing any cleanup afterward.
+- **Offline**: the app shell (`/q-write/`, the manifest, both icons)
+  is cached by its own service worker, `public/sw-q-write.js`
+  (cache `qwrite-v1`, scope `/q-write/`), completely separate from
+  `/q-sort/`'s `public/sw.js`. Drafts still load and autosave with no
+  connection; saving to the repo, uploading images, and publishing
+  need connectivity and fail with a clear "离线" message without
+  losing anything typed.
+
+### Keyboard shortcuts
+
+Save and Preview fire from anywhere on the editor screen; Bold and
+Link need the body textarea itself focused (they act on its
+selection, so firing from the title field would silently edit the
+body instead):
+
+| Shortcut | Action |
+|----------|--------|
+| Cmd/Ctrl+S | Save to repo (same as "存到仓库") |
+| Cmd/Ctrl+B | Bold the selection |
+| Cmd/Ctrl+K | Insert a link |
+| Cmd/Ctrl+Shift+P | Toggle the 写作/预览 tab |
+
+Publish deliberately has **no** shortcut — it deploys the live site,
+so it stays a deliberate tap on "发布", never a stray keystroke.
+
+### Setup
+
+1. Open `/q-write/` (or `/q-sort/` — either sets the same keys), tap
+   ⚙, paste a fine-grained PAT scoped to `Contents: Write` on
+   `tumluliu/blogs` with an expiry, confirm the repo (defaults to
+   `tumluliu/blogs`), save.
+2. Install to the home screen if writing from a phone; on a laptop a
+   pinned browser tab works the same way.
+3. Both `/q-write/` and `/q-sort/` are excluded from `robots.txt` and
+   carry `noindex,nofollow` — the route is public, but the PAT scope
+   is the actual protection, not obscurity.
+
 ## Daily flow
 
 ### Desktop, Obsidian or any editor
@@ -90,6 +165,13 @@ the optimiser and ship at full size.
 Use the PWA at https://luliu.me/q-sort/. Tap home-screen icon, type,
 Publish. Goes through the GitHub Contents API and triggers the same
 deploy.
+
+### Mobile, long-form writing
+
+Use the PWA at https://luliu.me/q-write/ — see "Writing long-form
+from a phone (or a laptop)" above. Same PAT as q-sort, same GitHub
+Contents API, same deploy trigger; the difference is drafts,
+frontmatter, and an image pipeline instead of a single publish tap.
 
 ## Recommended Obsidian settings
 
@@ -169,3 +251,4 @@ non-functional (console.warn only, no on-page error).
 - "I want an image." → put it under `src/content/`, reference relatively.
 - "I broke the build." → pre-push hook tells you. Fix and re-push.
 - "Mobile push is broken." → check CI; fix from desktop.
+- "I want to write a long post from my phone." → https://luliu.me/q-write/, install to home screen, same PAT as q-sort.
