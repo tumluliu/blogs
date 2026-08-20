@@ -214,6 +214,56 @@ describe('renderPreview sanitiser', () => {
     expect(container.textContent).not.toContain('background:red');
   });
 
+  it('strips a user-supplied style attribute', () => {
+    renderPreview(container, '<p style="color:red">red text</p>', new Map());
+
+    const p = container.querySelector('p');
+    expect(p?.hasAttribute('style')).toBe(false);
+    expect(container.innerHTML).not.toContain('color:red');
+    // the harmless markup around it still renders
+    expect(p?.textContent).toBe('red text');
+  });
+
+  it('strips a style attribute carrying url(...), which can fetch remote CSS/images', () => {
+    const md = '<div style="background: url(https://evil.example/track.png)">正文</div>';
+
+    renderPreview(container, md, new Map());
+
+    const div = container.querySelector('div');
+    expect(div?.hasAttribute('style')).toBe(false);
+    expect(container.innerHTML).not.toContain('evil.example');
+    expect(container.textContent).toContain('正文');
+  });
+
+  it('strips style from a real cnblogs-import pattern but keeps its text', () => {
+    // A representative sample of the legacy inline styling that cnblogs
+    // imports carry (color/font-size/FONT-FAMILY cosmetics) — the attribute
+    // goes, the text it wraps does not.
+    renderPreview(container, '<span style="color: #333399;">文字</span>', new Map());
+
+    const span = container.querySelector('span');
+    expect(span?.hasAttribute('style')).toBe(false);
+    expect(span?.textContent).toBe('文字');
+  });
+
+  it('strips a user style attribute while a highlighted code block keeps its own inline styles', async () => {
+    // The style-attribute block must not reach into Shiki's own output:
+    // highlightCodeBlocks builds the <pre>/<span> markup with
+    // createElement/setAttribute *after* sanitize() has already run, so it
+    // never passes through the code path this test is guarding.
+    const md = ['<p style="color:red">red text</p>', '', '```rust', 'fn main() {}', '```'].join('\n');
+
+    await renderPreview(container, md, new Map());
+
+    const p = container.querySelector('p');
+    expect(p?.hasAttribute('style')).toBe(false);
+
+    const pre = container.querySelector('pre');
+    expect(pre?.getAttribute('style')).toContain('white-space: pre-wrap');
+    const tokens = Array.from(pre?.querySelectorAll('code span[style]') ?? []);
+    expect(tokens.length).toBeGreaterThan(0);
+  });
+
   it('strips <link rel=stylesheet>, which fetches remote CSS', () => {
     const md = [
       '<link rel="stylesheet" href="https://evil.example/lead.css">',

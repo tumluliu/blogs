@@ -82,6 +82,13 @@ function sanitize(root: ParentNode): void {
     for (const attr of Array.from(el.attributes)) {
       const name = attr.name.toLowerCase();
       if (name.startsWith('on')) el.removeAttribute(attr.name);
+      // Same reasoning as the <style>/<link> element bans above: inline CSS
+      // can hide the real 发布 button under a fake one (click-jacking) or
+      // fetch remote CSS via `background: url(...)`. Shiki's own <pre>/<span>
+      // markup is built with createElement/setAttribute *after* this runs
+      // (see highlight.ts), so it never passes through here and keeps its
+      // style attributes.
+      else if (name === 'style') el.removeAttribute(attr.name);
       else if (URL_ATTRS.has(name) && isDangerousUrl(attr.value)) el.removeAttribute(attr.name);
     }
     // A <template>'s children hang off a separate document fragment that
