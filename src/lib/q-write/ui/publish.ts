@@ -188,6 +188,29 @@ export type PreflightResult =
   | { ok: false; reason: 'no-slug'; message: string }
   | { ok: false; reason: 'uploading'; message: string; uploadId: string };
 
+// The rename half of a commit — PUT the new path, DELETE the old one — takes
+// a file (and every link pointing at it) off the site. Extracted from the DOM
+// wiring for the same reason as preflightCommit: so the fact that a slug
+// change *moves* rather than copies, and the exact prompt that says so, are
+// covered by a test instead of living only in an `<script>` `confirm(...)`.
+export type RenamePlan =
+  | { renames: false }
+  | { renames: true; from: string; to: string; message: string };
+
+export function renamePlan(d: Draft): RenamePlan {
+  const to = postPath(d.slug);
+  if (!d.remotePath || d.remotePath === to) return { renames: false };
+  return {
+    renames: true,
+    from: d.remotePath,
+    to,
+    message:
+      `改 slug 会移动仓库里的文件，不是复制。\n\n` +
+      `新文件：${to}\n删除旧文件：${d.remotePath}\n\n` +
+      `旧链接会失效。确定继续？`,
+  };
+}
+
 export function preflightCommit(d: Draft): PreflightResult {
   if (!d.slug) {
     return { ok: false, reason: 'no-slug', message: '先写标题（或手动填 slug）' };

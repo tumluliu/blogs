@@ -75,22 +75,6 @@
       }
       :root[data-theme="dark"] body::after { mix-blend-mode: screen; opacity: 0.25; }
 
-      /* ---------- mock chrome (not part of the design) ---------- */
-      #mockbar {
-        position: sticky; top: 0; z-index: 100;
-        display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;
-        background: #2b2926; color: #d8d2c4;
-        font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
-        padding: 0.4rem 0.7rem;
-      }
-      #mockbar b { color: #d68b54; letter-spacing: 0.14em; }
-      #mockbar button {
-        background: transparent; color: #d8d2c4; border: 1px solid #4a4640;
-        font: inherit; padding: 0.2rem 0.55rem; cursor: pointer; border-radius: 2px;
-      }
-      #mockbar button[aria-pressed="true"] { background: #d68b54; color: #161514; border-color: #d68b54; }
-      #mockbar .sp { flex: 1; }
-
       /* ---------- app frame ----------
          Phone (<600px): unchanged — a 430px column, border-inline hidden
          below 460px exactly as before. From 600px up the column widens
@@ -102,7 +86,7 @@
          gaining a second device (a card, a shadow) — same "rules, not
          cards" language the rest of the design already uses. */
       #app {
-        max-width: 430px; margin: 0 auto; min-height: calc(100dvh - 28px);
+        max-width: 430px; margin: 0 auto; min-height: 100dvh;
         display: flex; flex-direction: column;
         border-inline: 1px solid var(--rule);
         background: var(--bg);
@@ -340,21 +324,21 @@
         <div class="topbar">
           <button class="icon-btn" id="back-btn" title="返回">←</button>
           <span class="brand" style="font-family: var(--sans); letter-spacing: 0.04em; text-transform: none; font-size: 12.5px;">草稿</span>
-          <span class="status ok">自动存于 12:07</span>
+          <span class="status"></span>
           <button class="icon-btn" id="copy-btn" title="复制正文">⧉</button>
           <button class="icon-btn" id="delete-btn" title="删除草稿">⌦</button>
         </div>
 
         <div class="ed-head">
-          <input class="title-input" id="title-input" value="从 Obsidian 到 q-write：长文也该在手机上写" />
+          <input class="title-input" id="title-input" placeholder="标题" />
           <div class="meta-line">
             <span class="k">SLUG</span>
-            <span class="v" id="slug-value">cong-obsidian-dao-q-write-chang-wen-ye-gai-zai-shou-ji</span>
+            <span class="v" id="slug-value"></span>
             <button class="edit" id="slug-edit">改</button>
           </div>
           <div class="meta-line">
             <span class="k">TAGS</span>
-            <span class="tags" id="tags-value"><span class="tag">工具</span><span class="tag">写作</span><span class="tag">PWA</span></span>
+            <span class="tags" id="tags-value"></span>
             <button class="edit" id="tags-edit">＋</button>
           </div>
         </div>
@@ -363,47 +347,15 @@
           <button class="tab" role="tab" aria-selected="true" data-pane="write">写作</button>
           <button class="tab" role="tab" aria-selected="false" data-pane="preview">预览</button>
           <span class="sp"></span>
-          <span class="wc" id="wc">1,240 字</span>
+          <span class="wc" id="wc">0 字</span>
         </div>
 
         <div class="pane on" id="p-write">
-          <textarea class="body" id="body" spellcheck="false">用 Obsidian 写博客这件事，麻烦的从来不是写，是**发**。
-
-模板要对、frontmatter 要对、图片要先塞进 `public/`、路径要写成站点绝对路径，最后还得等 obsidian-git 把 commit 推上去。手机上想补一段？基本别想。
-
-## 于是有了 q-write
-
-思路很简单：既然 [q-sort](/q-sort/) 已经能把一条 thought 一键怼进仓库，长文没理由做不到。
-
-![](/diagrams/article/01-chat-memory-vs-world-memory.png)
-
-> 关键差别在于长文有生命周期——它要写好几天。
-
-![](uploading:img-3)
-
-正在传的那张图会在原地替换成真实路径，不用等。
-</textarea>
+          <textarea class="body" id="body" spellcheck="false"></textarea>
         </div>
 
         <div class="pane" id="p-preview">
-          <div class="preview" id="preview">
-            <h1>从 Obsidian 到 q-write：长文也该在手机上写</h1>
-            <div class="byline">草稿 · 2026-08-19 · 工具 / 写作 / PWA</div>
-            <p>用 Obsidian 写博客这件事，麻烦的从来不是写，是<strong>发</strong>。</p>
-            <p>模板要对、frontmatter 要对、图片要先塞进 <code>public/</code>、路径要写成站点绝对路径，最后还得等 obsidian-git 把 commit 推上去。手机上想补一段？基本别想。</p>
-            <h2>于是有了 q-write</h2>
-            <p>思路很简单：既然 <a href="/q-sort/">q-sort</a> 已经能把一条 thought 一键怼进仓库，长文没理由做不到。</p>
-            <figure style="margin:0 0 1rem">
-              <img src="/diagrams/article/01-chat-memory-vs-world-memory.png" alt="示意图" />
-              <figcaption>图 1 — 已上传，指向 /media/2026/08/a3f91c02.webp</figcaption>
-            </figure>
-            <blockquote>关键差别在于长文有生命周期——它要写好几天。</blockquote>
-            <figure style="margin:0 0 1rem">
-              <img src="/diagrams/article/03-perception-cognition-cliff.png" alt="上传中" style="opacity:.55" />
-              <figcaption>图 2 — 本地预览<span class="local-badge">尚未上传</span></figcaption>
-            </figure>
-            <p>正在传的那张图会在原地替换成真实路径，不用等。</p>
-          </div>
+          <div class="preview" id="preview"></div>
         </div>
 
         <div class="uploads" id="uploads" hidden></div>
@@ -446,7 +398,7 @@
       import { listDir, getFile } from '../../lib/gh/client';
       import { listDrafts, getDraft, putDraft, deleteDraft, newDraft } from '../../lib/q-write/drafts';
       import { filterEntries, renderDrafts, renderRepoList } from '../../lib/q-write/ui/list';
-      import { draftFromRemote, saveDraftToRepo, preflightCommit } from '../../lib/q-write/ui/publish';
+      import { draftFromRemote, saveDraftToRepo, preflightCommit, renamePlan } from '../../lib/q-write/ui/publish';
       import { postPath } from '../../lib/q-write/paths';
       import { applyTitle, applySlug, touch, countWords, createAutosaver } from '../../lib/q-write/ui/state';
       import { wrapSelection, insertAtCursor, prefixLine, renderPreview } from '../../lib/q-write/ui/editor';
@@ -552,11 +504,24 @@
         autosaver.schedule(current);
       }
 
+      // The editor's status line starts empty and must never claim a save that
+      // has not happened; on open it reports where the draft actually stands.
+      function draftStatus(d) {
+        const t = new Date(d.updatedAt);
+        const hh = String(t.getHours()).padStart(2, '0');
+        const mm = String(t.getMinutes()).padStart(2, '0');
+        if (d.state === 'published') return [`已发布 · 编辑于 ${hh}:${mm}`, 'ok'];
+        if (d.state === 'synced') return [`已存到仓库 · 编辑于 ${hh}:${mm}`, 'ok'];
+        return [`本地草稿 · 编辑于 ${hh}:${mm}`, ''];
+      }
+
       let openDraft = async (id) => {
         current = await getDraft(id);
         autosaveFailed = false;
         paintEditor();
         show('editor');
+        // after show(), so setStatus targets the editor's own status span
+        setStatus(...draftStatus(current));
         $('body').focus();
       };
 
@@ -664,8 +629,9 @@
           await autosaver.flush();
           setStatus(publish ? '发布中…' : '保存到仓库…');
 
+          const rename = renamePlan(current);
           const targetPath = postPath(current.slug);
-          const isRename = !!current.remotePath && current.remotePath !== targetPath;
+          const isRename = rename.renames;
 
           // A brand-new post, or an existing draft being renamed onto a slug
           // some other post already owns, must not silently overwrite it.
@@ -685,12 +651,19 @@
             }
           }
 
+          // A rename is PUT-new + DELETE-old: the old file — and every link
+          // pointing at it — goes away. Never do that without being asked.
+          if (isRename && !confirm(rename.message)) {
+            setStatus('已取消 · 未改名，远端未动', 'error');
+            return;
+          }
+
           const out = await saveDraftToRepo(auth(), current, { publish, now: new Date() });
 
           if (out.conflict) {
-            const overwrite = confirm('远端已经变了。\n\n确定 = 用当前内容覆盖远端\n取消 = 保留本地内容，改个 slug 另存为新文件');
+            const overwrite = confirm('远端已经变了。\n\n确定 = 用当前内容覆盖远端\n取消 = 什么都不写，本地内容保留');
             if (!overwrite) {
-              setStatus('已取消 · 改 slug 后可另存为新文件，远端未动', 'error');
+              setStatus('已取消 · 远端未动（改 slug 是移动文件，不是复制）', 'error');
               return;
             }
             const fresh = await getFile(auth(), current.remotePath);

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { draftFromRemote, docFromDraft, saveDraftToRepo, preflightCommit } from './publish.js';
+import { draftFromRemote, docFromDraft, saveDraftToRepo, preflightCommit, renamePlan } from './publish.js';
 import { newDraft } from '../drafts.js';
 import { base64ToUtf8 } from '../../gh/encoding.js';
 
@@ -291,5 +291,29 @@ describe('preflightCommit', () => {
     const out = preflightCommit(d);
     expect(out.ok).toBe(false);
     if (!out.ok) expect(out.reason).toBe('no-slug');
+  });
+});
+
+describe('renamePlan', () => {
+  it('does not rename a draft that has never been saved to the repo', () => {
+    const d = { ...newDraft('id', NOW), slug: 'xin-wen' };
+    expect(renamePlan(d)).toEqual({ renames: false });
+  });
+
+  it('does not rename when the slug still matches the remote path', () => {
+    const d = { ...newDraft('id', NOW), slug: 't', remotePath: 'src/content/posts/t.md' };
+    expect(renamePlan(d)).toEqual({ renames: false });
+  });
+
+  it('names the file that would be deleted and says the move is not a copy', () => {
+    const d = { ...newDraft('id', NOW), slug: 'new-slug', remotePath: 'src/content/posts/old-slug.md' };
+    const plan = renamePlan(d);
+    if (!plan.renames) throw new Error('expected a rename');
+    expect(plan.from).toBe('src/content/posts/old-slug.md');
+    expect(plan.to).toBe('src/content/posts/new-slug.md');
+    // the old path has to be named, and the prompt must not promise a copy
+    expect(plan.message).toContain('src/content/posts/old-slug.md');
+    expect(plan.message).toContain('不是复制');
+    expect(plan.message).not.toContain('另存为新文件');
   });
 });
