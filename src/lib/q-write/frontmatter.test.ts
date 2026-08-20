@@ -54,11 +54,22 @@ describe('docTitle', () => {
 });
 
 describe('setDocTitle', () => {
-  it('rewrites the H1 line when the title came from an H1', () => {
+  it('always writes fm.title, even when the body opens with an H1', () => {
     const doc = setDocTitle(parseDoc('# 旧标题\n\n正文\n'), '新标题');
-    expect(doc.body).toBe('# 新标题\n\n正文\n');
-    expect(doc.fm.title).toBeUndefined();
-    expect(doc.hadFrontmatter).toBe(false);
+    expect(doc.fm.title).toBe('新标题');
+    expect(doc.hadFrontmatter).toBe(true);
+  });
+
+  it('drops a body H1 whose text duplicates the new title', () => {
+    const doc = setDocTitle(parseDoc('# 新标题\n\n正文\n'), '新标题');
+    expect(doc.fm.title).toBe('新标题');
+    expect(doc.body).toBe('正文\n');
+  });
+
+  it('leaves a body H1 whose text differs from the new title', () => {
+    const doc = setDocTitle(parseDoc('# 旧标题\n\n正文\n'), '新标题');
+    expect(doc.fm.title).toBe('新标题');
+    expect(doc.body).toBe('# 旧标题\n\n正文\n');
   });
 
   it('writes fm.title when the doc already has frontmatter', () => {

@@ -43,13 +43,23 @@ export function docTitle(doc: Doc): { title: string; source: 'fm' | 'h1' | 'none
 }
 
 export function setDocTitle(doc: Doc, title: string): Doc {
-  const current = docTitle(doc);
-  // A body H1 stays the single source of truth: rewrite that line rather
-  // than injecting a frontmatter title that would contradict it.
-  if (current.source === 'h1') {
-    return { ...doc, body: doc.body.replace(H1_RE, `# ${title}`) };
+  const fm = { ...doc.fm, title };
+  const m = doc.body.match(H1_RE);
+  // The title always lands in frontmatter — the corpus's rendering
+  // convention (`<h1>{post.data.title}</h1>` from the template, no H1 in
+  // the body) has no exception in this repo: all 229 legacy posts already
+  // carry `title:` and no body H1. A body H1 with the exact same text as
+  // the title would render as a second, duplicate heading, so drop that
+  // line; an H1 with different text is a deliberate heading and is left
+  // alone.
+  if (!m || m[1].trim() !== title) {
+    return { ...doc, hadFrontmatter: true, fm };
   }
-  return { ...doc, hadFrontmatter: true, fm: { ...doc.fm, title } };
+  const start = m.index ?? 0;
+  const body = (doc.body.slice(0, start) + doc.body.slice(start + m[0].length))
+    .replace(/^(?:\r?\n)+/, '')
+    .replace(/(?:\r?\n){3,}/g, '\n\n');
+  return { ...doc, hadFrontmatter: true, fm, body };
 }
 
 export function patchMeta(doc: Doc, patch: MetaPatch): Doc {

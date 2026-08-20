@@ -11,10 +11,10 @@ import { findUploadingPlaceholder } from './images.js';
 // so it survives a round-trip untouched.
 //
 // `title` deliberately rides along even though the editor has a title field:
-// where the title lives (a `title:` key vs. the body's H1) is a property of
-// the document, and `docTitle`/`setDocTitle` can only make that call if the
-// original `title:` key is still in front of them. Strip it here and a post
-// carrying both a `title:` and an H1 loses the key and has its H1 rewritten.
+// `setDocTitle` is only called when the title actually changed (see
+// `renderDraft` below), so an unedited save must still find the previous
+// `title:` key sitting in `frontmatterExtra` — strip it here and a save that
+// never touches the title field would silently drop the key.
 const META_KEYS = new Set(['tags', 'draft', 'updated']);
 
 // The frontmatter a Draft carries between saves: everything the serialized
@@ -87,7 +87,9 @@ export function renderDraft(d: Draft, opts: { publish: boolean; now: Date }): { 
       date: opts.now.toISOString(),
       source: (d.frontmatterExtra.source as string) ?? 'original',
     });
-    doc = setDocTitle(doc, d.title);
+    // Only a non-empty title field is a real title; an empty one leaves the
+    // post with no `title:` key at all rather than writing an empty string.
+    if (d.title) doc = setDocTitle(doc, d.title);
   } else {
     // Editing something that already exists: `date` is left exactly as it was
     // (it rides in frontmatterExtra), and `updated` is stamped instead.

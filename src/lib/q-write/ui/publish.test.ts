@@ -106,11 +106,32 @@ describe('docFromDraft', () => {
     expect(md).toContain('# 老标题');
   });
 
-  it('rewrites the H1 when the title of a legacy post is edited', () => {
+  it('writes fm.title, leaving a differing legacy H1 alone, when the title is edited', () => {
     const d = draftFromRemote('id', 'src/content/posts/x.md', 's', '# 老标题\n\n正文\n', NOW);
     const md = docFromDraft({ ...d, title: '新标题' }, { publish: true, now: NOW });
-    expect(md).toContain('# 新标题');
-    expect(md).not.toContain('老标题');
+    expect(fmValue(md, 'title')).toBe('新标题');
+    expect(md).toContain('# 老标题');
+  });
+
+  it('writes title to frontmatter and drops a duplicate H1 for a brand-new post', () => {
+    const d = { ...newDraft('id', NOW), title: '测试q-write', slug: 'ce-shi', body: '# 测试q-write\n\n正文\n' };
+    const md = docFromDraft(d, { publish: true, now: NOW });
+    expect(fmValue(md, 'title')).toBe('测试q-write');
+    expect(md).not.toContain('# 测试q-write');
+    expect(md).toContain('正文');
+  });
+
+  it('leaves a differing body H1 alone on a brand-new post', () => {
+    const d = { ...newDraft('id', NOW), title: '新标题', slug: 'x', body: '# 别的标题\n\n正文\n' };
+    const md = docFromDraft(d, { publish: true, now: NOW });
+    expect(fmValue(md, 'title')).toBe('新标题');
+    expect(md).toContain('# 别的标题');
+  });
+
+  it('does not write a title key for a brand-new post with an empty title field', () => {
+    const d = { ...newDraft('id', NOW), title: '', slug: 'x', body: '正文' };
+    const md = docFromDraft(d, { publish: true, now: NOW });
+    expect(md).not.toContain('title:');
   });
 
   it('keeps both the frontmatter title and a differing body H1 on an untouched round-trip', () => {

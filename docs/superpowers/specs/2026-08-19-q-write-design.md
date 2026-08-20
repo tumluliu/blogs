@@ -252,13 +252,26 @@ Parse the existing block with `js-yaml`, overwrite only
 round-trip is js-yaml's, not the original's; that is accepted.
 
 Legacy posts with **no** frontmatter (title derived from the first `#`
-H1, date from filename or mtime) are not force-migrated:
+H1, date from filename or mtime) are not force-migrated on read: opening
+one shows that first H1 in the title field, and re-saving without
+touching the title leaves the post exactly as it was — no frontmatter
+block is written just because the file lacked one.
 
-- The title field shows that first H1.
-- Editing the title rewrites that H1 line in the body.
-- A frontmatter block is written only if the user actually sets tags or
-  toggles draft — and then `title` is still left out, so the post never
-  ends up with both a frontmatter title and an H1 saying something else.
+But the moment a title is actually written — a new post, or an edited
+title on an existing one — `title` always lands in frontmatter, taken
+from the editor's title field, whenever that field is non-empty. A body
+H1 is never treated as the title's source of truth on write. If the
+body's first H1 has the exact same text as the title, that line is
+dropped from the body (it would otherwise duplicate the `<h1>` the page
+template already renders from frontmatter); an H1 with different text is
+left alone as a deliberate heading, not a duplicate. An earlier version
+of this rule instead preferred an existing body H1 and rewrote it in
+place, to protect "a legacy post whose title lives only in an H1" — but
+no post in this corpus is shaped that way (all 229 legacy posts already
+carry `title:` in frontmatter and no body H1 at all), so that protection
+cost more than it bought: it is the exact mechanism that shipped a real
+post with no `title:` key and a body H1, which the page template then
+rendered twice — once as the derived title, once as the H1 itself.
 
 ## Error handling
 
@@ -303,7 +316,8 @@ with the offline message above.
   truncation at a word boundary; parity with `scripts/lib/slugify.ts`
   on a shared fixture list.
 - `frontmatter.ts` — unknown-key preservation, legacy no-frontmatter
-  posts, the H1-title rule, tags round-trip, `updated` insertion.
+  posts, the duplicate-H1-drop rule, tags round-trip, `updated`
+  insertion.
 - `paths.ts` — media path from a date + hash, post path from a slug.
 - `gh/client.ts` — mocked `fetch`: 201, 401, 409, network throw;
   correct headers, branch, and base64 body.
