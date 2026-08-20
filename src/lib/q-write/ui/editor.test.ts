@@ -79,4 +79,37 @@ describe('renderPreview', () => {
     expect(container.querySelector('img')).toBeNull();
     expect(container.textContent).toContain('图片上传中');
   });
+
+  it('strips scripts and event handlers out of raw HTML in a draft', () => {
+    // The preview runs in a page whose localStorage holds a Contents:Write
+    // PAT, and marked passes raw HTML straight through.
+    const md = [
+      '正文',
+      '',
+      '<img src=x onerror="window.__pwned = true">',
+      '',
+      '<script>window.__pwned = true;<\/script>',
+      '',
+      '<iframe src="https://evil.example"></iframe>',
+      '',
+      '<a href="javascript:window.__pwned = true">点我</a>',
+    ].join('\n');
+
+    renderPreview(container, md, new Map());
+
+    expect(container.querySelector('script')).toBeNull();
+    expect(container.querySelector('iframe')).toBeNull();
+    expect(container.innerHTML).not.toContain('onerror');
+    expect(container.querySelector('img')?.hasAttribute('onerror')).toBe(false);
+    expect(container.querySelector('a')?.hasAttribute('href')).toBe(false);
+    // the harmless markup around it still renders
+    expect(container.textContent).toContain('正文');
+    expect(container.querySelector('img')).not.toBeNull();
+  });
+
+  it('keeps ordinary links and images intact', () => {
+    renderPreview(container, '[q-sort](/q-sort/)\n\n![alt](/media/2026/08/a.webp)', new Map());
+    expect(container.querySelector('a')?.getAttribute('href')).toBe('/q-sort/');
+    expect(container.querySelector('img')?.getAttribute('src')).toBe('/media/2026/08/a.webp');
+  });
 });

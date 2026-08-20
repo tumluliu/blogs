@@ -29,6 +29,45 @@ export function prefixLine(el: HTMLTextAreaElement, prefix: string): void {
   el.selectionStart = el.selectionEnd = s + prefix.length;
 }
 
+// marked passes raw HTML through untouched and does not sanitise, so anything
+// pasted into a draft — or sitting in a repo post pulled down for editing —
+// would execute on 预览, inside a page whose localStorage holds a
+// `Contents: Write` PAT for the live site. Strip the executable surface
+// before the markup ever reaches the document.
+const BLOCKED_TAGS = new Set(['script', 'iframe', 'object', 'embed']);
+const URL_ATTRS = new Set(['href', 'src', 'xlink:href', 'action', 'formaction', 'poster', 'data']);
+
+function isDangerousUrl(value: string): boolean {
+  // Browsers ignore leading control characters and whitespace inside a
+  // scheme, so `java\tscript:alert(1)` still runs — strip them before the test.
+  const v = value.replace(/[\u0000-\u0020]+/g, '').toLowerCase();
+  return v.startsWith('javascript:') || v.startsWith('vbscript:') || v.startsWith('data:text/html');
+}
+
+function sanitize(root: ParentNode): void {
+  for (const el of Array.from(root.querySelectorAll('*'))) {
+    if (BLOCKED_TAGS.has(el.localName.toLowerCase())) {
+      el.remove();
+      continue;
+    }
+    for (const attr of Array.from(el.attributes)) {
+      const name = attr.name.toLowerCase();
+      if (name.startsWith('on')) el.removeAttribute(attr.name);
+      else if (URL_ATTRS.has(name) && isDangerousUrl(attr.value)) el.removeAttribute(attr.name);
+    }
+  }
+}
+
+// Parses the rendered markdown in an inert document, strips what can execute,
+// and adopts the survivors. Adopting the nodes rather than re-serialising them
+// into innerHTML avoids the second parse that mutation-XSS payloads rely on.
+export function setSanitizedHtml(container: HTMLElement, html: string): void {
+  const parsed = new DOMParser().parseFromString(html, 'text/html');
+  sanitize(parsed.body);
+  const doc = container.ownerDocument;
+  container.replaceChildren(...Array.from(parsed.body.childNodes, (n) => doc.importNode(n, true)));
+}
+
 // Freshly uploaded images are not deployed yet, so /media/... 404s. Swap in
 // the in-memory blob URL for anything still local.
 export function renderPreview(
@@ -41,5 +80,5 @@ export function renderPreview(
     md = md.split(path).join(blobUrl);
   }
   md = md.replace(/!\[([^\]]*)\]\(uploading:[^)]*\)/g, '_[图片上传中…]_');
-  container.innerHTML = marked.parse(md, { async: false }) as string;
+  setSanitizedHtml(container, marked.parse(md, { async: false }) as string);
 }
