@@ -7,7 +7,8 @@ const NOW = new Date(2026, 7, 19, 12, 0);
 const auth = (fetchMock: unknown) => ({ fetch: fetchMock as typeof fetch, pat: 'ghp_test', repo: 'tumluliu/blogs' });
 
 // The markdown actually handed to the Contents API on the i-th call.
-const written = (fetchMock: { mock: { calls: [string, { body: string }][] } }, i: number): string =>
+type FetchMock = ReturnType<typeof vi.fn>;
+const written = (fetchMock: FetchMock, i: number): string =>
   base64ToUtf8(JSON.parse(fetchMock.mock.calls[i][1].body).content as string);
 
 const fmValue = (md: string, key: string): string | undefined =>
