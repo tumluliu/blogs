@@ -49,6 +49,9 @@ jobs:
       - name: Check for dead assets / links
         run: pnpm check:assets
 
+      - name: Check thoughts feed guid stability
+        run: pnpm check:thoughts-guid
+
       - name: Setup SSH
         env:
           DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}

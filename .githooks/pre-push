@@ -73,3 +73,17 @@ if ! pnpm -s check:assets >>/tmp/blogs-prepush.log 2>&1; then
   exit 1
 fi
 echo "pre-push: dead-asset check ok" >&2
+
+# Verify dist/thoughts/rss.xml carries exactly one stable, non-permalink
+# <guid> per item. Guards against @astrojs/rss silently reverting to
+# link-derived permalink guids (which would re-mark every thought as unread
+# for every subscriber) — see scripts/check-thoughts-guid.ts for why this
+# can't be caught by check:assets or a type error.
+if ! pnpm -s check:thoughts-guid >>/tmp/blogs-prepush.log 2>&1; then
+  echo "" >&2
+  echo "pre-push: thoughts feed guid check FAILED. Push aborted." >&2
+  tail -40 /tmp/blogs-prepush.log >&2
+  echo "Bypass (use sparingly): git push --no-verify" >&2
+  exit 1
+fi
+echo "pre-push: thoughts feed guid check ok" >&2
